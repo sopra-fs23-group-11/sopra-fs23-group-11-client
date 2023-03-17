@@ -101,6 +101,7 @@ const Game = () => {
       {content}
     </BaseContainer>
   );
+
 }
 
 export default Game;
