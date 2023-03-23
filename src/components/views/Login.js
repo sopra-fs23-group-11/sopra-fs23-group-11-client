@@ -58,8 +58,10 @@ const Login = props => {
     }
   };
 
-  return (
-    <BaseContainer>
+
+  return null
+
+    /*<BaseContainer>
       <div className="login container">
         <div className="login form">
           <FormField
@@ -85,7 +87,12 @@ const Login = props => {
       </div>
     </BaseContainer>
   );
+
+     */
 };
+
+
+
 
 /**
  * You can get access to the history object's properties via the withRouter.
