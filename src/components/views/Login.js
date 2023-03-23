@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import {api, handleError} from 'helpers/api';
-import User from 'models/User';
-import {useHistory} from 'react-router-dom';
-import {Button} from 'components/ui/Button';
+//import {api, handleError} from 'helpers/api';
+//import User from 'models/User';
+//import {useHistory} from 'react-router-dom';
+//import {Button} from 'components/ui/Button';
 import 'styles/views/Login.scss';
-import BaseContainer from "components/ui/BaseContainer";
+//import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
 
 /*
@@ -35,8 +35,8 @@ FormField.propTypes = {
   onChange: PropTypes.func
 };
 
-const Login = props => {
-  const history = useHistory();
+const Login = () => {
+  /*const history = useHistory();
   const [name, setName] = useState(null);
   const [username, setUsername] = useState(null);
 
@@ -58,7 +58,7 @@ const Login = props => {
     }
   };
 
-
+*/
   return null
 
     /*<BaseContainer>
