@@ -38,11 +38,11 @@ FormField.propTypes = {
 const Login = () => {
   const history = useHistory();
   const [password, setPassword] = useState(null);
-  const [username, setUsername] = useState(null);
+  const [name, setName] = useState(null);
 
   const doLogin = async () => {
     try {
-      const requestBody = JSON.stringify({username, password});
+      const requestBody = JSON.stringify({name, password});
       const response = await api.post('/users', requestBody);
 
       // Get the returned user and update a new object.
@@ -60,8 +60,8 @@ const Login = () => {
 
   const doRegister = async () => {
       try {
-          const requestBody = JSON.stringify({username, password});
-          const response = await api.post('/players', requestBody);
+          const requestBody = JSON.stringify({name, password});
+          const response = await api.post('/players/register', requestBody);
 
           const user = new User(response.data);
           localStorage.setItem('token', user.token);
@@ -78,9 +78,9 @@ const Login = () => {
       <div className="login container">
         <div className="login form">
           <FormField
-            label="Username"
-            value={username}
-            onChange={un => setUsername(un)}
+            label="Name"
+            value={name}
+            onChange={un => setName(un)}
           />
           <FormField
             label="Password"
@@ -89,7 +89,7 @@ const Login = () => {
           />
           <div className="login button-container">
             <Button
-              disabled={!username || !password}
+              disabled={!name || !password}
               width="100%"
               onClick={() => doLogin()}
             >
@@ -97,7 +97,7 @@ const Login = () => {
             </Button></div>
               <div className="register button-container">
                   <Button
-                      disabled={!username || !password}
+                      disabled={!name || !password}
                       width="100%"
                       onClick={() => doRegister()}
                       >Register</Button>
