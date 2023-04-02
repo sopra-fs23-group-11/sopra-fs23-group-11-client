@@ -1,5 +1,5 @@
 import { React, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useActionData, Form, useNavigate } from "react-router-dom"
 
 import {
   Box,
@@ -9,25 +9,41 @@ import {
   Button,
   InputGroup,
   InputRightElement,
+  Text,
 } from "@chakra-ui/react"
-import { Form, redirect } from "react-router-dom"
+
+import { api } from "../helpers/api"
 
 export async function action({ request }) {
   const data = await request.formData()
   const username = data.get("username")
   const password = data.get("password")
 
-  console.log({ username, password })
-
-  return redirect("/lobby")
+  try {
+    const response = await api.put(
+      "/users",
+      JSON.stringify({ username, password })
+    )
+    return response
+  } catch (err) {
+    return {
+      error: err.response.data.message,
+    }
+  }
 }
 
 export default function Login() {
   const [show, setShow] = useState(false)
+  const response = useActionData()
+  const navigate = useNavigate()
+  console.log(response?.data)
   const handleClick = () => setShow(!show)
+
+  if (response?.data.token) navigate("/lobby")
   return (
     <div>
       <Box maxW="480px">
+        {response?.error && <Text color="red.500">{response.error}</Text>}
         <Form method="post" action="/login">
           <FormControl mb="40px">
             <FormLabel>Username</FormLabel>
