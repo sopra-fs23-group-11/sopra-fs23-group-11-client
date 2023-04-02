@@ -8,26 +8,41 @@ import {
   FormHelperText,
   InputGroup,
   InputRightElement,
+  Text,
 } from "@chakra-ui/react"
-import { Form, redirect } from "react-router-dom"
+import { Form, useActionData, useNavigate } from "react-router-dom"
+import { api } from "../helpers/api"
 
 export async function action({ request }) {
-    const data = await request.formData()
-    const username = data.get("username")
-    const password = data.get("password")
+  const data = await request.formData()
+  const username = data.get("username")
+  const password = data.get("password")
 
-    console.log({username, password})
+  try {
+    const response = await api.post(
+      "/users",
+      JSON.stringify({ username, password })
+    )
+    return response
+  } catch (err) {
+    return {
+      error: err.response.data.message,
+    }
+  }
 
-    return redirect("/lobby")
+  //return redirect("/lobby")
 }
 
 export default function Register() {
   const [show, setShow] = useState(false)
-
+  const response = useActionData()
+  const navigate = useNavigate()
   const handleClick = () => setShow(!show)
 
+  if (response?.data.token) navigate("/lobby")
   return (
     <div className="">
+      {response?.error && <Text color="red.500">{response.error}</Text>}
       <Box maxW="480px">
         <Form method="post" action="/register">
           <FormControl mb="40px" isRequired>
