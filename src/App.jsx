@@ -13,6 +13,7 @@ import Lobby from "./pages/Lobby/Lobby"
 import Register, {action as registerAction}from "./pages/Register"
 import Host from "./pages/Lobby/Host"
 import Join from "./pages/Lobby/Join"
+import LobbyLayout from "./pages/Lobby/LobbyLayout"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -21,7 +22,8 @@ const router = createBrowserRouter(
       <Route path="register" element={<Register />} action={registerAction}/>
       <Route path="login" element={<Login />} action={loginAction}/>
 
-      <Route path="lobby" element={<Lobby />}>
+      <Route path="lobby" element={<LobbyLayout />}>
+        <Route index element={<Lobby/>}/>
         <Route path="host" element={<Host/>}/>
         <Route path="join" element={<Join/>}/>
       </Route>

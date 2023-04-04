@@ -39,7 +39,7 @@ export default function Login() {
   console.log(response?.data)
   const handleClick = () => setShow(!show)
 
-  if (response?.data.token) navigate("/lobby")
+  if (response?.data?.token) navigate("/lobby")
   return (
     <div>
       <Box maxW="480px">

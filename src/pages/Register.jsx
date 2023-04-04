@@ -29,17 +29,16 @@ export async function action({ request }) {
       error: err.response.data.message,
     }
   }
-
-  //return redirect("/lobby")
 }
 
 export default function Register() {
   const [show, setShow] = useState(false)
   const response = useActionData()
+  console.log(response?.data)
   const navigate = useNavigate()
   const handleClick = () => setShow(!show)
 
-  if (response?.data.token) navigate("/lobby")
+  if (response?.data?.token) navigate("/lobby")
   return (
     <div className="">
       {response?.error && <Text color="red.500">{response.error}</Text>}
