@@ -1,12 +1,10 @@
-import { Button, Heading, Flex } from "@chakra-ui/react"
+import { Button,Flex } from "@chakra-ui/react"
 import React from "react"
-import { Link, Outlet } from "react-router-dom"
+import { Link} from "react-router-dom"
 
 function Lobby() {
   return (
-    <div className="">
-      <Heading>Lobby</Heading>
-      <Outlet/>
+    <>
       <Flex
         flexDirection="column"
         height="400px"
@@ -21,7 +19,7 @@ function Lobby() {
           <Button w="200px" size="lg">Join</Button>
         </Link>
       </Flex>
-    </div>
+    </>
   )
 }
 

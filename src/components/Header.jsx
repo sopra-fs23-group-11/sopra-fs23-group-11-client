@@ -1,5 +1,6 @@
 import React from "react"
 import { Box } from "@chakra-ui/react"
+import { Link } from "react-router-dom"
 
 export default function Header() {
   return (
@@ -12,7 +13,9 @@ export default function Header() {
       fontSize="2rem"
       fontWeight="bold"
     >
-      BATTLESHIP
+        <Link to="/">
+            BATTLESHIP
+        </Link>
     </Box>
   )
 }
