@@ -7,7 +7,6 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
-
   },
   "dependencies": {
     "@chakra-ui/react": "^2.5.5",
@@ -20,7 +19,7 @@
     "react-router-dom": "^6.10.0"
   },
   "devDependencies": {
-    "@types/react": "^18.0.28",
+    "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react-swc": "^3.0.0",
     "eslint": "^8.37.0",
