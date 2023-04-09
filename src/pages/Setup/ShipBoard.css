@@ -1,0 +1,23 @@
+.shipBoard caption{
+    font-size: 20px;
+    padding: 10px;
+}
+.shipBoard table{
+    border-spacing: 30px;
+}
+
+.shipBoard table, th, td{
+    border: 1px solid black;
+}
+
+.shipBoard th,td{
+    padding: 10px;
+}
+.shipBoard tr{
+    border-bottom: 1px solid #ddd;
+}
+
+.shipBoard tr:hover{
+    background-color: #D6EEEE;
+}
+

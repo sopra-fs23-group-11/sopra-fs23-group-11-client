@@ -3,12 +3,6 @@ import {api, handleError} from "../../helpers/api.js";
 import {Spinner, Text} from "@chakra-ui/react";
 
 
-
-
-
-
-
-
 export default function Host() {
   const [code, setCode] = useState(null)
 

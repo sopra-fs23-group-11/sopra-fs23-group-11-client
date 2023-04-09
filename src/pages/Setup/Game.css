@@ -1,0 +1,82 @@
+.board {
+  margin: 0 auto;
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 400px; /* adjust as needed */
+}
+
+.cell {
+  width: 40px; /* adjust as needed */
+  height: 40px; /* same as width */
+}
+
+.corner-cell,
+.top-label,
+.side-label {
+  width: 40px; /* same as cell */
+  height: 40px; /* same as cell */
+}
+
+.corner-cell {
+  background-color: #f1f1f1;
+}
+
+.top-label {
+  text-align: center;
+  font-weight: bold;
+  border-top: 1px solid black;
+}
+
+.side-label {
+  text-align: center;
+  font-weight: bold;
+  border-left: 1px solid black;
+}
+
+.cell {
+  text-align: center;
+  border: 1px solid black;
+}
+
+.board {
+  border-collapse: collapse;
+}
+
+.cell,
+.side-label,
+.top-label,
+.corner-cell {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  vertical-align: middle;
+  border: none;
+}
+
+.cell {
+  border: 1px solid black;
+}
+
+.cell input {
+  border: none;
+  padding: 0;
+}
+
+.float-container{
+  border: 3px solid #fff;
+  padding: 20px;
+}
+
+.float-child1{
+  width: 60%;
+  float: left;
+  padding: 20px;
+
+}
+.float-child2{
+  width: 30%;
+  float: left;
+  padding: 40px;
+
+}
+
