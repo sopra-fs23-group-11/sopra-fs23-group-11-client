@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import "./ShipBoard.css";
-import ship from "./Ship.jsx";
+
 
 const ShipBoard = ()=> {
 
