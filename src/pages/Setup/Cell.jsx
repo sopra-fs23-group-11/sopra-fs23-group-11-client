@@ -6,7 +6,6 @@ const Cell = ()=> {
     const [status, setStatus] = useState('EMPTY')
     const [shiptype, setShiptype] = useState('EMPTY')
     const [coordinate, setCoordinate] = useState([])
-    console.log('hel')
 
     const renderCell = () => {
         let statusValue;
