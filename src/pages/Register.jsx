@@ -35,7 +35,6 @@ export default function Register() {
   const [show, setShow] = useState(false)
   const response = useActionData()
   console.log(response?.data)
-  localStorage.setItem("userId", response?.data?.id)
   const navigate = useNavigate()
   const handleClick = () => setShow(!show)
 
