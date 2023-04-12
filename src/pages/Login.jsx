@@ -37,7 +37,6 @@ export default function Login() {
   const response = useActionData()
   const navigate = useNavigate()
   console.log(response?.data)
-  localStorage.setItem("userId", response?.data?.id)
   const handleClick = () => setShow(!show)
 
   if (response?.data?.token) navigate("/lobby")
