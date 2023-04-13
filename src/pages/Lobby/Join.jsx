@@ -3,8 +3,11 @@ import {Button, Input} from '@chakra-ui/react'
 import {api, handleError} from "../../helpers/api.js";
 
 export default function Join() {
-  const [code, setCode]  = useState("")
-    console.log(code)
+  const [lobbyCode, setLobbyCode] = useState("")
+  console.log(lobbyCode)
+  const id = localStorage.getItem("userId")
+  const joiner = { id }
+    console.log(lobbyCode)
 
     function submitCode() {
         useEffect(() => {
@@ -13,7 +16,7 @@ export default function Join() {
                 try {
                      await api.put(
                         "/join",
-                        JSON.stringify({ username, code})
+                        JSON.stringify({ joiner, lobbyCode})
                     )
                     // delays continuous execution of an async operation for 1 second.
                     // This is just a fake async call, so that the spinner can be displayed
@@ -35,7 +38,7 @@ export default function Join() {
 
     return (
     <div><div>Enter Roomcode</div>
-      <Input value={code} name="code" onChange={e => setCode(e.target.value)} htmlSize={4} width='auto' />
+      <Input value={lobbyCode} name="code" onChange={e => setLobbyCode(e.target.value)} htmlSize={4} width='auto' />
       <Button onClick={submitCode}>submit code</Button>
     </div>
   )
