@@ -14,7 +14,7 @@ export default function Host() {
       try {
         const response = await api.post(
             "/host",
-            JSON.stringify({host})
+            JSON.stringify({ host})
         )
         // delays continuous execution of an async operation for 1 second.
         // This is just a fake async call, so that the spinner can be displayed
@@ -24,7 +24,7 @@ export default function Host() {
         setCode(response.data.lobbyCode);
 
         // See here to get more data.
-        // console.log(response.data.lobbyCode);
+        console.log(response);
       } catch (error) {
         console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
         console.error("Details:", error);
