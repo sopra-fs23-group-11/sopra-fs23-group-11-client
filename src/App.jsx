@@ -16,7 +16,7 @@ import Join from "./pages/Lobby/Join"
 import LobbyLayout from "./pages/Lobby/LobbyLayout"
 import Setup from "./pages/Setup/Setup"
 import Game from "./pages/Setup/Game.jsx";
-import Board from "./pages/Setup/Board.jsx";
+import Play from "./pages/Play/Play.jsx"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,6 +26,7 @@ const router = createBrowserRouter(
       <Route path="login" element={<Login />} action={loginAction}/>
         <Route path="setup" element={<Setup/>}/>
         <Route path="game" element={<Game/>}/>
+        <Route path="play" element={<Play/>}/>
 
       <Route path="lobby" element={<LobbyLayout />}>
         <Route index element={<Lobby/>}/>
