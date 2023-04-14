@@ -24,12 +24,8 @@ const Cell = ()=> {
     }
 
     return (
-
         renderCell()
-
     );
-
-
 }
 
 export default Cell;

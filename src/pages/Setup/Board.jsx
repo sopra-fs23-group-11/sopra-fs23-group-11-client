@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Game.css";
 import Cell from "./Cell";
 
-const Board = () => {
+const Board = (props) => {
   const [board, setBoard] = useState(Array(10).fill(Array(10).fill("")));
 
   const handleChange = (event, row, col) => {
@@ -25,41 +25,74 @@ const Board = () => {
 
   const renderBoard = () => {
     const rows = [];
-    for (let row = -1; row < board.length; row++) {
+    // Render the ship positions
+    console.log('Board shipP', props.shipPositions)
+    const shipCells = [];
+    for (const ship in props.shipPositions) {
+      const [start, end] = props.shipPositions[ship];
+      console.log(start, end)
+      const [startRow, startCol] = start.split("");
+      console.log(startRow, startCol)
+      const [endRow, endCol] = end.split("");
+      let [newStartRow, newEndRow] = [startRow.charCodeAt(0) - 65, endRow.charCodeAt(0) - 65];
+      let [newStartCol, newEndCol] = [parseInt(startCol), parseInt(endCol)];
+      // Swap start and end points if necessary to make sure row or column is in increasing order
+      if (newStartRow > newEndRow || newStartCol > newEndCol) {
+        [newStartRow, newEndRow] = [newEndRow, newStartRow];
+        [newStartCol, newEndCol] = [newEndCol, newStartCol];
+      }
+      // Add each cell of the ship to the shipCells Array
+      for (let row = newStartRow; row <= newEndRow; row++) {
+        for (let col = newStartCol; col <= newEndCol; col++) {
+          shipCells.push({row, col});
+        }
+      }
+    }
+
+   // Render each row of the board
+    console.log('shipCells', shipCells)
+   for (let row = -1; row < board.length; row++) {
       const cols = [];
+      // Render each cell in the row
       for (let col = -1; col < board.length; col++) {
+        const cell = {x:row, y:col};
+        let isShip = shipCells.some(
+            (shipCell) => (shipCell.row === cell.x && shipCell.col === cell.y)
+        );
+        console.log(row, col, isShip)
         if (row === -1 && col === -1) {
           cols.push(
             <td key={col} className="corner-cell"></td>
-          );
-        } else if (row === -1) {
+          );} else if (row === -1) {
           cols.push(
-            <th key={col} className="top-label">{String.fromCharCode(65 + col)}</th>
-          );
-        } else if (col === -1) {
+            <th key={col} className="top-label">{col}</th>
+          );} else if (col === -1) {
           cols.push(
-            <th key={col} className="side-label">{row + 1}</th>
-          );
-        } else {
+            <th key={col} className="side-label">{String.fromCharCode(65+row)}</th>
+          );} else if(isShip){
+          cols.push(
+              <td className="ship-cell">
+              </td>
+          );} else {
           cols.push(
             <td key={`${row},${col}`} className="cell" onClick={()=> handleCellClick(row,col)}>
-              {/*<input type="text" style={{width: "40px", height: "40px"}}*/}
-              {/*       value={board[row][col]} onChange={(e) => handleChange(e, row, col)} />*/}
-              <Cell></Cell>
+             <Cell></Cell>
             </td>
-          );
-        }
+          );}
       }
-      rows.push(<tr key={row}>{cols}</tr>);
-    }
-    return rows;
-  };
+        rows.push(<tr key={row}>{cols}</tr>);
+      }
+    // }
+  return rows;
 
+  }
   return (
     <table className="board">
       <tbody>{renderBoard()}</tbody>
     </table>
   );
-};
+}
+
+
 
 export default Board;
