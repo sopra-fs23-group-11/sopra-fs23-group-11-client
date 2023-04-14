@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import "./ShipBoard.css";
 
 
-const ShipBoard = ()=> {
+const ShipBoard = (props)=> {
 
     const[startPointBattle, setStartPointBattle] = useState('')
     const[startPointCarrier, setStartPointCarrier] = useState('')
@@ -29,6 +29,25 @@ const ShipBoard = ()=> {
         }
     }
 
+    const handleSubmit = () => {
+        if(startPointBattle && endPointBattle && startPointCarrier && endPointCarrier && startPointCruiser && endPointCruiser
+        && startPointDestroyer && endPointDestroyer && startPointSubmarine && endPointSubmarine){
+            const positions = {
+            battleShip: [startPointBattle, endPointBattle],
+            carrier: [startPointCarrier, endPointCarrier],
+            cruiser: [startPointCruiser,endPointCruiser],
+            destroyer: [startPointDestroyer, endPointDestroyer],
+            submarine: [startPointSubmarine, endPointSubmarine]
+            };
+        //props.getPosition(positions);
+            console.log('props', props)
+            console.log('positions', positions)
+            props.onShipPlacement(positions);
+        } else{
+            alert("Please enter start and end points for all ships.")
+        }
+    }
+
     const handleEndPoint = (event, shipType) => {
         let isVertical = false;
         let isHorizontal = false;
@@ -44,7 +63,6 @@ const ShipBoard = ()=> {
         if(shipType === 'Destroyer' && startPointDestroyer ===''){alert(`For ${shipType}, you should have input in StartPoint first!`)}
         if(shipType === 'Submarine' && startPointSubmarine ===''){alert(`For ${shipType}, you should have input in StartPoint first!`)}
         else{
-
             if (shipType === 'Battleship') {
                 if (startPointBattle[0] === inputValue[0]){isVertical = true}
                 if (startPointBattle[1] === inputValue[1]){isHorizontal = true}
@@ -95,7 +113,7 @@ const ShipBoard = ()=> {
 
 
     const renderShipBoard = () => {
-        return (<div>
+        return (<div className="container">
             <table className="shipBoard">
                 <caption className="caption">Ships to be placed</caption>
                 <tr>
@@ -141,6 +159,7 @@ const ShipBoard = ()=> {
                     <td><input type="text" onBlur={(event)=>handleEndPoint(event, 'Submarine')}/></td>
                 </tr>
             </table>
+            <button className="button" onClick={handleSubmit}>Submit</button>
         </div>)
     }
     return (renderShipBoard())

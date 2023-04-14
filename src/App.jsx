@@ -19,6 +19,7 @@ import Game from "./pages/Setup/Game.jsx";
 import Play from "./pages/Play/Play.jsx"
 import Chatroom from "./pages/Chatroom"
 
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
