@@ -26,13 +26,10 @@ const Board = (props) => {
   const renderBoard = () => {
     const rows = [];
     // Render the ship positions
-    console.log('Board shipP', props.shipPositions)
     const shipCells = [];
     for (const ship in props.shipPositions) {
       const [start, end] = props.shipPositions[ship];
-      console.log(start, end)
       const [startRow, startCol] = start.split("");
-      console.log(startRow, startCol)
       const [endRow, endCol] = end.split("");
       let [newStartRow, newEndRow] = [startRow.charCodeAt(0) - 65, endRow.charCodeAt(0) - 65];
       let [newStartCol, newEndCol] = [parseInt(startCol), parseInt(endCol)];
@@ -50,7 +47,7 @@ const Board = (props) => {
     }
 
    // Render each row of the board
-    console.log('shipCells', shipCells)
+
    for (let row = -1; row < board.length; row++) {
       const cols = [];
       // Render each cell in the row
@@ -59,7 +56,6 @@ const Board = (props) => {
         let isShip = shipCells.some(
             (shipCell) => (shipCell.row === cell.x && shipCell.col === cell.y)
         );
-        console.log(row, col, isShip)
         if (row === -1 && col === -1) {
           cols.push(
             <td key={col} className="corner-cell"></td>
