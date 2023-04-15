@@ -31,22 +31,6 @@ const ShipBoard = (props)=> {
         }
     }
 
-   const handlePlace = () => {
-        const positions = {};
-        if(startPointBattle && endPointBattle){
-            positions['battleShip'] = [startPointBattle, endPointBattle];
-        } if (startPointCarrier && endPointCarrier){
-            positions['carrier'] = [startPointCarrier, endPointCarrier]
-        } if (startPointCruiser && endPointCruiser){
-            positions['cruiser'] = [ startPointCruiser, endPointCruiser]
-        } if (startPointDestroyer && endPointDestroyer){
-            positions['destroyer']=[startPointDestroyer, endPointDestroyer]
-        } if (startPointSubmarine && endPointDestroyer){
-            positions['submarine']=[startPointSubmarine, endPointSubmarine]
-        }
-        props.onShipPlacement(positions)
-    }
-
     const handleSubmit = () => {
         if(startPointBattle && endPointBattle && startPointCarrier && endPointCarrier && startPointCruiser && endPointCruiser
         && startPointDestroyer && endPointDestroyer && startPointSubmarine && endPointSubmarine){
@@ -230,7 +214,7 @@ const ShipBoard = (props)=> {
                     <td><center>1</center></td>
                     <td><input type="text" onBlur={(event)=>handleStartPoint(event,'Battleship')}/></td>
                     <td><input type="text" onBlur={(event)=>handleEndPoint(event, 'Battleship')}/></td>
-                    <td><button className="place" onClick={handlePlace}>Remove</button></td>
+                    <td><button className="place" onClick={handleSubmit}>Remove</button></td>
                 </tr>
                 <tr>
                     <td>Carrier</td>
@@ -238,7 +222,7 @@ const ShipBoard = (props)=> {
                     <td><center>1</center></td>
                     <td><input type="text" onBlur={(event)=>handleStartPoint(event,'Carrier')}/></td>
                     <td><input type="text" onBlur={(event)=>handleEndPoint(event, 'Carrier')}/></td>
-                    <td><button className="place" onClick={handlePlace}>Remove</button></td>
+                    <td><button className="place" onClick={handleSubmit}>Remove</button></td>
                 </tr>
                 <tr>
                     <td>Cruiser</td>
@@ -246,7 +230,7 @@ const ShipBoard = (props)=> {
                     <td><center>1</center></td>
                     <td><input type="text" onBlur={(event)=>handleStartPoint(event,'Cruiser')}/></td>
                     <td><input type="text" onBlur={(event)=>handleEndPoint(event, 'Cruiser')}/></td>
-                    <td><button className="place" onClick={handlePlace}>Remove</button></td>
+                    <td><button className="place" onClick={handleSubmit}>Remove</button></td>
                 </tr>
                 <tr>
                     <td>Destroyer</td>
@@ -254,7 +238,7 @@ const ShipBoard = (props)=> {
                     <td><center>1</center></td>
                     <td><input type="text" onBlur={(event)=>handleStartPoint(event,'Destroyer')}/></td>
                     <td><input type="text" onBlur={(event)=>handleEndPoint(event, 'Destroyer')}/></td>
-                    <td><button className="place" onClick={handlePlace}>Remove</button></td>
+                    <td><button className="place" onClick={handleSubmit}>Remove</button></td>
                 </tr>
                 <tr>
                     <td>Submarine</td>
@@ -262,7 +246,7 @@ const ShipBoard = (props)=> {
                     <td><center>1</center></td>
                     <td><input type="text" onBlur={(event)=>handleStartPoint(event,'Submarine')}/></td>
                     <td><input type="text" onBlur={(event)=>handleEndPoint(event, 'Submarine')}/></td>
-                    <td><button className="place" onClick={handlePlace}>Remove</button></td>
+                    <td><button className="place" onClick={handleSubmit}>Remove</button></td>
                 </tr>
             </table>
             <button className="button" onClick={handleSubmit}>Submit</button>
