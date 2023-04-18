@@ -13,6 +13,8 @@ import {
 } from "@chakra-ui/react"
 
 import { api } from "../helpers/api"
+import User from "../models/User"
+
 
 export async function action({ request }) {
   const data = await request.formData()
@@ -37,7 +39,8 @@ export default function Login() {
   const response = useActionData()
   const navigate = useNavigate()
   console.log(response?.data)
-  localStorage.setItem("userId", response?.data?.id)
+  const user = new User(response?.data)
+  localStorage.setItem("user", JSON.stringify(user))
   const handleClick = () => setShow(!show)
 
   if (response?.data?.token) navigate("/lobby")

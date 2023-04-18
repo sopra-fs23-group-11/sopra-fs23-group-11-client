@@ -1,5 +1,7 @@
-import { Box, Button, Input, ListItem, UnorderedList } from "@chakra-ui/react"
+import { Box, Button, Input, ListItem, UnorderedList, Flex } from "@chakra-ui/react"
+import BattleshipBoard from "../components/BattleShipBoard"
 import React, { useState, useEffect } from "react"
+import { useParams } from "react-router"
 // import SockJS from "sockjs-client"
 // import { over } from "stompjs"
 import { Stomp } from "stompjs/lib/stomp"
@@ -8,7 +10,9 @@ let stompClient = null
 const Chatroom = () => {
   const [privateChats, setPrivateChats] = useState(new Map())
   const [publicChats, setPublicChats] = useState([])
-  const [tab, setTab] = useState("CHATROOM")
+  const [tab, setTab] = useState("CHATROOM") 
+  const [shots, setShots] = useState([])
+  const {lobbyCode} = useParams()
   const [userData, setUserData] = useState({
     username: "",
     receivername: "",
@@ -17,7 +21,10 @@ const Chatroom = () => {
   })
   useEffect(() => {
     console.log(userData)
+    console.log(shots)
   }, [userData])
+
+  
 
   const connect = () => {
     // let Sock = new SockJS("http://localhost:8080/ws")
@@ -28,7 +35,8 @@ const Chatroom = () => {
 
   const onConnected = () => {
     setUserData({ ...userData, connected: true })
-    stompClient.subscribe("/chatroom/public", onMessageReceived)
+    stompClient.subscribe(`/chatroom/${lobbyCode}`, onMessageReceived)
+    stompClient.subscribe(`/shot-simple`, onShotReceived)
     // stompClient.subscribe(
     //   "/user/" + userData.username + "/private",
     //   onPrivateMessage
@@ -41,7 +49,14 @@ const Chatroom = () => {
       senderName: userData.username,
       status: "JOIN",
     }
-    stompClient.send("/app/message", {}, JSON.stringify(chatMessage))
+    stompClient.send(`/app/lobby/${lobbyCode}/message`, {}, JSON.stringify(chatMessage))
+  }
+
+  const onShotReceived = (payload) => {
+    const payloadData = JSON.parse(payload.body)
+    console.log(payloadData)
+    shots.push(payloadData)
+    setShots([...shots])
   }
 
   const onMessageReceived = (payload) => {
@@ -61,19 +76,7 @@ const Chatroom = () => {
     }
   }
 
-  // const onPrivateMessage = (payload) => {
-  //   console.log(payload)
-  //   var payloadData = JSON.parse(payload.body)
-  //   if (privateChats.get(payloadData.senderName)) {
-  //     privateChats.get(payloadData.senderName).push(payloadData)
-  //     setPrivateChats(new Map(privateChats))
-  //   } else {
-  //     let list = []
-  //     list.push(payloadData)
-  //     privateChats.set(payloadData.senderName, list)
-  //     setPrivateChats(new Map(privateChats))
-  //   }
-  // }
+
 
   const onError = (err) => {
     console.log(err)
@@ -91,28 +94,11 @@ const Chatroom = () => {
         status: "MESSAGE",
       }
       console.log(chatMessage)
-      stompClient.send("/app/message", {}, JSON.stringify(chatMessage))
+      stompClient.send(`/app/lobby/${lobbyCode}/message`, {}, JSON.stringify(chatMessage))
       setUserData({ ...userData, message: "" })
     }
   }
 
-  const sendPrivateValue = () => {
-    if (stompClient) {
-      var chatMessage = {
-        senderName: userData.username,
-        receiverName: tab,
-        message: userData.message,
-        status: "MESSAGE",
-      }
-
-      if (userData.username !== tab) {
-        privateChats.get(tab).push(chatMessage)
-        setPrivateChats(new Map(privateChats))
-      }
-      stompClient.send("/app/private-message", {}, JSON.stringify(chatMessage))
-      setUserData({ ...userData, message: "" })
-    }
-  }
 
   const handleUsername = (event) => {
     const { value } = event.target
@@ -124,6 +110,10 @@ const Chatroom = () => {
   }
   return (
     <Box className="container">
+      <Flex justifyContent="space-around" alignItems="center">
+            <BattleshipBoard  socket={stompClient}/> 
+            <BattleshipBoard socket={stompClient}/>
+        </Flex>
       {userData.connected ? (
         <div className="chat-box">
           <div className="member-list">
@@ -166,6 +156,13 @@ const Chatroom = () => {
                     {chat.senderName === userData.username && (
                       <div className="avatar self">{chat.senderName}</div>
                     )}
+                  </ListItem>
+                ))}
+              </UnorderedList>
+              <UnorderedList>
+                {shots.map((shot, index) =>(
+                  <ListItem key={index}>
+                    {shot.position}
                   </ListItem>
                 ))}
               </UnorderedList>
@@ -220,7 +217,7 @@ const Chatroom = () => {
                 <Button
                   type="button"
                   className="send-button"
-                  onClick={sendPrivateValue}
+                  // onClick={sendPrivateValue}
                 >
                   send
                 </Button>

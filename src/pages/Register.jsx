@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react"
 import { Form, useActionData, useNavigate } from "react-router-dom"
 import { api } from "../helpers/api"
+import User from "../models/User"
 
 export async function action({ request }) {
   const data = await request.formData()
@@ -34,8 +35,9 @@ export async function action({ request }) {
 export default function Register() {
   const [show, setShow] = useState(false)
   const response = useActionData()
+  const user = new User(response?.data)
   console.log(response?.data)
-  localStorage.setItem("userId", response?.data?.id)
+  localStorage.setItem("user", JSON.stringify(user))
   const navigate = useNavigate()
   const handleClick = () => setShow(!show)
 
