@@ -3,20 +3,22 @@ runtime: nodejs18
 
 handlers:
   - url: /static/js/(.*)
-    static_dir: dist/assets/js/\1
-    upload: dist/static/js/(.*)
+    static_dir: dist/assets/js/
+
   - url: /assets/css/(.*)
-    static_files: dist/assets/css/\1
-    upload: dist/assets/css/(.*)
+    static_dir: dist/assets/css
+
   - url: /static/media/(.*)
-    static_files: dist/assets/media/\1
-    upload: dist/static/media/(.*)
+    static_dir: dist/assets/media
+ 
   - url: /(.*\.(json|ico))$
     static_files: dist/\1
     upload: dist/.*\.(json|ico)$
+
   - url: /
     static_files: dist/index.html
     upload: dist/index.html
+    
   - url: /.*
     static_files: dist/index.html
     upload: dist/index.html
