@@ -2,9 +2,10 @@
 runtime: nodejs18
 
 handlers:
-  - url: /static/js/(.*)
-    static_files: dist/assets/js/\1
-    upload: dist/assets/js/(.*)
+  - url: /(.*\.js)
+    static_files: dist/\1
+    mime_type: text/javascript
+    upload: dist/.*\.js
 
   - url: /(.*\.css)
     static_files: dist/\1
