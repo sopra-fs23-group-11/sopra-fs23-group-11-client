@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Game.css";
+import "./Setup.css";
 import Cell from "./Cell";
 
 const Board = (props) => {
