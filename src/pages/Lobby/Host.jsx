@@ -6,7 +6,7 @@ import {Spinner, Text} from "@chakra-ui/react";
 export default function Host() {
   const [code, setCode] = useState(null)
   const id = localStorage.getItem("userId")
-  const host ={id}
+  const userId ={id}
 
   useEffect(() => {
     // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
@@ -14,7 +14,7 @@ export default function Host() {
       try {
         const response = await api.post(
             "/host",
-            JSON.stringify({ host})
+            JSON.stringify({ userId})
         )
         // delays continuous execution of an async operation for 1 second.
         // This is just a fake async call, so that the spinner can be displayed
