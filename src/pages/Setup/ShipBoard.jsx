@@ -7,6 +7,8 @@ import {
   AlertDescription,
     Stack,
 } from '@chakra-ui/react'
+import {api} from "../../helpers/api.js";
+import User from "../../models/User.js";
 
 const ShipBoard = (props)=> {
 
@@ -36,9 +38,7 @@ const ShipBoard = (props)=> {
         }
 
 
-    const handleSubmit = () => {
-        if(startPointBattle && endPointBattle && startPointCarrier && endPointCarrier && startPointCruiser && endPointCruiser
-        && startPointDestroyer && endPointDestroyer && startPointSubmarine && endPointSubmarine){
+    const handleSubmit = async (shipType) => {
             const positions = {
             battleShip: [startPointBattle, endPointBattle],
             carrier: [startPointCarrier, endPointCarrier],
@@ -46,13 +46,47 @@ const ShipBoard = (props)=> {
             destroyer: [startPointDestroyer, endPointDestroyer],
             submarine: [startPointSubmarine, endPointSubmarine]
             };
+            let requestBody = null
+        const user = new User(localStorage.getItem("user"))
+        const shipPlayerPlayerId = user.id;
+            let shipPlayerShipId = null;
+            let startPosition = null;
+            let endPosition = null;
+
+        if (shipType === 'Destroyer'){
+            shipPlayerShipId = 1;
+            startPosition = startPointDestroyer
+            endPosition = endPointDestroyer
+        }
+        if (shipType === 'Submarine'){
+            shipPlayerShipId = 2;
+            startPosition = startPointSubmarine
+            endPosition = endPointSubmarine
+            }
+        if (shipType === 'Cruiser'){
+            shipPlayerShipId = 3;
+            startPosition = startPointCruiser
+            endPosition = endPointCruiser
+            }
+        if (shipType === 'Battleship'){
+            shipPlayerShipId = 4;
+            startPosition = startPointBattle
+            endPosition = endPointBattle
+            }
+        if (shipType === 'Carrier'){
+            shipPlayerShipId = 5;
+            startPosition = startPointCarrier
+            endPosition = endPointCarrier
+            }
+
+        requestBody = JSON.stringify({shipPlayerShipId, startPosition, endPosition, shipPlayerPlayerId})
+
+    const response = await api.post('/submit/ships', requestBody);
             console.log('props', props)
             console.log('positions', positions)
             props.onShipPlacement(positions);
-        } else{
-            alert("Please enter start and end points for all ships.")
         }
-    }
+
 
     const handleEndPoint = (event, shipType) => {
         let isVertical = false;
@@ -303,6 +337,7 @@ const ShipBoard = (props)=> {
                     <th>StartPoint</th>
                     <th>EndPoint</th>
                     <th>ShipClear & NewInputs</th>
+                    <th>Submit Ships</th>
                 </tr>
                 <tr>
                     <td>BattleShip</td>
@@ -313,6 +348,7 @@ const ShipBoard = (props)=> {
                     <td><input type="text" maxLength={2} value={endPointBattle} onChange={(event)=>handleEndPoint(event, 'Battleship')}/>
                         </td>
                     <td><button className="place" onClick={(event) => handleRemove(event, 'Battleship')}>Remove</button></td>
+                    <td><button className="place" onClick={() => handleSubmit('Battleship')}>Submit</button></td>
                 </tr>
 
 
@@ -323,6 +359,7 @@ const ShipBoard = (props)=> {
                     <td><input type="text" maxLength={2} value={startPointCarrier} onChange={(event)=>handleStartPoint(event,'Carrier')}/></td>
                     <td><input type="text" maxLength={2} value={endPointCarrier} onChange={(event)=>handleEndPoint(event, 'Carrier')}/></td>
                     <td><button className="place" onClick={(event) => handleRemove(event, 'Carrier')}>Remove</button></td>
+                    <td><button className="place" onClick={() => handleSubmit('Carrier')}>Submit</button></td>
                 </tr>
                 <tr>
                     <td>Cruiser</td>
@@ -331,6 +368,7 @@ const ShipBoard = (props)=> {
                     <td><input type="text" maxLength={2} value={startPointCruiser} onChange={(event)=>handleStartPoint(event,'Cruiser')}/></td>
                     <td><input type="text" maxLength={2} value={endPointCruiser} onChange={(event)=>handleEndPoint(event, 'Cruiser')}/></td>
                     <td><button className="place" onClick={(event) => handleRemove(event, 'Cruiser')}>Remove</button></td>
+                    <td><button className="place" onClick={() => handleSubmit('Cruiser')}>Submit</button></td>
                 </tr>
                 <tr>
                     <td>Destroyer</td>
@@ -339,6 +377,7 @@ const ShipBoard = (props)=> {
                     <td><input type="text" maxLength={2} value={startPointDestroyer} onChange={(event)=>handleStartPoint(event,'Destroyer')}/></td>
                     <td><input type="text" maxLength={2} value={endPointDestroyer} onChange={(event)=>handleEndPoint(event, 'Destroyer')}/></td>
                     <td><button className="place" onClick={(event) => handleRemove(event, 'Destroyer')}>Remove</button></td>
+                    <td><button className="place" onClick={() => handleSubmit('Destroyer')}>Submit</button></td>
                 </tr>
                 <tr>
                     <td>Submarine</td>
@@ -347,9 +386,9 @@ const ShipBoard = (props)=> {
                     <td><input type="text" maxLength={2} value={startPointSubmarine} onChange={(event)=>handleStartPoint(event,'Submarine')}/></td>
                     <td><input type="text" maxLength={2} value={endPointSubmarine} onChange={(event)=>handleEndPoint(event, 'Submarine')}/></td>
                     <td><button className="place" onClick={(event) => handleRemove(event, 'Submarine')}>Remove</button></td>
+                    <td><button className="place" onClick={() => handleSubmit('Submarine')}>Submit</button></td>
                 </tr>
             </table>
-            <button className="button" onClick={handleSubmit}>Submit</button>
         </div>)
     }
     return (renderShipBoard())
