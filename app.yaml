@@ -6,9 +6,10 @@ handlers:
     static_files: dist/assets/js/\1
     upload: dist/assets/js/(.*)
 
-  - url: /assets/css/(.*)
-    static_files: dist/assets/css/\1
-    upload: dist/assets/css/(.*)
+  - url: /(.*\.css)
+    static_files: dist/\1
+    mime_type: text/css
+    upload: dist/.*\.css
 
   - url: /static/media/(.*)
     static_files: dist/assets/media/\1
