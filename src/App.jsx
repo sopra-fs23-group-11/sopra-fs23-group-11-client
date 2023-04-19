@@ -14,8 +14,7 @@ import Register, {action as registerAction}from "./pages/Register"
 import Host from "./pages/Lobby/Host"
 import Join from "./pages/Lobby/Join"
 import LobbyLayout from "./pages/Lobby/LobbyLayout"
-import Setup from "./pages/Setup/Setup"
-import Game from "./pages/Setup/Game.jsx";
+import Setup from "./pages/Setup/Setup.jsx";
 import Play from "./pages/Play/Play.jsx"
 import Chatroom from "./pages/Chatroom"
 
@@ -27,7 +26,6 @@ const router = createBrowserRouter(
       <Route path="register" element={<Register />} action={registerAction}/>
       <Route path="login" element={<Login />} action={loginAction}/>
         <Route path="setup" element={<Setup/>}/>
-        <Route path="game" element={<Game/>}/>
         <Route path="play" element={<Play/>}/>
         <Route path="chatroom/:lobbyCode" element={<Chatroom/>}/>
 
