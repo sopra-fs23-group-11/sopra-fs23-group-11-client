@@ -25,15 +25,19 @@ const Setup =() =>{
 
   return (
     <div className="float-container">
-      <div className="float-child1"><Board shipPositions={shipPositions}/></div>
-      <div className="float-child2"><ShipBoard onShipPlacement={handleShipPlacement}/></div>
-        <div>
-            <Box position="fixed" bottom="4rem" right="2rem">
-                <Button as={Link} to="/play" colorScheme="blue">
+      <div className="float-child1" ><Board shipPositions={shipPositions}/></div>
+      <div className="float-child2">
+          <div className="ship-board-container">
+            <ShipBoard onShipPlacement={handleShipPlacement}/>
+            <div className="button-container">
+                <Box >
+                    <Button as={Link} to="/play" colorScheme="blue">
                     Submit Ships
-                </Button>
-            </Box>
-        </div>
+                    </Button>
+                </Box>
+            </div>
+          </div>
+      </div>
     </div>
   );
 }

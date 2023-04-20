@@ -47,7 +47,6 @@ const Board = (props) => {
     }
 
    // Render each row of the board
-
    for (let row = -1; row < board.length; row++) {
       const cols = [];
       // Render each cell in the row
@@ -78,9 +77,7 @@ const Board = (props) => {
       }
         rows.push(<tr key={row}>{cols}</tr>);
       }
-    // }
   return rows;
-
   }
   return (
     <table className="board">
