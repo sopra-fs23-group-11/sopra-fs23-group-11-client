@@ -6,13 +6,12 @@ import { api, handleError } from "../../helpers/api"
 function Lobby() {
   const [code, setCode] = useState(null)
   const user = JSON.parse(localStorage.getItem("user"))
-  const id = user.id
-  const host = { id }
+  const hostId = user.id
   const navigate = useNavigate()
 
   async function generateLobbyCode() {
     try {
-      const response = await api.post("/host", JSON.stringify({ host }))
+      const response = await api.post("/host", JSON.stringify({ hostId }))
       setCode(response.data.lobbyCode)
 
       // See here to get more data.

@@ -1,5 +1,4 @@
-import MyField from "./MyField.jsx"
-import SubmitButton from "./SubmitButton.jsx"
+
 import React from "react";
 import BattleshipBoard from "../../components/BattleShipBoard.jsx";
 import Ships from "../../components/Ships.jsx";
