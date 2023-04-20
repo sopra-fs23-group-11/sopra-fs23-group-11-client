@@ -89,8 +89,6 @@ const ShipBoard = (props)=> {
 
 
     const handleEndPoint = (event, shipType) => {
-        let isVertical = false;
-        let isHorizontal = false;
         const inputValue = event.target.value;
         console.log(inputValue)
         console.log('pp1', positions)

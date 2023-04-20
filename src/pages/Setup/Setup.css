@@ -83,3 +83,14 @@
   background-color: darkslateblue;
 }
 
+.ship-board-container{
+  display: flex;
+  flex-direction: column;
+}
+
+.button-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top:1rem;
+}
