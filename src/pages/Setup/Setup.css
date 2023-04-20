@@ -64,21 +64,20 @@
 
 .float-container{
   border: 3px solid #fff;
-  padding: 20px;
+  display: flex;
 }
 
 .float-child1{
-  width: 60%;
-  float: left;
-  padding: 20px;
-
+  flex: 1;
 }
+
 .float-child2{
-  width: 30%;
-  float: left;
+  flex: 1;
+  margin-right: 20px;
+  float:left;
   padding: 40px;
-
 }
+
 .ship-cell{
   background-color: darkslateblue;
 }
@@ -93,4 +92,9 @@
   justify-content: center;
   align-items: center;
   margin-top:1rem;
+}
+
+.shipBoard
+{
+   text-align: center;
 }
