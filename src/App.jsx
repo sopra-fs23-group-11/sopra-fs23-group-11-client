@@ -28,6 +28,7 @@ const router = createBrowserRouter(
         <Route path="setup" element={<Setup/>}/>
         <Route path="play" element={<Play/>}/>
         <Route path="chatroom/:lobbyCode" element={<Chatroom/>}/>
+        <Route path=""/>
 
       <Route path="lobby" element={<LobbyLayout />}>
         <Route index element={<Lobby/>}/>
