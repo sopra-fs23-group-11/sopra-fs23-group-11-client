@@ -25,7 +25,7 @@ const Setup =() =>{
 
   return (
     <div className="float-container">
-      <div className="float-child1"><Board shipPositions={shipPositions}/></div>
+      <div className="float-child1" ><Board shipPositions={shipPositions}/></div>
       <div className="float-child2">
           <div className="ship-board-container">
             <ShipBoard onShipPlacement={handleShipPlacement}/>
