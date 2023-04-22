@@ -46,7 +46,7 @@ const ShipBoard = (props)=> {
             submarine: [startPointSubmarine, endPointSubmarine]
             };
             let requestBody = null
-        const user = new User(localStorage.getItem("user"))
+        const user = JSON.parse(localStorage.getItem("user"))
         const shipPlayerPlayerId = user.id;
             let shipPlayerShipId = null;
             let startPosition = null;
@@ -79,11 +79,12 @@ const ShipBoard = (props)=> {
             }
 
         requestBody = JSON.stringify({shipPlayerShipId, startPosition, endPosition, shipPlayerPlayerId})
+        console.log(requestBody)
 
     const response = await api.post('/submit/ships', requestBody);
             console.log('props', props)
             console.log('positions', positions)
-            props.onShipPlacement(positions);
+            //props.onShipPlacement(positions);
         }
 
 
