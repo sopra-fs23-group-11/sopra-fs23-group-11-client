@@ -1,4 +1,4 @@
-import React,  from 'react';
+import React from 'react';
 import Board from '../Setup/Board.jsx';
 import ShipBoard from "../Setup/ShipBoard.jsx";
 import {Box, Button} from "@chakra-ui/react";
