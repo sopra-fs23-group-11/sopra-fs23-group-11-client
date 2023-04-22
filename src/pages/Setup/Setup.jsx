@@ -1,11 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Board from './Board.jsx';
 import ShipBoard from "./ShipBoard.jsx";
 import {Box, Button} from "@chakra-ui/react";
 import {Link} from "react-router-dom";
+import GameBoard from "../Play/GameBoard.jsx";
+import {ShipPositionsContext} from "./ShipPositionsContext.jsx";
 
 import './Setup.css';
-import {useState} from "react";
+
 
 
 const Setup =() =>{
@@ -14,14 +16,10 @@ const Setup =() =>{
     function handleShipPlacement(positions){
         console.log('position', positions)
         setShipPositions(positions)
-        console.log('shipPosition', shipPositions)
-  // there is function takes value from ShipBoard
-    // put all 10 input values
-  //const getValueFromShipBoard(startPointBattle, endPointBattle, startPointCruiser, endPointCruiser) {
 
-    // https://timmousk.com/blog/react-call-function-in-child-component/
-        // read that, how to pass values to child component
     }
+
+    console.log('shipPosition', shipPositions)
 
   return (
     <div className="float-container">
@@ -38,7 +36,9 @@ const Setup =() =>{
             </div>
           </div>
       </div>
+      <div>  <GameBoard shipPositions = {shipPositions}/> </div>
     </div>
+
   );
 }
 

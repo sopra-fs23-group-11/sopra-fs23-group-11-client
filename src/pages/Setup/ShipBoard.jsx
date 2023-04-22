@@ -29,7 +29,6 @@ const ShipBoard = (props)=> {
 
     const handleStartPoint = (event, shipType) => {
         const inputValue = event.target.value;
-        //const regex = /^[A-J]\d?$/;
         if (shipType === 'Battleship') {setStartPointBattle(inputValue); setErrorLogs([])}
         if (shipType === 'Carrier'){setStartPointCarrier(inputValue); setErrorLogs([])}
         if (shipType === 'Cruiser'){setStartPointCruiser(inputValue); setErrorLogs([])}

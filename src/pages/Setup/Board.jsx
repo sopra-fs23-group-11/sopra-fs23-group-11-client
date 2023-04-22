@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./Setup.css";
 import Cell from "./Cell";
+import {ShipPositionsContext} from "./ShipPositionsContext.jsx";
+
 
 const Board = (props) => {
   const [board, setBoard] = useState(Array(10).fill(Array(10).fill("")));
