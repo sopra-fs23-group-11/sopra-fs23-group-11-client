@@ -4,7 +4,7 @@ import ShipBoard from "./ShipBoard.jsx";
 import {Box, Button} from "@chakra-ui/react";
 import {Link} from "react-router-dom";
 import GameBoard from "../Play/GameBoard.jsx";
-import {ShipPositionsContext} from "./ShipPositionsContext.jsx";
+
 
 import './Setup.css';
 
