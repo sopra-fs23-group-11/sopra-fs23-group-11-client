@@ -1,42 +1,8 @@
 import { Box, Grid, GridItem } from "@chakra-ui/react"
 import { React, useState } from "react"
 
-function BattleshipBoard({ socket }) {
-  const [board, setBoard] = useState(generateBoard())
-
-  function generateBoard() {
-    const rows = 10
-    const cols = 10
-    const boardArray = []
-
-    for (let i = 0; i < rows; i++) {
-      boardArray[i] = []
-      for (let j = 0; j < cols; j++) {
-        boardArray[i][j] = {
-          id: `${String.fromCharCode(65 + i)}${j + 1}`,
-          isHit: false,
-          occupied: null,
-        }
-      }
-    }
-
-    return boardArray
-  }
-
-  const handleClick = (e, rowIndex, colIndex) => {
-    //console.log(e.target.id)
-    const position = board[rowIndex][colIndex].id
-    if(socket) socket.send("/app/game-simple", {}, JSON.stringify({ position }))
-
-    const newBoard = board.map((row, rIndex) =>
-      row.map((col, cIndex) =>
-        rIndex === rowIndex && cIndex === colIndex
-          ? { ...col, isHit: !col.isHit }
-          : col
-      )
-    )
-    setBoard(newBoard)
-  }
+function BattleshipBoard({socket, board, handleShoot}) {
+  console.log(socket, board, handleShoot)
 
   return (
     <Grid
@@ -78,8 +44,8 @@ function BattleshipBoard({ socket }) {
                 h="30px"
                 w="30px"
                 border="1px solid gray"
-                bg={board[rowIndex][colIndex].isHit ? "blue" : "white"}
-                onClick={(e) => handleClick(e, rowIndex, colIndex)}
+                bg={board[rowIndex][colIndex].isShotAt ? "blue" : "white"}
+                onClick={(e) => handleShoot(e, rowIndex, colIndex)}
               />
             </GridItem>
           ))}
