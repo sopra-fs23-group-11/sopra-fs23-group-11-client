@@ -7,15 +7,14 @@ export default function Join() {
   const [lobbyCode, setLobbyCode] = useState("")
   const [isValidCode, setIsValidCode] = useState(false)
   const user = JSON.parse(localStorage.getItem("user"))
-  const id = user.id
-  const joiner = { id }
+  const joinerId = user.id
   const navigate = useNavigate()
 
   async function submitCode() {
     try {
       const response = await api.put(
         "/join",
-        JSON.stringify({ joiner, lobbyCode })
+        JSON.stringify({ joinerId, lobbyCode })
       )
       console.log(response.ok, response.status)
       if (response.status === 200) {
