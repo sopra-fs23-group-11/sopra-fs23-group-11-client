@@ -79,7 +79,7 @@ const ShipBoard = (props)=> {
             }
 
         requestBody = JSON.stringify({shipPlayerShipId, startPosition, endPosition, shipPlayerPlayerId})
-        console.log(requestBody)
+        console.log("requestBody",requestBody)
 
     const response = await api.post('/submit/ships', requestBody);
             console.log('props', props)

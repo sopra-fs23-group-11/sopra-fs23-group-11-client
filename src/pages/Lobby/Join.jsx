@@ -39,7 +39,7 @@ export default function Join() {
       console.log("effect ran...")
       localStorage.setItem("hostId" , hostId)
       //navigate(`/chatroom/${lobbyCode}`)
-      navigate(`/game/${lobbyCode}`)
+      navigate(`/setup/${lobbyCode}`)
     }
   }, [isValidCode])
 

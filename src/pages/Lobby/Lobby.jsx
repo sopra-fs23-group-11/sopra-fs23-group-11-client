@@ -30,7 +30,7 @@ function Lobby() {
   useEffect(() => {
     if (code) {
       //navigate(`/chatroom/${code}`)
-      navigate(`/game/${code}`)
+      navigate(`/setup/${code}`)
     }
   }, [code])
 
