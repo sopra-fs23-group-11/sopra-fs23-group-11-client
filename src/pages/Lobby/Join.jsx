@@ -6,6 +6,7 @@ import { useNavigate } from "react-router"
 export default function Join() {
   const [lobbyCode, setLobbyCode] = useState("")
   const [isValidCode, setIsValidCode] = useState(false)
+  const [hostId, setHostId] = useState("")
   const user = JSON.parse(localStorage.getItem("user"))
   const joinerId = user.id
   const navigate = useNavigate()
@@ -16,9 +17,10 @@ export default function Join() {
         "/join",
         JSON.stringify({ joinerId, lobbyCode })
       )
-      console.log(response.ok, response.status)
+      console.log(response.ok, response.status, response.data)
       if (response.status === 200) {
         setIsValidCode(true)
+        setHostId(response.data.hostId)
       }
     } catch (error) {
       console.error(
@@ -35,7 +37,9 @@ export default function Join() {
     // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
     if (isValidCode) {
       console.log("effect ran...")
-      navigate(`/chatroom/${lobbyCode}`)
+      localStorage.setItem("hostId" , hostId)
+      //navigate(`/chatroom/${lobbyCode}`)
+      navigate(`/game/${lobbyCode}`)
     }
   }, [isValidCode])
 
