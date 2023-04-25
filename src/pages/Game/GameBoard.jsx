@@ -28,11 +28,11 @@ const GameBoard =() => {
 
     let positions = {}
 
-    for (const obj of shipPositions) {
-        positions[obj.id] = [obj.startPosition, obj.endPosition]
-    }
+    // for (const obj of shipPositions) {
+    //     positions[obj.id] = [obj.startPosition, obj.endPosition]
+    // }
 
-    console.log(positions)
+    // console.log(positions)
     return (
         <>
         <div><Board shipPositions={shipPositions}/></div>
