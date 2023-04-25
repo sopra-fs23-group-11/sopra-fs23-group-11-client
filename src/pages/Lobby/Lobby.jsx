@@ -29,7 +29,8 @@ function Lobby() {
 
   useEffect(() => {
     if (code) {
-      navigate(`/chatroom/${code}`)
+      //navigate(`/chatroom/${code}`)
+      navigate(`/game/${code}`)
     }
   }, [code])
 

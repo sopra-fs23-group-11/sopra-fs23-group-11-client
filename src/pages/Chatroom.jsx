@@ -37,6 +37,7 @@ const Chatroom = () => {
     setUserData({ ...userData, connected: true })
     stompClient.subscribe(`/chatroom/${lobbyCode}`, onMessageReceived)
     stompClient.subscribe(`/shot-simple`, onShotReceived)
+    stompClient.subscribe(`/game/${lobbyCode}`, onJoin)
     // stompClient.subscribe(
     //   "/user/" + userData.username + "/private",
     //   onPrivateMessage
@@ -50,6 +51,11 @@ const Chatroom = () => {
       status: "JOIN",
     }
     stompClient.send(`/app/lobby/${lobbyCode}/message`, {}, JSON.stringify(chatMessage))
+  }
+
+  const onJoin = (payload) => {
+    const payloadData = JSON.parse(payload.body)
+    console.log(payloadData)
   }
 
   const onShotReceived = (payload) => {
@@ -110,10 +116,10 @@ const Chatroom = () => {
   }
   return (
     <Box className="container">
-      <Flex justifyContent="space-around" alignItems="center">
+      {/* <Flex justifyContent="space-around" alignItems="center">
             <BattleshipBoard  socket={stompClient}/> 
             <BattleshipBoard socket={stompClient}/>
-        </Flex>
+        </Flex> */}
       {userData.connected ? (
         <div className="chat-box">
           <div className="member-list">
