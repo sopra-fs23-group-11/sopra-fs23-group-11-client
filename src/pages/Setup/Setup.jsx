@@ -3,7 +3,7 @@ import Board from "./Board.jsx"
 import ShipBoard from "./ShipBoard.jsx"
 import { Box, Button } from "@chakra-ui/react"
 import { Link } from "react-router-dom"
-import GameBoard from "../Game/GameBoard.jsx"
+
 
 import "./Setup.css"
 import {api} from "../../helpers/api.js";
