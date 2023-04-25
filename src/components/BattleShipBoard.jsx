@@ -23,7 +23,7 @@ function BattleshipBoard({ socket, board, handlePlace }) {
           {index + 1}
         </GridItem>
       ))}
-      {board.map((row, rowIndex) => (
+      {board && board.map((row, rowIndex) => (
         <>
           <GridItem
             key={`col-label-${rowIndex}`}

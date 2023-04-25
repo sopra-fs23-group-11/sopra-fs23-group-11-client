@@ -37,7 +37,9 @@ function Game() {
     }
     startGame()
   }, [lobbyCode])
+
   console.log(game)
+
   function generateBoard() {
     const rows = 10
     const cols = 10
