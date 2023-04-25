@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react"
 import BattleshipBoard from "../../components/BattleShipBoard.jsx"
 import Ship from "../../components/Ship.jsx"
 import { api } from "../../helpers/api.js"
-import { Flex } from "@chakra-ui/react"
+import { Flex, Button } from "@chakra-ui/react"
 
 import shipsData from "../../models/ShipsData"
-import { useParams } from "react-router-dom"
+import { useParams, Link} from "react-router-dom"
 
 function Game() {
   const [gameBoard, setGameBoard] = useState({
@@ -164,6 +164,9 @@ function Game() {
         handlePlace={placeShip}
       />
       <Flex direction="column">{shipElements}</Flex>
+      <Button mt={3} as={Link} to={`/chatroom/${lobbyCode}`} colorScheme="blue">
+        Chat with friend
+      </Button>
     </Flex>
   )
 }
