@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react"
 import {Box, Button, Heading, Input} from "@chakra-ui/react"
 import { api, handleError } from "../../helpers/api.js"
 import { useNavigate } from "react-router"
-import backgroundImage from './battleship.jpeg';
 
 export default function Join() {
   const [lobbyCode, setLobbyCode] = useState("")
