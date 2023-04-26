@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { api, handleError } from "../../helpers/api"
 
+
 function Lobby() {
   const [code, setCode] = useState(null)
   const [lobbyCode, setLobbyCode] = useState(null)

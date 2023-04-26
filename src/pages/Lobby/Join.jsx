@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Button, Input } from "@chakra-ui/react"
+import {Box, Button, Heading, Input} from "@chakra-ui/react"
 import { api, handleError } from "../../helpers/api.js"
 import { useNavigate } from "react-router"
 
@@ -44,16 +44,26 @@ export default function Join() {
   }, [isValidCode])
 
   return (
-    <div>
-      <div>Enter Roomcode</div>
+    <Box
+      height="20vh"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      flexDirection="column">
+
+      <Heading as="h1" color="blackAlpha.900" frontsize="4x1" mb={6}>
+        Enter Roomcode</Heading>
+      <div style={{display:"flex", alignItems:"center"}}>
       <Input
         value={lobbyCode}
         name="code"
         onChange={(e) => setLobbyCode(e.target.value)}
         htmlSize={4}
         width="auto"
+        mr={6}
       />
       <Button onClick={submitCode}>submit code</Button>
-    </div>
+      </div>
+    </Box>
   )
 }
