@@ -1,7 +1,7 @@
 import React from 'react';
-import battleship from './battleship.jpg';
 import { Heading, Box } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
+import battleship from './battleship.jpg';
 
 
 export default function LobbyLayout() {
