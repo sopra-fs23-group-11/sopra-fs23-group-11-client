@@ -1,7 +1,8 @@
 import React from 'react';
+import backgroundImage from './battleship.jpeg';
 import { Heading, Box } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
-import backgroundImage from './battleship.jpeg';
+
 
 export default function LobbyLayout() {
   const bgStyle = {
