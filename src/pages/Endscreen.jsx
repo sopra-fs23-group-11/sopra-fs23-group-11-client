@@ -8,35 +8,19 @@ import {useParams, Link} from "react-router-dom";
 
 
 function EndScreen() {
-    const [user, setUsers] = useState(null);
+    const [users, setUsers] = useState(null);
     const hostId = localStorage.getItem("hostId")
-    let [winner, setWinner] = useState(null);
-    let [loser, setLoser] = useState(null);
+    const user = JSON.parse(localStorage.getItem("user"))
+    let [boardUser, setBoardUser] = useState(null);
     const { lobbyCode } = useParams();
 
 
     useEffect(() => {
             async function fetchData() {
                 try {
-                    const response = await api.get('/board/' + hostId)
-                    const response1 = await api.get('/users/' + hostId)
-                    const response2 = await api.get('/users')
-                    setUsers(response2)
-                    let joinId = response2.data[1].id
-                    if (joinId == hostId) {
-                        joinId = response2.data[0].id
-                    }
-                    const response3 = await api.get('/users/' + joinId)
-                    console.log(response1)
-                    const shipsRemaining = response.data.shipsRemaining
-                    console.log(shipsRemaining)
-                    if (shipsRemaining == 0) {
-                         setLoser(response1.data.username)
-                        setWinner(response3.data.username)
-                    }else{
-                        setWinner(response1.data.username)
-                        setLoser(response3.data.username)
-                    }
+
+                    setBoardUser((await api.get('/board/' + user.id)).data.shipsRemaining)
+
 
                 } catch (error) {
                     console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
@@ -51,24 +35,46 @@ function EndScreen() {
 
 
 
-    return (
-        <div>
-            <Flex alignItems="center" justifyContent="center">
-            <Box textAlign="center">
-                <Text Text as='b' fontSize='2xl' mt={4}>You won {winner}</Text>
-                <Image src={ship_winner} alt="Image 1" boxSize="500px"/>
-            </Box>
+    if(boardUser>0){
+        return (
+            <div>
+                <Flex alignItems="center" justifyContent="center">
+                    <Box textAlign="center">
+                        <Text Text as='b' fontSize='2xl' mt={4}>CONGRATULATIONS</Text>
+                        <Image src={ship_winner} alt="Image 1" width="500px" height="500px"/>
+                        <Text Text as='b' fontSize='1xl' mt={4}>{user.username}</Text>
+                        <Text>ships remaining : {boardUser} </Text>
+                        <Text>total wins: {user.totalWins+1}</Text>
+                    </Box>
+                </Flex>
+                <Button as={Link} to={`/game/${lobbyCode}`} colorScheme="blue">
+                    New Game
+                </Button>
+            </div>
 
-            <Box textAlign="center">
-                <Text Text as='b' fontSize='2xl' mt={4}>You lost {loser}</Text>
-                <Image src={ship_loser1} alt="Image 2" boxSize="500px" />
-            </Box>
-        </Flex>
-            <Button as={Link} to={`/game/${lobbyCode}`} colorScheme="blue">
-                New Game
-            </Button>
-        </div>
+        );
+    }
+    else{
+            return (
+                <div>
+                    <Flex alignItems="center" justifyContent="center">
+                        <Box textAlign="center">
+                            <Text Text as='b' fontSize='2xl' mt={4}>BETTER LUCK NEXT TIME</Text>
+                            <Image src={ship_loser1} alt="Image 1" width="500px" height="500px"/>
+                            <Text Text as='b' fontSize='1xl' mt={4}>{user.username}</Text>
+                            <Text>ships remaining : 0 </Text>
+                            <Text>total wins: {user.totalWins}</Text>
+                        </Box>
+                    </Flex>
+                    <Button as={Link} to={`/game/${lobbyCode}`} colorScheme="blue">
+                        New Game
+                    </Button>
+                </div>
 
-    );
+            );
+    }
+
+
+
 }
 export default EndScreen
