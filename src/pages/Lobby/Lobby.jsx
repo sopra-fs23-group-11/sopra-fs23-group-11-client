@@ -17,6 +17,7 @@ function Lobby() {
   async function generateLobbyCode() {
     try {
       const response = await api.post("/host", JSON.stringify({ hostId }))
+      localStorage.setItem("lobby",JSON.stringify(response));
       setCode(response.data.lobbyCode)
       setLobbyCode(response.data.lobbyCode)
       setShowCode(true)

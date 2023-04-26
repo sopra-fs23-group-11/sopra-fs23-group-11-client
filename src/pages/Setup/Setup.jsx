@@ -28,7 +28,7 @@ const Setup = () => {
         if(!game) {
 
           const response = await api.post(
-            `/game`,
+            `/startgame`,
             JSON.stringify({ lobbyCode, hostId })
           )
           setGame(response.data)
