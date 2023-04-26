@@ -1,5 +1,5 @@
 import React from 'react';
-import backgroundImage from './battleship.jpeg';
+import battleship from './battleship.jpg';
 import { Heading, Box } from '@chakra-ui/react';
 import { Outlet } from 'react-router-dom';
 
@@ -7,7 +7,7 @@ import { Outlet } from 'react-router-dom';
 export default function LobbyLayout() {
   const bgStyle = {
     position: 'relative',
-    backgroundImage: `url(${backgroundImage})`,
+    backgroundImage: `url(${battleship})`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
