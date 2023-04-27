@@ -2,12 +2,14 @@ import React, { useContext, useEffect, useState } from "react"
 import BattleshipBoard from "../../components/BattleShipBoard.jsx"
 import Ship from "../../components/Ship.jsx"
 import { api } from "../../helpers/api.js"
+
 import { Flex, Button, Box, Text } from "@chakra-ui/react"
 import { GameContext } from "../../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp"
 
 import shipsData from "../../models/ShipsData"
 import { useParams, Link } from "react-router-dom"
+
 
 function Game() {
   // const [gameBoard, setGameBoard] = useState({
@@ -35,6 +37,7 @@ function Game() {
   const user = JSON.parse(sessionStorage.getItem("user"))
   const socket = null
   console.log(joiner)
+
 
   async function startSetup() {
     try {
@@ -101,6 +104,7 @@ function Game() {
   }
 
   return (
+
     <Box>
       <>
         <h2>Host ID: {host.hostId}</h2>
@@ -176,6 +180,7 @@ function Game() {
         Chat with friend
       </Button> */}
     </Box>
+
   )
 }
 export default Game

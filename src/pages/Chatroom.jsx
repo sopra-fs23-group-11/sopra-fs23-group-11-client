@@ -5,6 +5,7 @@ import { useParams } from "react-router"
 // import SockJS from "sockjs-client"
 // import { over } from "stompjs"
 import { Stomp } from "stompjs/lib/stomp"
+import {Link} from "react-router-dom";
 
 let stompClient = null
 const Chatroom = () => {
@@ -243,9 +244,13 @@ const Chatroom = () => {
           <Button type="button" onClick={registerUser}>
             connect
           </Button>
+          <Button as={Link} to={`/game/${lobbyCode}`} colorScheme="blue">
+            back
+          </Button>
         </div>
       )}
     </Box>
+
   )
 }
 

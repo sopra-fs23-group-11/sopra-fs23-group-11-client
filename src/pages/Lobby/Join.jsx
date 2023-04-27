@@ -1,5 +1,8 @@
+
 import React, { useState, useEffect, useContext} from "react"
 import { Button, Heading, Input, Box } from "@chakra-ui/react"
+
+import React, { useState, useEffect } from "react"
 import { api, handleError } from "../../helpers/api.js"
 import { useNavigate } from "react-router"
 import { GameContext } from "../../contexts/GameContext.jsx"
@@ -46,22 +49,34 @@ export default function Join() {
       console.log("effect ran...")
       localStorage.setItem("hostId" , hostId)
       //navigate(`/chatroom/${lobbyCode}`)
+
       // navigate(`/game/${lobbyCode}`)
       navigate(`/game/${lobbyCode}`)
+      //navigate(`/setup/${lobbyCode}`)
     }
   }, [isValidCode])
 
   return (
-    <div>
-      <div>Enter Roomcode</div>
+    <Box
+      height="20vh"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      flexDirection="column">
+
+      <Heading as="h1" color="blackAlpha.900" frontsize="4x1" mb={6}>
+        Enter Roomcode</Heading>
+      <div style={{display:"flex", alignItems:"center"}}>
       <Input
         value={lobbyCode}
         name="code"
         onChange={(e) => setLobbyCode(e.target.value)}
         htmlSize={4}
         width="auto"
+        mr={6}
       />
       <Button onClick={submitCode}>submit code</Button>
-    </div>
+      </div>
+    </Box>
   )
 }
