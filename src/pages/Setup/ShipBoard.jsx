@@ -26,6 +26,8 @@ const ShipBoard = (props)=> {
     let positions = {};
     let error_logs = [];
 
+    const gameId = props.lobbyCode
+
 
     const handleStartPoint = (event, shipType) => {
         const inputValue = event.target.value;
@@ -46,7 +48,7 @@ const ShipBoard = (props)=> {
             submarine: [startPointSubmarine, endPointSubmarine]
             };
             let requestBody = null
-        const user = JSON.parse(localStorage.getItem("user"))
+        const user = JSON.parse(sessionStorage.getItem("user"))
         const shipPlayerPlayerId = user.id;
             let shipPlayerShipId = null;
             let startPosition = null;
@@ -78,7 +80,9 @@ const ShipBoard = (props)=> {
             endPosition = endPointCarrier
             }
 
-        requestBody = JSON.stringify({shipPlayerShipId, startPosition, endPosition, shipPlayerPlayerId})
+
+        requestBody = JSON.stringify({shipPlayerShipId, startPosition, endPosition, shipPlayerPlayerId, gameId })
+
         console.log("requestBody",requestBody)
 
     const response = await api.post('/submit/ships', requestBody);

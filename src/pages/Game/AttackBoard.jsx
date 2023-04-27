@@ -1,7 +1,7 @@
 import { Box, Grid, GridItem } from "@chakra-ui/react"
-import { React, useState } from "react"
+import { React, } from "react"
 
-function BattleshipBoard({ socket, board, handlePlace, playerId, handleShoot }) {
+function AttackBoard({ socket, board, handlePlace, playerId, handleShoot }) {
   return (
     <Grid
       templateColumns="repeat(11, 30px)"
@@ -42,9 +42,9 @@ function BattleshipBoard({ socket, board, handlePlace, playerId, handleShoot }) 
                 h="30px"
                 w="30px"
                 border="1px solid gray"
-                bg={board[rowIndex][colIndex].isOccupied ? "blue" : "white"}
-                //onClick={() => handleShoot(playerId,rowIndex, colIndex)}
-                onClick={()=> handlePlace(playerId, rowIndex, colIndex)}
+                bg={board[rowIndex][colIndex].isShotAt ? "red" : "white"}
+                onClick={() => handleShoot(playerId,rowIndex, colIndex)}
+                //onClick={()=> handlePlace(playerId, rowIndex, colIndex)}
               />
             </GridItem>
           ))}
@@ -54,4 +54,4 @@ function BattleshipBoard({ socket, board, handlePlace, playerId, handleShoot }) 
   )
 }
 
-export default BattleshipBoard
+export default AttackBoard

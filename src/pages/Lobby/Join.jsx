@@ -1,15 +1,23 @@
+
+import React, { useState, useEffect, useContext} from "react"
+import { Button, Heading, Input, Box } from "@chakra-ui/react"
+
 import React, { useState, useEffect } from "react"
-import {Box, Button, Heading, Input} from "@chakra-ui/react"
 import { api, handleError } from "../../helpers/api.js"
 import { useNavigate } from "react-router"
+import { GameContext } from "../../contexts/GameContext.jsx"
+
 
 export default function Join() {
   const [lobbyCode, setLobbyCode] = useState("")
   const [isValidCode, setIsValidCode] = useState(false)
   const [hostId, setHostId] = useState("")
-  const user = JSON.parse(localStorage.getItem("user"))
+  const user = JSON.parse(sessionStorage.getItem("user"))
   const joinerId = user.id
   const navigate = useNavigate()
+  const {host, setHost, joiner, setJoiner} = useContext(GameContext)
+
+
 
   async function submitCode() {
     try {
@@ -21,6 +29,8 @@ export default function Join() {
       if (response.status === 200) {
         setIsValidCode(true)
         setHostId(response.data.hostId)
+        setHost({hostId: response.data.hostId, hostName: response.data.hostName})
+        setJoiner({joinerId: user.id, joinerName: user.username})
       }
     } catch (error) {
       console.error(
@@ -39,7 +49,10 @@ export default function Join() {
       console.log("effect ran...")
       localStorage.setItem("hostId" , hostId)
       //navigate(`/chatroom/${lobbyCode}`)
-      navigate(`/setup/${lobbyCode}`)
+
+      // navigate(`/game/${lobbyCode}`)
+      navigate(`/game/${lobbyCode}`)
+      //navigate(`/setup/${lobbyCode}`)
     }
   }, [isValidCode])
 
