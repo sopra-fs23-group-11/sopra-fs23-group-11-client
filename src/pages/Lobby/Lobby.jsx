@@ -42,7 +42,7 @@ function Lobby() {
       setSocket(stompClient)
       stompClient.connect({}, ()=> {
       console.log("Stomp client connected !")
-      stompClient.subscribe(`/game/${response.data.lobbyCode}`, onJoiner)
+      stompClient.subscribe(`/join/${response.data.lobbyCode}`, onJoiner)
     })
 
 

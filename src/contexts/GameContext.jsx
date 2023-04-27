@@ -50,6 +50,14 @@ export default function GameProvider({ children }) {
    
   }
 
+  const handleAttack = (rowIndex, colIndex, playerId) => {
+    if(playerOne.playerId === playerId){
+      setPlayerOne({...playerOne, playerBoard: shootMissle(playerOne.playerBoard,rowIndex, colIndex )})
+    }else {
+      setPlayerTwo({...playerTwo, playerBoard: shootMissle(playerTwo.playerBoard,rowIndex, colIndex )})
+    }
+  }
+
   const handlePlace = (playerId, rowIndex, colIndex) => {
     playerOne.playerId === playerId ?
       setPlayerOne(updatePlayer(playerOne, rowIndex, colIndex))
@@ -181,12 +189,12 @@ export default function GameProvider({ children }) {
       )
       return response
     }catch(e){
-      alert("ships are touching")
+      //alert("ships are touching")
     }
    }
 
   return (
-    <GameContext.Provider value={{host, setHost, joiner, setJoiner,playerOne, playerTwo,setPlayerOne, setPlayerTwo,  handleShoot, handleSelect, handlePlace}}>
+    <GameContext.Provider value={{host, setHost, joiner, setJoiner,playerOne, playerTwo,setPlayerOne, setPlayerTwo,  handleShoot, handleSelect, handlePlace, handleAttack}}>
       {children}
     </GameContext.Provider>
   )

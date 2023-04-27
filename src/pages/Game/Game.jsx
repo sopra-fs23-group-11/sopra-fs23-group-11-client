@@ -7,15 +7,10 @@ import { Flex, Button, Box, Text } from "@chakra-ui/react"
 import { GameContext } from "../../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp"
 
-import shipsData from "../../models/ShipsData"
 import { useParams, Link, useNavigate } from "react-router-dom"
 
-
+let socket = null
 function Game() {
-  // const [gameBoard, setGameBoard] = useState({
-  //   id: 1,
-  //   grid: generateBoard(),
-  // })
 
   const {
     playerOne,
@@ -31,12 +26,12 @@ function Game() {
   } = useContext(GameContext)
 
   const [game, setGame] = useState(null)
+  const [isReady, setIsReady] = useState(false)
   const [isStartSetup, setIsStartSetup] = useState(false)
   const { lobbyCode } = useParams()
   const hostId = host.hostId
   const hostName = host.hostName
   const user = JSON.parse(sessionStorage.getItem("user"))
-  const socket = null
   console.log(joiner)
   const navigate = useNavigate()
 
@@ -53,6 +48,8 @@ function Game() {
         playerId: host.hostId,
         playerName: host.hostName,
       }))
+
+      
       
 
       setGame(response.data)
@@ -61,60 +58,69 @@ function Game() {
     }
   }
 
-  async function playerReady() {
-    try {
-      const response = await api.post("/ready", JSON.stringify({lobbyCode,hostId , hostName}))
-      const stompClient = Stomp.client("ws://localhost:8080/ws")
-      stompClient.connect({}, () => {
-        stompClient.subscribe(`game/${lobbyCode}`, onReady)
+  function playerReady() {
+
+    let id
+    let name
+    if(host.hostId === user.id){
+      id = hostId
+      name = host.hostName
+    }else{
+      id = joiner.joinerId
+      name = joiner.joinerName
+    }
+    const readyMessage = {
+      gameId: lobbyCode,
+      playerId: id,
+      playerName: name
+    }
+
+    socket.send(`/app/ready`, {}, JSON.stringify(readyMessage))
+    // setIsReady(true)
+    navigate(`/main/${lobbyCode}`)
+  }
+    
+
+  // function onReady(payload) {
+  //   const payloadData = JSON.parse(payload.body)
+  //   console.log(payloadData)
+  // }
+
+  useEffect(() => {
+    console.log("effect ran...")
+    socket = Stomp.client("ws://localhost:8080/ws")
+    socket.connect({}, onConnected)
+  }, [])
+  
+  const onConnected = () => {
+    console.log("Stomp client connected !")
+    
+    socket.subscribe(`/startgame/${lobbyCode}`, onStartGame)
+    socket.subscribe(`/ready/${lobbyCode}`, onReady)
+  }
+  
+  const onStartGame = (payload) => {
+    const payloadData = JSON.parse(payload.body)
+    if(payloadData.type === "Start"){
+      setJoiner({
+        joinerId: payloadData.player2Id,
+        joinerName: payloadData.player2Name,
       })
-      navigate("/main")
-    } catch (error) {
-      console.log(error)
+      setPlayerTwo((player) => ({
+        ...player,
+        playerId: joiner.joinerId,
+        playerName: joiner.joinerName,
+      }))
+      setIsStartSetup(true)
     }
   }
 
-  function onReady(payload) {
+  const onReady = (payload) => {
     const payloadData = JSON.parse(payload.body)
     console.log(payloadData)
+    setIsReady(true)
   }
 
-  useEffect(() => {
-    const newSocket = Stomp.client("ws://localhost:8080/ws")
-    newSocket.connect({}, () => {
-      console.log("Stomp client connected !")
-      newSocket.subscribe(`/game/${lobbyCode}`, (payload) => {
-        const payloadData = JSON.parse(payload.body)
-        setJoiner({
-          joinerId: payloadData.player2Id,
-          joinerName: payloadData.player2Name,
-        })
-        setPlayerTwo((player) => ({
-          ...player,
-          playerId: joiner.joinerId,
-          playerName: joiner.joinerName,
-        }))
-        setIsStartSetup(true)
-      })
-    })
-  }, [])
-
-  // const submitShipPosition = async (array, ship) => {
-  //   const startPosition = array[0]
-  //   const endPosition = array[array.length - 1]
-  //   const shipPlayerShipId = ship.id
-  //   const shipPlayerPlayerId = user.id
-  //   const response = await api.post(
-  //     "/ships",
-  //     JSON.stringify({
-  //       shipPlayerPlayerId,
-  //       shipPlayerShipId,
-  //       startPosition,
-  //       endPosition,
-  //     })
-  //   )
-  //   return response
-  // }
 
   const selectShip = (shipId, playerId) => {
     handleSelect(shipId, playerId)
@@ -128,12 +134,15 @@ function Game() {
 
     <Box>
       <>
+        {isReady && <p>Ready!!!</p> }
+        
         <h2>Host ID: {host.hostId}</h2>
         <h2>Host Name: {host.hostName}</h2>
         <h2>Joiner ID: {joiner.joinerId}</h2>
         <h2>Joiner Name: {joiner.joinerName}</h2>
       </>
       {isStartSetup ? (
+      
         <Flex>
           {user.id === host.hostId ? (
             <>
