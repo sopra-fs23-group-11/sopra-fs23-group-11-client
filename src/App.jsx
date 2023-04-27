@@ -33,7 +33,7 @@ const router = createBrowserRouter(
       <Route path="chatroom/:lobbyCode" element={<Chatroom />} />
         <Route path="endscreen/:lobbyCode" element={<Endscreen />} />
 
-        <Route path="main" element={<MainGame/>} />
+        <Route path="main/:lobbyCode" element={<MainGame/>} />
 
 
       <Route path="lobby" element={<LobbyLayout />}>

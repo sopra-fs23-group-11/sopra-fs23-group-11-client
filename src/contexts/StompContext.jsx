@@ -5,17 +5,23 @@ export const StompContext = createContext(null)
 
 export default function StompProvider({ children }) {
   const [stompClient, setStompClient] = useState(null)
+  const [isReady, setIsReady] = useState(null)
 
   useEffect(() => {
     const socket = Stomp.client("ws://localhost:8080/ws")
-    setStompClient(socket)
+    
 
     socket.connect({}, () => {
       console.log("Stomp client connected")
+      setStompClient(socket)
     })
+    setIsReady(true)
 
-    return () => socket.disconnect()
+    
   }, [])
+
+  if(!isReady) return <div>Loading...</div>
+
   return (
     <StompContext.Provider value={stompClient}>
       {children}
