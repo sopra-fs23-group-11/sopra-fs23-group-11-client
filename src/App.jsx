@@ -19,6 +19,8 @@ import Game from "./pages/Game/Game.jsx"
 import Chatroom from "./pages/Chatroom"
 import Endscreen from "./pages/Endscreen"
 import GameBoard from "./pages/Game/GameBoard.jsx"
+import MainGame from "./pages/Game/MainGame"
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,7 +32,9 @@ const router = createBrowserRouter(
       <Route path="game/:lobbyCode" element={<Game />} />
       <Route path="chatroom/:lobbyCode" element={<Chatroom />} />
         <Route path="endscreen/:lobbyCode" element={<Endscreen />} />
-      <Route path="" />
+
+        <Route path="main" element={<MainGame/>} />
+
 
       <Route path="lobby" element={<LobbyLayout />}>
         <Route index element={<Lobby />} />
