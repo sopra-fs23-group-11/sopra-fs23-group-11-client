@@ -41,6 +41,7 @@ function Game() {
 
   async function startSetup() {
     try {
+
       const response = await api.post(
         `/startgame`,
         JSON.stringify({ lobbyCode, hostId })
