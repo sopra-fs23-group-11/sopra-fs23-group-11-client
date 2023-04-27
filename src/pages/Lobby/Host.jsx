@@ -13,7 +13,7 @@ export default function Host() {
     async function fetchData() {
       try {
         const response = await api.post(
-            "/host",
+            "/lobbies",
             JSON.stringify({userId})
         )
         // delays continuous execution of an async operation for 1 second.

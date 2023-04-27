@@ -21,7 +21,7 @@ export default function Join() {
   async function submitCode() {
     try {
       const response = await api.put(
-        "/join",
+        "/lobbies",
         JSON.stringify({ joinerId, lobbyCode })
       )
       console.log(response.ok, response.status, response.data)
