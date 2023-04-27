@@ -37,7 +37,7 @@ export default function Register() {
   const response = useActionData()
   const user = new User(response?.data)
   console.log(response?.data)
-  localStorage.setItem("user", JSON.stringify(user))
+  sessionStorage.setItem("user", JSON.stringify(user))
   const navigate = useNavigate()
   const handleClick = () => setShow(!show)
 
