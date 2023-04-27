@@ -80,11 +80,34 @@ export default function GameProvider({ children }) {
   
   }
 
+  function getYCords(y){
+    let characters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+    return characters[y];
+  }
+
+  function getLastPart(url) {
+    const parts = url.split('/');
+    return parts.at(-1);
+  }
+
   const updatePlayer =  (player, rowIndex, colIndex) => {
     const shipToBePlaced = JSON.parse(sessionStorage.getItem("selected"))
+    console.log("row:"+rowIndex, "col:"+colIndex)
     if(shipToBePlaced){
       const length = shipToBePlaced.length
       const coordinatesToBeOccupied = []
+      let shipPlayerPlayerId = player.playerId;
+      console.log("playerid:"+shipPlayerPlayerId)
+      let shipPlayerShipId = shipToBePlaced.id;
+      console.log("shipId:"+shipPlayerShipId)
+      let startY = getYCords(rowIndex);
+      let endX = colIndex + length;
+      let startX = colIndex + 1;
+      console.log("rowIndex:"+rowIndex, "colIndex:"+colIndex, "startY:" +startY, "endX:"+endX)
+      let startPosition = startY.toString() + startX.toString();
+      let endPosition = startY.toString() + endX.toString();
+      console.log("startPos:"+startPosition, "endPos:"+endPosition)
+      submitShipPosition(shipPlayerPlayerId,shipPlayerShipId,startPosition,endPosition)
       for (let i = 0; i < length; i++) {
         coordinatesToBeOccupied.push(player.playerBoard[rowIndex][colIndex + i].id)
       }
@@ -143,22 +166,24 @@ export default function GameProvider({ children }) {
   //const providerHost = useMemo(() => ({host, setHost}), [host, setHost])
 
 
-  // const submitShipPosition = async (array, ship) => {
-  //   const startPosition = array[0]
-  //   const endPosition = array[array.length - 1]
-  //   const shipPlayerShipId = ship.id
-  //   const shipPlayerPlayerId = user.id
-  //   const response = await api.post(
-  //     "/submit/ships",
-  //     JSON.stringify({
-  //       shipPlayerPlayerId,
-  //       shipPlayerShipId,
-  //       startPosition,
-  //       endPosition,
-  //     })
-  //   )
-  //   return response
-  // }
+   const submitShipPosition = async (shipPlayerPlayerId,shipPlayerShipId,startPosition,endPosition) => {
+    try {
+      const gameId = getLastPart(window.location.href)
+      const response = await api.post(
+          "/submit/ships",
+          JSON.stringify({
+            shipPlayerPlayerId,
+            shipPlayerShipId,
+            startPosition,
+            endPosition,
+            gameId
+          })
+      )
+      return response
+    }catch(e){
+      alert("ships are touching")
+    }
+   }
 
   return (
     <GameContext.Provider value={{host, setHost, joiner, setJoiner,playerOne, playerTwo,setPlayerOne, setPlayerTwo,  handleShoot, handleSelect, handlePlace}}>

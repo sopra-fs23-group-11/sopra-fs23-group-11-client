@@ -14,7 +14,7 @@ export default function Host() {
       try {
         const response = await api.post(
             "/host",
-            JSON.stringify({ userId})
+            JSON.stringify({userId})
         )
         // delays continuous execution of an async operation for 1 second.
         // This is just a fake async call, so that the spinner can be displayed

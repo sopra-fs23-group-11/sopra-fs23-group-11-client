@@ -42,6 +42,10 @@ export default function Join() {
     }
   }
 
+  function toGame(){
+    navigate(`/game/${lobbyCode}`)
+  }
+
   useEffect(() => {
     // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
     if (isValidCode) {
