@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useContext} from "react"
 import { Button, Heading, Input, Box } from "@chakra-ui/react"
 
-import React, { useState, useEffect } from "react"
 import { api, handleError } from "../../helpers/api.js"
 import { useNavigate } from "react-router"
 import { GameContext } from "../../contexts/GameContext.jsx"
