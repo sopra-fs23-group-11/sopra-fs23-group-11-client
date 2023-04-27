@@ -85,7 +85,7 @@ const ShipBoard = (props)=> {
 
         console.log("requestBody",requestBody)
 
-    const response = await api.post('/submit/ships', requestBody);
+    const response = await api.post('/ships', requestBody);
             console.log('props', props)
             console.log('positions', positions)
             //props.onShipPlacement(positions);

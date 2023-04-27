@@ -105,7 +105,7 @@ function Game() {
   //   const shipPlayerShipId = ship.id
   //   const shipPlayerPlayerId = user.id
   //   const response = await api.post(
-  //     "/submit/ships",
+  //     "/ships",
   //     JSON.stringify({
   //       shipPlayerPlayerId,
   //       shipPlayerShipId,

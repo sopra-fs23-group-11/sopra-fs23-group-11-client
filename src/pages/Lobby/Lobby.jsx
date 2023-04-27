@@ -29,7 +29,7 @@ function Lobby() {
 
   async function generateLobbyCode() {
     try {
-      const response = await api.post("/host", JSON.stringify({ hostId }))
+      const response = await api.post("/lobbies", JSON.stringify({ hostId }))
       localStorage.setItem("lobby",JSON.stringify(response));
       setCode(response.data.lobbyCode)
       setLobbyCode(response.data.lobbyCode)
@@ -109,8 +109,8 @@ function Lobby() {
         justifyContent="center"
         alignItems="center"
       >
-        <h2>Host ID: {host.hostId}</h2>
-        <h2>Host Name: {host.hostName}</h2>
+        <h2><Text Text as='b' color="white">ID: {user.id}</Text></h2>
+        <h2><Text Text as='b' color="white">Name: {user.username}</Text></h2>
         <Button w="200px" size="lg" onClick={generateLobbyCode}>
           Host
         </Button>

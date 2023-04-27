@@ -170,7 +170,7 @@ export default function GameProvider({ children }) {
     try {
       const gameId = getLastPart(window.location.href)
       const response = await api.post(
-          "/submit/ships",
+          "/ships",
           JSON.stringify({
             shipPlayerPlayerId,
             shipPlayerShipId,
