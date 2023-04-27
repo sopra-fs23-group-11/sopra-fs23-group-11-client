@@ -8,7 +8,7 @@ import { GameContext } from "../../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp"
 
 import shipsData from "../../models/ShipsData"
-import { useParams, Link } from "react-router-dom"
+import { useParams, Link, useNavigate } from "react-router-dom"
 
 
 function Game() {
@@ -34,9 +34,11 @@ function Game() {
   const [isStartSetup, setIsStartSetup] = useState(false)
   const { lobbyCode } = useParams()
   const hostId = host.hostId
+  const hostName = host.hostName
   const user = JSON.parse(sessionStorage.getItem("user"))
   const socket = null
   console.log(joiner)
+  const navigate = useNavigate()
 
 
   async function startSetup() {
@@ -59,16 +61,34 @@ function Game() {
     }
   }
 
+  async function playerReady() {
+    try {
+      const response = await api.post("/ready", JSON.stringify({lobbyCode,hostId , hostName}))
+      const stompClient = Stomp.client("ws://localhost:8080/ws")
+      stompClient.connect({}, () => {
+        stompClient.subscribe(`game/${lobbyCode}`, onReady)
+      })
+      navigate("/main")
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  function onReady(payload) {
+    const payloadData = JSON.parse(payload.body)
+    console.log(payloadData)
+  }
+
   useEffect(() => {
     const newSocket = Stomp.client("ws://localhost:8080/ws")
     newSocket.connect({}, () => {
       console.log("Stomp client connected !")
       newSocket.subscribe(`/game/${lobbyCode}`, (payload) => {
         const payloadData = JSON.parse(payload.body)
-        // setJoiner({
-        //   joinerId: payloadData.player2Id,
-        //   joinerName: payloadData.player2Name,
-        // })
+        setJoiner({
+          joinerId: payloadData.player2Id,
+          joinerName: payloadData.player2Name,
+        })
         setPlayerTwo((player) => ({
           ...player,
           playerId: joiner.joinerId,
@@ -170,10 +190,10 @@ function Game() {
       ) : (
         <Text>Preparing Setup stage...</Text>
       )}
-      {playerOne.playerShips.length === 0 &&
+      {(playerOne.playerShips.length === 0 || playerTwo.playerShips.length === 0) &&
         (
-          <Button as={Link} to={`/main`}>
-            StartGame
+          <Button onClick={playerReady}>
+            Ready!
           </Button>
         )}
 
