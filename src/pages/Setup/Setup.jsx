@@ -38,9 +38,6 @@ const Setup = () => {
     setShipPositions(positions)
   }
 
-  const [game, setGame] = useState(null)
-  const{lobbyCode} = useParams()
-  const hostId = localStorage.getItem("hostId")
   console.log("shipPosition", shipPositions)
 
   //set up api request to start a game
