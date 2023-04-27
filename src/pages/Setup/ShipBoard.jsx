@@ -80,7 +80,9 @@ const ShipBoard = (props)=> {
             endPosition = endPointCarrier
             }
 
+
         requestBody = JSON.stringify({shipPlayerShipId, startPosition, endPosition, shipPlayerPlayerId, gameId })
+
         console.log("requestBody",requestBody)
 
     const response = await api.post('/submit/ships', requestBody);

@@ -1,8 +1,11 @@
+
 import React, { useState, useContext, useEffect } from "react"
+
 import Board from "./Board.jsx"
 import ShipBoard from "./ShipBoard.jsx"
 import { Box, Button, Text } from "@chakra-ui/react"
 import { Link } from "react-router-dom"
+
 import GameBoard from "../Game/GameBoard.jsx"
 import { GameContext } from "../../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp"
@@ -10,6 +13,7 @@ import { Stomp } from "stompjs/lib/stomp"
 import "./Setup.css"
 import { api } from "../../helpers/api.js"
 import { useParams } from "react-router"
+
 
 const Setup = () => {
   const [shipPositions, setShipPositions] = useState([])
@@ -34,9 +38,32 @@ const Setup = () => {
     setShipPositions(positions)
   }
 
+  const [game, setGame] = useState(null)
+  const{lobbyCode} = useParams()
+  const hostId = localStorage.getItem("hostId")
   console.log("shipPosition", shipPositions)
 
+  //set up api request to start a game
+   useEffect(() => {
+    async function startGame() {
+      try {
+        if(!game) {
+
+          const response = await api.post(
+            `/startgame`,
+            JSON.stringify({ lobbyCode, hostId })
+          )
+          setGame(response.data)
+        }
+      } catch (error) {
+        console.log(error.message)
+      }
+    }
+    startGame()
+  }, [lobbyCode])
+
   return (
+
     <Box>
       <>
         <h2>Host ID: {host.hostId}</h2>
@@ -73,6 +100,7 @@ const Setup = () => {
         <Text>Preparing Setup stage...</Text>
       )}
     </Box>
+
   )
 }
 

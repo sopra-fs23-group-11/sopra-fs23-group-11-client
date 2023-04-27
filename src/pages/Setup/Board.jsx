@@ -6,24 +6,51 @@ import Cell from "./Cell";
 
 const Board = (props) => {
   const [board, setBoard] = useState(Array(10).fill(Array(10).fill("")));
+  const [hits, setHits] = useState([]);
+  const [shipStatus, setShipStatus] = useState({
+    battleShip: "OK", carrier: "OK", cruiser: "OK", destroyer: "OK", submarine: "OK"
+  })
+  const [showHits, setShowHits] = useState(false)
 
-  const handleChange = (event, row, col) => {
-    const value = event.target.value;
-    console.log(row, col, value)
-    setBoard(prevBoard => {
-      console.log(prevBoard)
-      const newBoard = [...prevBoard];
-      console.log(newBoard)
-      newBoard[row][col] = value;
-      console.log(newBoard)
-      return newBoard;
-    });
-  };
+
 
   const handleCellClick = (row, col) => {
-    // pass row and col to backend to check if valid move
-    // if valid, update board with new move
-  }
+    // Add clicked cell to hits array
+
+    console.log("cell", row,col)
+    const cell = {row, col}
+    const updateHits = [...hits, cell];
+    console.log("hits1", hits)
+    console.log(updateHits)
+    setHits(updateHits)
+    console.log("hits2", hits)
+
+
+    // Check if cell is a hit or a miss
+    const isHit = Object.keys(props.shipPositions).some(ship => (
+        props.shipPositions[ship].some(shipCell => (
+        shipCell.row === cell.row && shipCell.col === cell.col))))
+
+    if (isHit){
+      // Update board with hit
+      board[row][col] = "H"
+      // check if ship is destroyed
+      const ship = Object.keys(props.shipPositions).find(ship => (
+          props.shipPositions[ship].every(shipCell=> (hits.some(hit => (
+              hit.row === shipCell.row && hit.col === shipCell.col
+          ))))
+      ))
+      if(ship){
+        // Update ship status
+        setShipStatus(prevShipStatus => ({
+          ...prevShipStatus, [ship]: "DESTROYED"
+        }))
+      }
+    } else{
+      // update board with miss
+      return board[row][col] = "M";
+    }
+  };
 
   const renderBoard = () => {
     const rows = [];
@@ -72,8 +99,7 @@ const Board = (props) => {
               </td>
           );} else {
           cols.push(
-            <td key={`${row},${col}`} className="cell" onClick={()=> handleCellClick(row,col)}>
-             <Cell></Cell>
+            <td key={`${row},${col}`} className="cell" >
             </td>
           );}
       }
