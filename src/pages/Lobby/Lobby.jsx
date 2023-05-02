@@ -34,6 +34,10 @@ function Lobby() {
           </Button>
         </Link>
 
+        <Button as={Link} to={`/profile/${user.id}`} w="200px" size="lg">
+        Profile
+      </Button>
+
 
         
       </Flex>
