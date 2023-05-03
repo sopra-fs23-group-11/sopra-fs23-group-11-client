@@ -1,28 +1,14 @@
 import React, { useEffect, useState } from "react"
 import { useNavigate} from "react-router-dom"
 import { api, handleError } from "../../helpers/api"
-import { Box, Button, Text} from "@chakra-ui/react";
+import { Box, Button, Text, Avatar} from "@chakra-ui/react";
 
 
 const Profile = () => {
-    const [username, setUsername] = useState(null);
-    const [status, setStatus] = useState(null);
-    const [id, setId] = useState(null);
-    const [totalWins, setTotalWins] = useState(null);
+
     const user = JSON.parse(sessionStorage.getItem("user"))
     console.log(user)
     const navigate = useNavigate()
-
-    const userInfo = async (id) =>{
-        try{
-            setUsername(user.username);
-            setStatus(user.status);
-            setId(user.id)
-            setTotalWins(user.totalWins);
-        }catch (error) {
-            alert(`not working: \n${handleError(error)}`)
-        }
-    };
 
     const goBack = () => {
         navigate(`/lobby`)
@@ -31,10 +17,12 @@ const Profile = () => {
     let content = (
         <div className="game">
             <ul className="game user-list">
+                <Avatar size='2xl' src={user.avatar}/>
                 <li> Account username: {user.username}</li>
                 <li>Account ID: {user.id}</li>
                 <li> Account Status: {user.status}</li>
                 <li> Account Wins: {user.totalWins}</li>
+
             </ul>
         </div>
     )
