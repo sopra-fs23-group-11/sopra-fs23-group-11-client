@@ -18,12 +18,10 @@ export default function GameProvider({ children }) {
   })
 
   const [playerTwo, setPlayerTwo] = useState({
-    
       playerId: null,
       playerName: "",
       playerBoard: generateBoard(),
       playerShips: shipsData
-     
   })
 
   // const [gameState, setGameState] = useState([
@@ -88,9 +86,10 @@ export default function GameProvider({ children }) {
   
   }
 
-  function getYCords(y){
+  // To get the letter at some index
+  function getYCords(int){
     let characters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
-    return characters[y];
+    return characters[int];
   }
 
   function getLastPart(url) {
