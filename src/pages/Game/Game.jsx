@@ -23,6 +23,8 @@ function Game() {
     setHost,
     joiner,
     setJoiner,
+    direction,
+    setDirection,
   } = useContext(GameContext)
 
   const [game, setGame] = useState(null)
@@ -34,7 +36,7 @@ function Game() {
   const user = JSON.parse(sessionStorage.getItem("user"))
   console.log(joiner)
   const navigate = useNavigate()
-  const [direction, setDirection] = useState("Horizontal")
+
 
 
   async function startSetup() {
@@ -45,7 +47,6 @@ function Game() {
         JSON.stringify({ lobbyCode, hostId })
       )
       
-
 
       setGame(response.data)
     } catch (error) {
