@@ -189,7 +189,7 @@ export default function GameProvider({ children }) {
    }
 
   return (
-    <GameContext.Provider value={{direction, setDirection,host, setHost, joiner, setJoiner,playerOne, playerTwo,setPlayerOne, setPlayerTwo,  handleShoot, handleSelect, handlePlace, handleAttack}}>
+    <GameContext.Provider value={{direction, setDirection,host, setHost, joiner, setJoiner,playerOne, playerTwo,setPlayerOne, setPlayerTwo,  handleShoot, handleSelect, handlePlace}}>
       {children}
     </GameContext.Provider>
   )
