@@ -8,7 +8,7 @@ import {
   FormHelperText,
   InputGroup,
   InputRightElement,
-  Text,
+  Text, Avatar, Tooltip,
 } from "@chakra-ui/react"
 import {Form, useActionData, useNavigate} from "react-router-dom"
 import {api, handleError} from "../helpers/api"
@@ -18,8 +18,7 @@ export async function action({ request }) {
   const data = await request.formData()
   const username = data.get("username")
   const password = data.get("password")
-  let avatar = data.get("avatar")
-
+  let avatar = sessionStorage.getItem('avatar')
   try {
     const response = await api.post(
       "/users",
@@ -32,45 +31,63 @@ export async function action({ request }) {
     }
   }
 }
+
 function AvatarList() {
   const [avatar, setAvatar] = useState('');
 
+
   const avatars = [
-    "https://api.dicebear.com/6.x/lorelei/svg?seed=1",
-    "https://api.dicebear.com/6.x/lorelei/svg?seed=2",
-    "https://api.dicebear.com/6.x/lorelei/svg?seed=3",
-    "https://api.dicebear.com/6.x/lorelei/svg?seed=4",
-    "https://api.dicebear.com/6.x/lorelei/svg?seed=5",
-    "https://api.dicebear.com/6.x/lorelei/svg?seed=6",
-    "https://api.dicebear.com/6.x/lorelei/svg?seed=7",
-    "https://api.dicebear.com/6.x/lorelei/svg?seed=8",
-    "https://api.dicebear.com/6.x/lorelei/svg?seed=9",
-    "https://api.dicebear.com/6.x/lorelei/svg?seed=10",
+    "https://api.dicebear.com/6.x/lorelei/svg?seed="+ localStorage.getItem('result'),
+    "https://api.dicebear.com/6.x/adventurer/svg?seed="+ localStorage.getItem('result'),
+    "https://api.dicebear.com/6.x/avataaars/svg?seed="+ localStorage.getItem('result'),
+    "https://api.dicebear.com/6.x/bottts/svg?seed=" + localStorage.getItem('result'),
+    "https://api.dicebear.com/6.x/big-ears/svg?seed=" + localStorage.getItem('result'),
+    "https://api.dicebear.com/6.x/croodles/svg?seed=" + localStorage.getItem('result'),
+    "https://api.dicebear.com/6.x/open-peeps/svg?seed=" + localStorage.getItem('result'),
+    "https://api.dicebear.com/6.x/big-smile/svg?seed=" + localStorage.getItem('result'),
+    "https://api.dicebear.com/6.x/miniavs/svg?seed=" + localStorage.getItem('result'),
+    "https://api.dicebear.com/6.x/pixel-art/svg?seed=" + localStorage.getItem('result'),
   ];
 
   const handleAvatarClick = (index) => {
     setAvatar(avatars[index]);
-    console.log(avatar)
+    console.log(index)
+    sessionStorage.setItem('avatar', avatar)
   };
+
+  function generateAvatar() {
+    const minLength = 1; // minimum length of the code
+    const maxLength = 10; // maximum length of the code
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"; // possible characters in the code
+    const length = Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength; // random length between min and max length
+    let result = "";
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    localStorage.setItem('result', result);
+  }
 
 
   return (
+      <div><Button onClick={generateAvatar}>Generate Avatars</Button>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {avatars.map((url, index) => (
-            <img
+            <Tooltip hasArrow label='Pick Me!'><Avatar
+                size='xl'
                 key={index}
                 src={url}
                 alt={`avatar-${index}`}
-                style={{ width: '75px', height: '75px', margin: '10px', cursor: 'pointer' }}
                 onClick={() => handleAvatarClick(index)}
-            />
+            /></Tooltip>
         ))}
       </div>
+    </div>
   );
 }
 
 
-  export default function Register() {
+
+export default function Register() {
   const [show, setShow] = useState(false)
   const response = useActionData()
   const user = new User(response?.data)
