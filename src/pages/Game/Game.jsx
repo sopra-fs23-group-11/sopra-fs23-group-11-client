@@ -34,6 +34,7 @@ function Game() {
   const user = JSON.parse(sessionStorage.getItem("user"))
   console.log(joiner)
   const navigate = useNavigate()
+  const [direction, setDirection] = useState("Horizontal")
 
 
   async function startSetup() {
@@ -49,8 +50,6 @@ function Game() {
         playerName: host.hostName,
       }))
 
-      
-      
 
       setGame(response.data)
     } catch (error) {
@@ -59,7 +58,6 @@ function Game() {
   }
 
   function playerReady() {
-
     let id
     let name
     if(host.hostId === user.id){
@@ -89,18 +87,25 @@ function Game() {
   useEffect(() => {
     console.log("effect ran...")
     socket = Stomp.client("ws://localhost:8080/ws")
-    socket.connect({}, onConnected)
+    socket.connect({}, onConnected, errorCallback)
   }, [])
+
+  const errorCallback = (m) => {
+    console.log('mmm', m)
+  }
   
   const onConnected = () => {
-    console.log("Stomp client connected !")
+    console.log("Stomp client connected !", lobbyCode)
     
     socket.subscribe(`/startgame/${lobbyCode}`, onStartGame)
+    console.log("websocket connected!")
     socket.subscribe(`/ready/${lobbyCode}`, onReady)
   }
   
   const onStartGame = (payload) => {
+    console.log("game starts")
     const payloadData = JSON.parse(payload.body)
+    console.log("game starts")
     if(payloadData.type === "Start"){
       setJoiner({
         joinerId: payloadData.player2Id,
@@ -111,11 +116,13 @@ function Game() {
         playerId: joiner.joinerId,
         playerName: joiner.joinerName,
       }))
+      console.log("isStartsetup", isStartSetup)
       setIsStartSetup(true)
     }
   }
 
   const onReady = (payload) => {
+    console.log("game starts on REady")
     const payloadData = JSON.parse(payload.body)
     console.log(payloadData)
     setIsReady(true)
@@ -129,6 +136,11 @@ function Game() {
   const placeShip = (playerId, rowIndex, colIndex) => {
     handlePlace(playerId, rowIndex, colIndex)
   }
+
+  const handleClick =() => {
+    setDirection(direction === "Horizontal" ? "Vertical":"Horizontal")
+  }
+
 
   return (
 
@@ -166,6 +178,8 @@ function Game() {
                     shipId={ship.id}
                   />
                 ))}
+                 <button onClick={handleClick}> {direction} </button>
+
               </Flex>
             </>
           ) : (
@@ -190,6 +204,7 @@ function Game() {
                     shipId={ship.id}
                   />
                 ))}
+                <button onClick={handleClick}> {direction} </button>
               </Flex>
             </>
           )}

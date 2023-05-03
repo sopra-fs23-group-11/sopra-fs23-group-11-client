@@ -88,9 +88,10 @@ export default function GameProvider({ children }) {
   
   }
 
-  function getYCords(y){
+// get letter value for a  certain index
+  function getYCords(ind){
     let characters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
-    return characters[y];
+    return characters[ind];
   }
 
   function getLastPart(url) {
