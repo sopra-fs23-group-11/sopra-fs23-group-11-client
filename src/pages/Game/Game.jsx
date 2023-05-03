@@ -44,11 +44,7 @@ function Game() {
         `/startgame`,
         JSON.stringify({ lobbyCode, hostId })
       )
-      setPlayerOne((player) => ({
-        ...player,
-        playerId: host.hostId,
-        playerName: host.hostName,
-      }))
+      
 
 
       setGame(response.data)
@@ -107,14 +103,17 @@ function Game() {
     const payloadData = JSON.parse(payload.body)
     console.log("game starts")
     if(payloadData.type === "Start"){
-      setJoiner({
-        joinerId: payloadData.player2Id,
-        joinerName: payloadData.player2Name,
-      })
+
+      setPlayerOne((player) => ({
+        ...player,
+        playerId: payloadData.player1Id,
+        playerName: payloadData.player1Name,
+      }))
+     
       setPlayerTwo((player) => ({
         ...player,
-        playerId: joiner.joinerId,
-        playerName: joiner.joinerName,
+        playerId: payloadData.player2Id,
+        playerName: payloadData.player2Name,
       }))
       console.log("isStartsetup", isStartSetup)
       setIsStartSetup(true)
@@ -135,6 +134,7 @@ function Game() {
 
   const placeShip = (playerId, rowIndex, colIndex) => {
     handlePlace(playerId, rowIndex, colIndex)
+    
   }
 
   const handleClick =() => {
@@ -145,15 +145,14 @@ function Game() {
   return (
 
     <Box>
+      {isStartSetup ? (
       <>
         {isReady && <p>Ready!!!</p> }
         
-        <h2>Host ID: {host.hostId}</h2>
-        <h2>Host Name: {host.hostName}</h2>
-        <h2>Joiner ID: {joiner.joinerId}</h2>
-        <h2>Joiner Name: {joiner.joinerName}</h2>
-      </>
-      {isStartSetup ? (
+        <h2>Player1 ID: {playerOne.playerId}</h2>
+        <h2>Player1 Name: {playerOne.playerName}</h2>
+        <h2>Player2 ID: {playerTwo.playerId}</h2>
+        <h2>Player2 Name: {playerTwo.playerName}</h2>
       
         <Flex>
           {user.id === host.hostId ? (
@@ -176,7 +175,7 @@ function Game() {
                     handleSelect={selectShip}
                     playerId={playerOne.playerId}
                     shipId={ship.id}
-                  />
+                    />
                 ))}
                  <button onClick={handleClick}> {direction} </button>
 
@@ -209,6 +208,7 @@ function Game() {
             </>
           )}
         </Flex>
+      </>
       ) : host.hostId === user.id ? (
         <Button onClick={startSetup}>Start Setup</Button>
       ) : (
@@ -226,6 +226,6 @@ function Game() {
       </Button> */}
     </Box>
 
-  )
+)
 }
 export default Game
