@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react"
 import BattleshipBoard from "../../components/BattleShipBoard.jsx"
 import Ship from "../../components/Ship.jsx"
 import { api } from "../../helpers/api.js"
+import './Game.css'
 
 import { Flex, Button, Box, Text } from "@chakra-ui/react"
 import { GameContext } from "../../contexts/GameContext.jsx"
@@ -154,10 +155,11 @@ function Game() {
         <h2>Player1 Name: {playerOne.playerName}</h2>
         <h2>Player2 ID: {playerTwo.playerId}</h2>
         <h2>Player2 Name: {playerTwo.playerName}</h2>
-      
+        <h2> Click the button on the right to make your ship vertical or horizontal</h2>
         <Flex>
           {user.id === host.hostId ? (
             <>
+              <div className="board-container">
               <BattleshipBoard
                 socket={socket}
                 board={playerOne.playerBoard}
@@ -166,7 +168,8 @@ function Game() {
                 playerId={playerOne.playerId}
                 playerName={playerOne.playerName}
               />
-              <Flex direction="column">
+              </div>
+              <div className="ship-container">
                 {playerOne.playerShips.map((ship) => (
                   <Ship
                     key={ship.id}
@@ -178,12 +181,15 @@ function Game() {
                     shipId={ship.id}
                     />
                 ))}
-                 <button onClick={handleClick}> {direction} </button>
+                <button className="button-orientation" onClick={handleClick}>
 
-              </Flex>
+                  {direction}
+                </button>
+              </div>
             </>
           ) : (
             <>
+              <div className="board-container">
               <BattleshipBoard
                 socket={socket}
                 board={playerTwo.playerBoard}
@@ -192,7 +198,8 @@ function Game() {
                 playerId={playerTwo.playerId}
                 playerName={playerTwo.playerName}
               />
-              <Flex direction="column">
+              </div>
+              <div className="ship-container">
                 {playerTwo.playerShips.map((ship) => (
                   <Ship
                     key={ship.id}
@@ -204,8 +211,10 @@ function Game() {
                     shipId={ship.id}
                   />
                 ))}
-                <button onClick={handleClick}> {direction} </button>
-              </Flex>
+                <button className="button-orientation" onClick={handleClick}>
+                  {direction}
+                </button>
+              </div>
             </>
           )}
         </Flex>
