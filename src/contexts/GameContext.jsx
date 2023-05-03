@@ -8,13 +8,13 @@ export const GameContext = createContext()
 export default function GameProvider({ children }) {
   const [host, setHost] = useState({hostId: "", hostName: ""})
   const [joiner, setJoiner] = useState({joinerId: "", joinerName: ""})
-  const user = JSON.parse(sessionStorage.getItem("user"))
-
   const [playerOne, setPlayerOne] = useState({
     playerId: null,
       playerName: "",
       playerBoard: generateBoard(),
-      playerShips: shipsData
+      playerShips: shipsData,
+      receivedShots: []
+
   })
 
   const [playerTwo, setPlayerTwo] = useState({
@@ -22,24 +22,10 @@ export default function GameProvider({ children }) {
       playerId: null,
       playerName: "",
       playerBoard: generateBoard(),
-      playerShips: shipsData
-     
-  })
+      playerShips: shipsData,
+      receivedShots: []
 
-  // const [gameState, setGameState] = useState([
-  //   {
-  //     playerId: 1,
-  //     playerName: "kalil",
-  //     playerBoard: generateBoard(),
-  //     playerShips: shipsData
-  //   },
-  //    {
-  //     playerId: 2,
-  //     playerName: "sumi",
-  //     playerBoard: generateBoard(),
-  //     playerShips: shipsData
-  //    }
-  // ])
+  })
 
   const handleShoot = (playerId, rowIndex, colIndex) => {
     if(playerOne.playerId === playerId){
@@ -50,19 +36,11 @@ export default function GameProvider({ children }) {
    
   }
 
-  const handleAttack = (rowIndex, colIndex, playerId) => {
-    if(playerOne.playerId === playerId){
-      setPlayerOne({...playerOne, playerBoard: shootMissle(playerOne.playerBoard,rowIndex, colIndex )})
-    }else {
-      setPlayerTwo({...playerTwo, playerBoard: shootMissle(playerTwo.playerBoard,rowIndex, colIndex )})
-    }
-  }
-
   const handlePlace = (playerId, rowIndex, colIndex) => {
     playerOne.playerId === playerId ?
-      setPlayerOne(updatePlayer(playerOne, rowIndex, colIndex))
+      setPlayerOne(updatePlayerSetup(playerOne, rowIndex, colIndex))
         :
-      setPlayerTwo(updatePlayer(playerTwo, rowIndex, colIndex))
+      setPlayerTwo(updatePlayerSetup(playerTwo, rowIndex, colIndex))
   }
 
   const handleSelect = (shipId, playerId) => {
@@ -99,7 +77,7 @@ export default function GameProvider({ children }) {
     return parts.at(-1);
   }
 
-  const updatePlayer =  (player, rowIndex, colIndex) => {
+  const updatePlayerSetup =  (player, rowIndex, colIndex) => {
     const shipToBePlaced = JSON.parse(sessionStorage.getItem("selected"))
     console.log("row:"+rowIndex, "col:"+colIndex)
     if(shipToBePlaced){
@@ -151,22 +129,15 @@ export default function GameProvider({ children }) {
       return player
     }
   }
+
   
-  // const updatePlayerShips = (ships) => {
-  //     const shipToBePlaced = JSON.parse(sessionStorage.getItem("selected"))
-  //     if(isUpdated){
-  //       const updatedShips = ships.filter(ship => ship.id !== shipToBePlaced.id)
-  //       return updatedShips
-  //     }
-  //     return ships
-  // }
 
   const shootMissle = (board, rowIndex, colIndex) => {
     // console.log("...still working on it")
       const newBoard = board.map((row, rIndex) =>
       row.map((col, cIndex) =>
         rIndex === rowIndex && cIndex === colIndex
-          ? { ...col, isShotAt: !col.isShotAt }
+          ? { ...col, isShotAt: true }
           : col
       )
     )
@@ -195,7 +166,7 @@ export default function GameProvider({ children }) {
    }
 
   return (
-    <GameContext.Provider value={{host, setHost, joiner, setJoiner,playerOne, playerTwo,setPlayerOne, setPlayerTwo,  handleShoot, handleSelect, handlePlace, handleAttack}}>
+    <GameContext.Provider value={{host, setHost, joiner, setJoiner,playerOne, playerTwo,setPlayerOne, setPlayerTwo,  handleShoot, handleSelect, handlePlace}}>
       {children}
     </GameContext.Provider>
   )

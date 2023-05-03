@@ -46,7 +46,6 @@ function AttackBoard({ socket, board, handlePlace, playerId, handleShoot }) {
                 border="1px solid gray"
                 bg={board[rowIndex][colIndex].isOccupied ? "blue" : "white"}
                 onClick={() => handleShoot(playerId,rowIndex, colIndex)}
-                //onClick={()=> handlePlace(playerId, rowIndex, colIndex)}
               >
                 {board[rowIndex][colIndex].isShotAt ? "X" : ""}
               </Box>
