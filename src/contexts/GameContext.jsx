@@ -8,6 +8,9 @@ export const GameContext = createContext()
 export default function GameProvider({ children }) {
   const [host, setHost] = useState({hostId: "", hostName: ""})
   const [joiner, setJoiner] = useState({joinerId: "", joinerName: ""})
+  const user = JSON.parse(sessionStorage.getItem("user"))
+  const [direction, setDirection] = useState("Horizontal")
+
   const [playerOne, setPlayerOne] = useState({
     playerId: null,
       playerName: "",
@@ -33,7 +36,7 @@ export default function GameProvider({ children }) {
     }else{
       setPlayerOne({...playerOne, playerBoard: shootMissle(playerOne.playerBoard, rowIndex, colIndex)})
     }
-   
+
   }
 
   const handlePlace = (playerId, rowIndex, colIndex) => {
@@ -87,17 +90,37 @@ export default function GameProvider({ children }) {
       console.log("playerid:"+shipPlayerPlayerId)
       let shipPlayerShipId = shipToBePlaced.id;
       console.log("shipId:"+shipPlayerShipId)
-      let startY = getYCords(rowIndex);
-      let endX = colIndex + length;
-      let startX = colIndex + 1;
-      console.log("rowIndex:"+rowIndex, "colIndex:"+colIndex, "startY:" +startY, "endX:"+endX)
-      let startPosition = startY.toString() + startX.toString();
-      let endPosition = startY.toString() + endX.toString();
+      let startPosition
+      let endPosition
+      let startY; let startX; let endX; let endY
+      // place ships either horizontally or vertically
+      if(direction=== "Horizontal") {
+        startY = getYCords(rowIndex); // 0 ==>  A
+        endY = startY // horizontal has the same row // A
+        startX = colIndex; // 0
+        endX = colIndex + length-1; // 4
+        console.log("rowIndex:" + rowIndex, "colIndex:" + colIndex, "startY:" + startY, "endX:" + endX)
+        startPosition = startY.toString() + startX.toString(); // A0
+        endPosition = endY.toString() + endX.toString(); // A4
+        for (let i = 0; i < length; i++) {
+          coordinatesToBeOccupied.push(player.playerBoard[rowIndex][colIndex + i].id)
+        }
+      }
+      if(direction === "Vertical"){
+        startY = getYCords(rowIndex) // 0 ==> A
+        endY = getYCords(rowIndex + length -1) // 4 ===> E
+        startX = colIndex // 0
+        endX = startX // 0
+        startPosition = startY.toString() + startX.toString() // A0
+        endPosition = endY.toString() + endX.toString() // E0
+        for(let i =0; i <length; i++){
+          coordinatesToBeOccupied.push(player.playerBoard[rowIndex + i][colIndex].id)
+        }
+
+      }
       console.log("startPos:"+startPosition, "endPos:"+endPosition)
       submitShipPosition(shipPlayerPlayerId,shipPlayerShipId,startPosition,endPosition)
-      for (let i = 0; i < length; i++) {
-        coordinatesToBeOccupied.push(player.playerBoard[rowIndex][colIndex + i].id)
-      }
+
       let valid = true
       player.playerBoard.forEach((row) =>
         row.forEach((cell) => {
@@ -130,7 +153,7 @@ export default function GameProvider({ children }) {
     }
   }
 
-  
+
 
   const shootMissle = (board, rowIndex, colIndex) => {
     // console.log("...still working on it")
@@ -166,7 +189,7 @@ export default function GameProvider({ children }) {
    }
 
   return (
-    <GameContext.Provider value={{host, setHost, joiner, setJoiner,playerOne, playerTwo,setPlayerOne, setPlayerTwo,  handleShoot, handleSelect, handlePlace}}>
+    <GameContext.Provider value={{direction, setDirection,host, setHost, joiner, setJoiner,playerOne, playerTwo,setPlayerOne, setPlayerTwo,  handleShoot, handleSelect, handlePlace, handleAttack}}>
       {children}
     </GameContext.Provider>
   )
