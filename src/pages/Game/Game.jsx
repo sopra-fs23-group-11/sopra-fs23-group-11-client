@@ -181,12 +181,14 @@ function Game() {
                     shipId={ship.id}
                     />
                 ))}
-                <button className="button-orientation" onClick={handleClick}>
-
+                { playerOne.playerShips.length !== 0 &&
+                  <button className="button-orientation" onClick={handleClick}>
                   {direction}
-                </button>
+                </button>}
               </div>
             </>
+
+
           ) : (
             <>
               <div className="board-container">
@@ -211,9 +213,10 @@ function Game() {
                     shipId={ship.id}
                   />
                 ))}
-                <button className="button-orientation" onClick={handleClick}>
+                { playerTwo.playerShips.length !== 0 &&
+                  <button className="button-orientation" onClick={handleClick}>
                   {direction}
-                </button>
+                </button>}
               </div>
             </>
           )}
