@@ -16,7 +16,8 @@ export default function GameProvider({ children }) {
       playerName: "",
       playerBoard: generateBoard(),
       playerShips: shipsData,
-      receivedShots: []
+      receivedShots: [],
+      isReady: false
 
   })
 
@@ -26,7 +27,8 @@ export default function GameProvider({ children }) {
       playerName: "",
       playerBoard: generateBoard(),
       playerShips: shipsData,
-      receivedShots: []
+      receivedShots: [],
+      isReady: false
 
   })
 

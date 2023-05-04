@@ -108,13 +108,19 @@ export default function Host() {
                   Continue
                 </Button>
                 :
+                <>
+                <Button mt="2" bg="blue.500">
+
+                <Text>Waiting for Player to join</Text>
                 <Spinner
                   thickness='4px'
-                  speed='0.65s'
+                  speed='0.95s'
                   emptyColor='gray.200'
                   color='blue.500'
-                  size='xl'
+                  size='lg'
               />
+                </Button>
+                </>
               }
             </Box>
         )}

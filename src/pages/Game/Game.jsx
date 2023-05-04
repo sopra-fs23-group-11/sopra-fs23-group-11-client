@@ -4,7 +4,7 @@ import Ship from "../../components/Ship.jsx"
 import { api } from "../../helpers/api.js"
 import './Game.css'
 
-import { Flex, Button, Box, Text } from "@chakra-ui/react"
+import { Flex, Button, Box, Text, Spinner } from "@chakra-ui/react"
 import { GameContext } from "../../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp"
 
@@ -29,17 +29,16 @@ function Game() {
   } = useContext(GameContext)
 
   const [game, setGame] = useState(null)
-  const [isReady, setIsReady] = useState(false)
   const [isStartSetup, setIsStartSetup] = useState(false)
+  const [waitingSpinner, setWaitingSpinner] = useState(false)
   const { lobbyCode } = useParams()
   const hostId = host.hostId
   const hostName = host.hostName
   const user = JSON.parse(sessionStorage.getItem("user"))
-  console.log(joiner)
   const navigate = useNavigate()
 
 
-
+  // console.log(playerOne.isReady, playerTwo.isReady)
   async function startSetup() {
     try {
 
@@ -55,25 +54,28 @@ function Game() {
     }
   }
 
-  function playerReady() {
+  async function playerReady() {
     let id
     let name
     if(host.hostId === user.id){
-      id = hostId
-      name = host.hostName
+      id = playerOne.playerId
+      name = playerOne.playerName
+      setPlayerOne(player => ({...player, isReady: true}))
     }else{
-      id = joiner.joinerId
-      name = joiner.joinerName
+      id = playerTwo.playerId
+      name = playerTwo.playerName
+      setPlayerTwo(player => ({...player, isReady: true}))
     }
     const readyMessage = {
       gameId: lobbyCode,
       playerId: id,
       playerName: name
     }
-
+    setWaitingSpinner(true)
     socket.send(`/app/ready`, {}, JSON.stringify(readyMessage))
+    // if(isReady)
     // setIsReady(true)
-    navigate(`/main/${lobbyCode}`)
+    
   }
     
 
@@ -86,7 +88,9 @@ function Game() {
     console.log("effect ran...")
     socket = Stomp.client("ws://localhost:8080/ws")
     socket.connect({}, onConnected, errorCallback)
-  }, [])
+
+    if(playerOne.isReady && playerTwo.isReady)navigate(`/main/${lobbyCode}`)
+  }, [isStartSetup, waitingSpinner])
 
   const errorCallback = (m) => {
     console.log('mmm', m)
@@ -97,14 +101,13 @@ function Game() {
     
     socket.subscribe(`/startgame/${lobbyCode}`, onStartGame)
     console.log("websocket connected!")
-    socket.subscribe(`/ready/${lobbyCode}`, onReady)
+    socket.subscribe(`/ready/${ host.hostId === user.id ? playerTwo.playerName : playerOne.playerName}`, onReady)
   }
   
   const onStartGame = (payload) => {
     console.log("game starts")
     const payloadData = JSON.parse(payload.body)
     console.log("game starts")
-    if(payloadData.type === "Start"){
 
       setPlayerOne((player) => ({
         ...player,
@@ -119,14 +122,26 @@ function Game() {
       }))
       console.log("isStartsetup", isStartSetup)
       setIsStartSetup(true)
-    }
   }
 
   const onReady = (payload) => {
     console.log("game starts on REady")
     const payloadData = JSON.parse(payload.body)
-    console.log(payloadData)
-    setIsReady(true)
+    console.log(typeof(payloadData.playerId), typeof(parseInt(playerOne.playerId)))
+    setWaitingSpinner(false)
+    if(payloadData.playerId === parseInt(playerOne.playerId)){
+       setPlayerOne(player => ({...player, isReady: true}))
+    console.log("player 1 is ready")
+     }else if(payloadData.playerId === parseInt(playerTwo.playerId)){
+       setPlayerTwo(player => ({...player, isReady: true}))
+    console.log("player 2 is ready")
+    }else{
+      console.log("abti wuxuu waa sidee??")
+    }
+  }
+
+  const toGame = () => {
+    navigate(`/main/${lobbyCode}`)
   }
 
 
@@ -149,8 +164,9 @@ function Game() {
     <Box>
       {isStartSetup ? (
       <>
-        {isReady && <p>Ready!!!</p> }
-        
+        {playerOne.isReady && <p>Player1 is READY</p> }
+
+        {playerTwo.isReady && <p>Player2 is READY</p> }
         <h2>Player1 ID: {playerOne.playerId}</h2>
         <h2>Player1 Name: {playerOne.playerName}</h2>
         <h2>Player2 ID: {playerTwo.playerId}</h2>
@@ -225,18 +241,35 @@ function Game() {
       ) : host.hostId === user.id ? (
         <Button onClick={startSetup}>Start Setup</Button>
       ) : (
-        <Text>Preparing Setup stage...</Text>
+        <Flex justifyContent="center" alignItems="center" h="70vh" direction={"column"}>
+          <Spinner
+                  thickness='4px'
+                  speed='0.65s'
+                  emptyColor='gray.200'
+                  color='blue.500'
+                  size='lg'
+              />
+          <Text textAlign={"center"}>Please Wait Host is putting on his socks...</Text>
+
+        </Flex>
       )}
       {(playerOne.playerShips.length === 0 || playerTwo.playerShips.length === 0) &&
-        (
-          <Button onClick={playerReady}>
-            Ready!
+        
+          <Button onClick={playerReady} isDisabled={waitingSpinner}>
+            {!waitingSpinner ? "Ready" : 
+            <>
+            <Spinner
+              thickness='4px'
+              speed='0.65s'
+              emptyColor='gray.200'
+              color='blue.500'
+              size='lg'/>
+        <Text>Good Luck Captain, See you on the other side 🫡</Text>
+            </>
+    }
           </Button>
-        )}
+        }
 
-      {/* <Button mt={3} as={Link} to={`/chatroom/${lobbyCode}`} colorScheme="blue">
-        Chat with friend
-      </Button> */}
     </Box>
 
 )

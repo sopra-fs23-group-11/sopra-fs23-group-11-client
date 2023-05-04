@@ -11,7 +11,6 @@ export default function MainGame() {
   const { playerOne, playerTwo, handleShoot, setPlayerOne, setPlayerTwo } =
     useContext(GameContext)
   const { lobbyCode } = useParams()
-  console.log(playerOne.receivedShots)
 
   useEffect(() => {
     socket = Stomp.client("ws://localhost:8080/ws")
