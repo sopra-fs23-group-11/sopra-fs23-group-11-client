@@ -11,7 +11,7 @@ export default function MainGame() {
   const { player, setPlayer, game, setGame, handleShoot, user, lobby, enemy, setEnemy} =
     useContext(GameContext)
   const { lobbyCode } = useParams()
-  console.log(player.isMyTurn)
+  
   useEffect(() => {
     socket = Stomp.client("ws://localhost:8080/ws")
     socket.connect({}, onConnected)
@@ -25,18 +25,24 @@ export default function MainGame() {
     console.log("shot received")
     const payloadData = JSON.parse(payload.body)
     const position = payloadData.posOfShot
-
-    setPlayer(player => ({
-      ...player,
-      receivedShots: [...player.receivedShots, position]
-    }))
+    const isAHit = payloadData.hit
+ 
+    setPlayer(player => (
+      isAHit ? 
+      {...player,hitsReceived: [...player.hitsReceived, position]}
+        : 
+      {...player, missesReceived: [...player.missesReceived, position]}
+    ))
+    
 
     setPlayer(player => {
       const newBoard = player.board.map((row) =>
           row.map((cell) =>
-            player.receivedShots.includes(cell.id)
-              ? { ...cell, isShotAt: true }
-              : cell
+            player.hitsReceived.includes(cell.id) ?
+                {...cell, isHit: true}
+            : player.missesReceived.includes(cell.id) ? 
+                {...cell, isShotAt: true}
+            : cell
           )
         )
 

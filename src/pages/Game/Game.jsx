@@ -180,7 +180,7 @@ function Game() {
                 shipId={ship.id}
               />
             ))}
-            {player.ships.length !== 0 && <button className="button-orientation" onClick={handleClick}>
+            { player.ships.length !== 0 && <button className="button-orientation" onClick={handleClick}>
               {direction}
             </button>}
           </div>
