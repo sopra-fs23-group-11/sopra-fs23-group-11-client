@@ -2,8 +2,9 @@ import React, { useContext, useEffect, useState } from "react"
 import BattleshipBoard from "../../components/BattleShipBoard.jsx"
 import Ship from "../../components/Ship.jsx"
 import { api } from "../../helpers/api.js"
+import "./Game.css"
 
-import { Flex, Button, Box, Text } from "@chakra-ui/react"
+import { Flex, Button, Box, Text, Spinner } from "@chakra-ui/react"
 import { GameContext } from "../../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp"
 
@@ -11,75 +12,55 @@ import { useParams, Link, useNavigate } from "react-router-dom"
 
 let socket = null
 function Game() {
-
   const {
-    playerOne,
-    playerTwo,
-    setPlayerOne,
-    setPlayerTwo,
-    handlePlace,
+    user,
+    player,
+    setPlayer,
+    lobby,
+    direction,
+    setDirection,
     handleSelect,
-    host,
-    setHost,
-    joiner,
-    setJoiner,
+    handlePlace,
+    game,
+    setGame,
+    setEnemy, 
+    enemy
   } = useContext(GameContext)
 
-  const [game, setGame] = useState(null)
-  const [isReady, setIsReady] = useState(false)
   const [isStartSetup, setIsStartSetup] = useState(false)
+  const [waitingSpinner, setWaitingSpinner] = useState(false)
   const { lobbyCode } = useParams()
-  const hostId = host.hostId
-  const hostName = host.hostName
-  const user = JSON.parse(sessionStorage.getItem("user"))
-  console.log(joiner)
+  console.log(player.isReady, enemy.isReady)
   const navigate = useNavigate()
+  const hostId = lobby.hostId
+  console.log(lobby, player, game)
 
-
+  // console.log(playerOne.isReady, playerTwo.isReady)
   async function startSetup() {
     try {
-
       const response = await api.post(
         `/startgame`,
         JSON.stringify({ lobbyCode, hostId })
       )
-      setPlayerOne((player) => ({
-        ...player,
-        playerId: host.hostId,
-        playerName: host.hostName,
-      }))
-
-      
-      
-
-      setGame(response.data)
+      //setGame(response.data)
     } catch (error) {
       console.log(error.message)
     }
   }
 
-  function playerReady() {
+  async function playerReady() {
+    setPlayer((player) => ({ ...player, isReady: true }))
 
-    let id
-    let name
-    if(host.hostId === user.id){
-      id = hostId
-      name = host.hostName
-    }else{
-      id = joiner.joinerId
-      name = joiner.joinerName
-    }
     const readyMessage = {
       gameId: lobbyCode,
-      playerId: id,
-      playerName: name
+      playerId: player.id,
+      playerName: player.name,
     }
-
+    setWaitingSpinner(true)
     socket.send(`/app/ready`, {}, JSON.stringify(readyMessage))
+    // if(isReady)
     // setIsReady(true)
-    navigate(`/main/${lobbyCode}`)
   }
-    
 
   // function onReady(payload) {
   //   const payloadData = JSON.parse(payload.body)
@@ -89,128 +70,161 @@ function Game() {
   useEffect(() => {
     console.log("effect ran...")
     socket = Stomp.client("ws://localhost:8080/ws")
-    socket.connect({}, onConnected)
-  }, [])
-  
-  const onConnected = () => {
-    console.log("Stomp client connected !")
-    
-    socket.subscribe(`/startgame/${lobbyCode}`, onStartGame)
-    socket.subscribe(`/ready/${lobbyCode}`, onReady)
+    socket.connect({}, onConnected, errorCallback)
+
+    if(player.isReady && enemy.isReady)navigate(`/main/${lobbyCode}`)
+  }, [enemy.isReady, player.isReady])
+
+  const errorCallback = (m) => {
+    console.log("mmm", m)
   }
-  
+
+  const onConnected = () => {
+    console.log("Stomp client connected !", lobbyCode)
+
+    socket.subscribe(`/startgame/${lobbyCode}`, onStartGame)
+    console.log("websocket connected!")
+    socket.subscribe(
+      `/ready/${user.id === lobby.hostId ? lobby.joinerName : lobby.hostName}`,
+      onReady
+    )
+  }
+
   const onStartGame = (payload) => {
+    console.log("game starts")
     const payloadData = JSON.parse(payload.body)
-    if(payloadData.type === "Start"){
-      setJoiner({
-        joinerId: payloadData.player2Id,
-        joinerName: payloadData.player2Name,
-      })
-      setPlayerTwo((player) => ({
+    console.log("game starts")
+    if (user.isHost) {
+      setPlayer((player) => ({
         ...player,
-        playerId: joiner.joinerId,
-        playerName: joiner.joinerName,
+        id: payloadData.player1Id,
+        name: payloadData.player1Name,
+        isMyTurn: true
       }))
-      setIsStartSetup(true)
+
+      setEnemy(enemy => ({
+        ...enemy,
+        id: payloadData.player2Id,
+        name: payloadData.player2Name
+      }))
+    } else {
+      setPlayer((player) => ({
+        ...player,
+        id: payloadData.player2Id,
+        name: payloadData.player2Name,
+      }))
+      setEnemy(enemy => ({
+        ...enemy,
+        id: payloadData.player1Id,
+        name: payloadData.player1Name
+      }))
+
     }
+
+    setGame(payloadData)
+
+    console.log("isStartsetup", isStartSetup)
+    setIsStartSetup(true)
   }
 
   const onReady = (payload) => {
+    console.log("game starts on REady")
     const payloadData = JSON.parse(payload.body)
-    console.log(payloadData)
-    setIsReady(true)
+    setEnemy(enemy => ({...enemy, isReady: true}))
+
   }
 
-
-  const selectShip = (shipId, playerId) => {
-    handleSelect(shipId, playerId)
+  const selectShip = (shipId) => {
+    handleSelect(shipId)
   }
 
-  const placeShip = (playerId, rowIndex, colIndex) => {
-    handlePlace(playerId, rowIndex, colIndex)
+  const placeShip = (rowIndex, colIndex) => {
+    handlePlace(rowIndex, colIndex)
   }
 
+  const handleClick = () => {
+    setDirection(direction === "Horizontal" ? "Vertical" : "Horizontal")
+  }
+
+ 
   return (
-
     <Box>
       <>
-        {isReady && <p>Ready!!!</p> }
-        
-        <h2>Host ID: {host.hostId}</h2>
-        <h2>Host Name: {host.hostName}</h2>
-        <h2>Joiner ID: {joiner.joinerId}</h2>
-        <h2>Joiner Name: {joiner.joinerName}</h2>
+        <h2>Player1: {user.isHost ? player.name : enemy.name}</h2>
+        <h2>Player2: {user.isHost ? enemy.name : player.name}</h2>
+        <h2>
+          {" "}
+          Click the button on the right to make your ship vertical or horizontal
+        </h2>
       </>
       {isStartSetup ? (
-      
         <Flex>
-          {user.id === host.hostId ? (
-            <>
-              <BattleshipBoard
-                socket={socket}
-                board={playerOne.playerBoard}
-                //handleShoot={shootMissle}
-                handlePlace={placeShip}
-                playerId={playerOne.playerId}
-                playerName={playerOne.playerName}
+          <div className="board-container">
+            <BattleshipBoard
+              socket={socket}
+              board={player.board}
+              handlePlace={placeShip}
+              playerId={player.id}
+              playerName={player.name}
+            />
+          </div>
+          <div className="ship-container">
+            {player.ships.map((ship) => (
+              <Ship
+                key={ship.id}
+                type={ship.type}
+                length={ship.length}
+                isHeld={ship.isHeld}
+                handleSelect={selectShip}
+                playerId={player.id}
+                shipId={ship.id}
               />
-              <Flex direction="column">
-                {playerOne.playerShips.map((ship) => (
-                  <Ship
-                    key={ship.id}
-                    type={ship.type}
-                    length={ship.length}
-                    isHeld={ship.isHeld}
-                    handleSelect={selectShip}
-                    playerId={playerOne.playerId}
-                    shipId={ship.id}
-                  />
-                ))}
-              </Flex>
-            </>
-          ) : (
-            <>
-              <BattleshipBoard
-                socket={socket}
-                board={playerTwo.playerBoard}
-                //handleShoot={shootMissle}
-                handlePlace={placeShip}
-                playerId={playerTwo.playerId}
-                playerName={playerTwo.playerName}
-              />
-              <Flex direction="column">
-                {playerTwo.playerShips.map((ship) => (
-                  <Ship
-                    key={ship.id}
-                    type={ship.type}
-                    length={ship.length}
-                    isHeld={ship.isHeld}
-                    handleSelect={selectShip}
-                    playerId={playerTwo.playerId}
-                    shipId={ship.id}
-                  />
-                ))}
-              </Flex>
-            </>
-          )}
+            ))}
+            <button className="button-orientation" onClick={handleClick}>
+              {direction}
+            </button>
+          </div>
         </Flex>
-      ) : host.hostId === user.id ? (
+      ) : user.isHost ? (
         <Button onClick={startSetup}>Start Setup</Button>
       ) : (
-        <Text>Preparing Setup stage...</Text>
+        <Flex
+          justifyContent="center"
+          alignItems="center"
+          h="70vh"
+          direction={"column"}
+        >
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="lg"
+          />
+          <Text textAlign={"center"}>
+            Please Wait, Host is putting on his socks...
+          </Text>
+        </Flex>
       )}
-      {(playerOne.playerShips.length === 0 || playerTwo.playerShips.length === 0) &&
-        (
-          <Button onClick={playerReady}>
-            Ready!
-          </Button>
-        )}
-
-      {/* <Button mt={3} as={Link} to={`/chatroom/${lobbyCode}`} colorScheme="blue">
-        Chat with friend
-      </Button> */}
+      {player.ships.length === 0 && (
+        <Button onClick={playerReady} isDisabled={waitingSpinner}>
+          {!waitingSpinner ? (
+            "Ready"
+          ) : (
+            <>
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="lg"
+              />
+              <Text>Good Luck Captain, See you on the other side 🫡</Text>
+            </>
+          )}
+        </Button>
+      )}
     </Box>
-
   )
 }
 export default Game
