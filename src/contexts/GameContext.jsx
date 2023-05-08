@@ -3,6 +3,10 @@ import { Stomp } from "stompjs/lib/stomp"
 import generateBoard from "../helpers/getBoard"
 import shipsData from "../models/ShipsData"
 import { api } from "../helpers/api"
+import waterSound from "../assets/sounds/water.mp3";
+import bigSplash1 from '../assets/sounds/bigSplash1.mp3'
+import bigSplash2 from '../assets/sounds/bigSplash2.mp3'
+import bigSplash3 from '../assets/sounds/bigSplash3.mp3'
 export const GameContext = createContext()
 
 export default function GameProvider({ children }) {
@@ -10,16 +14,12 @@ export default function GameProvider({ children }) {
   const [lobby, setLobby] = useState(null)
   const [game, setGame] = useState(null)
 
-
-  
   const [user, setUser] = useState({
     id: null,
     name: "",
     avatar: "",
     isHost: false
   })
-  
-
 
 
   const [player, setPlayer] = useState({
@@ -27,7 +27,8 @@ export default function GameProvider({ children }) {
     name: "",
     board: generateBoard(),
     ships: shipsData,
-    receivedShots: [],
+    missesReceived: [],
+    hitsReceived: [],
     isReady: false,
     isMyTurn: false,
     hasWon: false,
@@ -43,11 +44,31 @@ export default function GameProvider({ children }) {
   const handleShoot = (rowIndex, colIndex) => {
 
       setEnemy(enemy => ({...enemy, board:shootMissle(enemy.board, rowIndex, colIndex)}))
+    smallSplash();
     
+  }
+  function smallSplash() {
+    const audio = new Audio(waterSound);
+    audio.play();
+  }
+  function bigSplash() {
+    const audio1 = new Audio(bigSplash1);
+    const audio2 = new Audio(bigSplash2);
+    const audio3 = new Audio(bigSplash3);
+    const randomNumber = Math.random();
+    if (randomNumber < 0.33) {
+      audio1.play();
+    } else if (randomNumber < 0.66) {
+      audio2.play();
+    } else {
+      audio3.play();
+    }
+
   }
 
   const handlePlace = (rowIndex, colIndex) => {
       setPlayer(updatePlayerSetup(player, rowIndex, colIndex))
+      bigSplash();
   }
 
   const handleSelect = (shipId) => {
@@ -95,31 +116,45 @@ export default function GameProvider({ children }) {
       console.log("shipId:"+shipPlayerShipId)
       let startPosition
       let endPosition
-      let startY; let startX; let endX; let endY
+      let startX; let startY; let endX; let endY
       // place ships either horizontally or vertically
       if(direction=== "Horizontal") {
-        startY = getYCords(rowIndex); // 0 ==>  A
-        endY = startY // horizontal has the same row // A
-        startX = colIndex; // 0
-        endX = colIndex + length-1; // 4
-        console.log("rowIndex:" + rowIndex, "colIndex:" + colIndex, "startY:" + startY, "endX:" + endX)
-        startPosition = startY.toString() + startX.toString(); // A0
-        endPosition = endY.toString() + endX.toString(); // A4
-        for (let i = 0; i < length; i++) {
+        startY = getYCords(rowIndex); // 7 ==>  H
+        endY = startY // horizontal has the same row // H
+        startX = colIndex; // 7
+        endX = colIndex + length-1; // 11
+        console.log("rowIndex:" + rowIndex, "colIndex:" + colIndex, "endY:" + endY, "endX:" + endX)
+        if(endX > 9){
+          alert("Out of boundary!")
+          return player
+        }
+        else
+        {
+          startPosition = startY.toString() + startX.toString(); // H7
+          endPosition = endY.toString() + endX.toString(); // H11
+          for (let i = 0; i < length; i++) {
           coordinatesToBeOccupied.push(player.board[rowIndex][colIndex + i].id)
+        }
         }
       }
       if(direction === "Vertical"){
-        startY = getYCords(rowIndex) // 0 ==> A
-        endY = getYCords(rowIndex + length -1) // 4 ===> E
+        startY = getYCords(rowIndex) // 7 ==> H
+        endY = getYCords(rowIndex + length -1) // 11 ===> ?
         startX = colIndex // 0
         endX = startX // 0
-        startPosition = startY.toString() + startX.toString() // A0
-        endPosition = endY.toString() + endX.toString() // E0
-        for(let i =0; i <length; i++){
-          coordinatesToBeOccupied.push(player.board[rowIndex + i][colIndex].id)
+
+        if (rowIndex + length -1 >9)
+        {alert ("Out of boundary!")
+          return player
         }
 
+        else
+        {
+          startPosition = startY.toString() + startX.toString() // H0
+        endPosition = endY.toString() + endX.toString() // ?0
+        for(let i =0; i <length; i++){
+          coordinatesToBeOccupied.push(player.board[rowIndex + i][colIndex].id)
+        }}
       }
       console.log("startPos:"+startPosition, "endPos:"+endPosition)
       submitShipPosition(shipPlayerPlayerId,shipPlayerShipId,startPosition,endPosition)
