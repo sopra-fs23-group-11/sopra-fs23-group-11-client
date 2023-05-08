@@ -9,7 +9,6 @@ import {useParams, Link} from "react-router-dom";
 
 function EndScreen() {
 
-    const hostId = sessionStorage.getItem("hostId")
     const user = JSON.parse(sessionStorage.getItem("user"))
     let [boardUser, setBoardUser] = useState(null);
     const { lobbyCode } = useParams();
