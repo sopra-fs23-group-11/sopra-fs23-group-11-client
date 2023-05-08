@@ -8,82 +8,55 @@ import { useParams } from "react-router-dom"
 
 let socket = null
 export default function MainGame() {
-  const { playerOne, playerTwo, handleShoot, setPlayerOne, setPlayerTwo } =
+  const { player, setPlayer, game, setGame, handleShoot, user, lobby, enemy, setEnemy} =
     useContext(GameContext)
   const { lobbyCode } = useParams()
-
+  console.log(player.isMyTurn)
   useEffect(() => {
     socket = Stomp.client("ws://localhost:8080/ws")
     socket.connect({}, onConnected)
   }, [])
 
   const onConnected = () => {
-    socket.subscribe(`/game/${lobbyCode}`, onShotReceived)
+    socket.subscribe(`/game/${lobbyCode}/${player.id}`, onShotReceived)
   }
 
   const onShotReceived = (payload) => {
     console.log("shot received")
     const payloadData = JSON.parse(payload.body)
     const position = payloadData.posOfShot
-    // const arr = position.split("")
-    // const x = arr[0].charCodeAt(0)- 65
-    // const y = parseInt(arr[1]) - 1
-    const defender = payloadData.defenderId
-    if (defender === playerOne.playerId) {
-      setPlayerOne((prevState) => ({
-        ...prevState,
-        receivedShots: [...prevState.receivedShots, position],
-      }))
 
-      setPlayerOne((prevState) => {
-        const newBoard = prevState.playerBoard.map((row) =>
+    setPlayer(player => ({
+      ...player,
+      receivedShots: [...player.receivedShots, position]
+    }))
+
+    setPlayer(player => {
+      const newBoard = player.board.map((row) =>
           row.map((cell) =>
-            prevState.receivedShots.includes(cell.id)
+            player.receivedShots.includes(cell.id)
               ? { ...cell, isShotAt: true }
               : cell
           )
         )
 
-        return { ...prevState, playerBoard: newBoard }
-      })
-    } else {
-      setPlayerTwo((prevState) => ({
-        ...prevState,
-        receivedShots: [...prevState.receivedShots, position],
-      }))
-      setPlayerTwo((prevState) => {
-        const newBoard = prevState.playerBoard.map((row) =>
-          row.map((cell) =>
-            prevState.receivedShots.includes(cell.id)
-              ? { ...cell, isShotAt: true }
-              : cell
-          )
-        )
+        return { ...player, board: newBoard, isMyTurn: true }
+    })
 
-        return { ...prevState, playerBoard: newBoard }
-      })
-    }
   }
 
-  const shootMissle = (id, rowIndex, colIndex) => {
+  const shootMissle = (rowIndex, colIndex) => {
     //first render the shot on your own screen on the enemy board
-    handleShoot(id, rowIndex, colIndex)
+    handleShoot(rowIndex, colIndex)
 
     //next, send the shot through websocket to render on enemy screen
-    const position = playerOne.playerBoard[rowIndex][colIndex].id
-    let attack
-    let defend
+    const position = player.board[rowIndex][colIndex].id
 
-    if (id === playerOne.playerId) {
-      attack = playerOne.playerId
-      defend = playerTwo.playerId
-    } else {
-      attack = playerTwo.playerId
-      defend = playerOne.playerId
-    }
+    setPlayer(player => ({...player, isMyTurn: false}))
+ 
     const shot = {
-      attackerId: attack,
-      defenderId: defend,
+      attackerId: player.id,
+      defenderId: enemy.id,
       posOfShot: position,
       gameId: lobbyCode,
     }
@@ -95,24 +68,42 @@ export default function MainGame() {
   return (
     <div>
       <>
-        <h2>Player1 ID: {playerOne.playerId}</h2>
-        <h2>Player1 Name: {playerOne.playerName}</h2>
-        <h2>Player2 ID: {playerTwo.playerId}</h2>
-        <h2>Player2 Name: {playerTwo.playerName}</h2>
+      <h2>Player1: {user.isHost ? player.name : enemy.name}</h2>
+        <h2>Player2: {user.isHost ? enemy.name : player.name}</h2>
+        <h3>
+          {player.isMyTurn ? "Your Turn to Shoot": "Enemy Shot Incoming!" }
+        </h3>
       </>
       <Flex>
+        {user.isHost ? 
+        <>
         <AttackBoard
-          socket={socket}
-          board={playerOne.playerBoard}
-          handleShoot={shootMissle}
-          playerId={playerTwo.playerId}
+          board={player.board}
+          playerId={player.id}
         />
+
         <AttackBoard
-          socket={socket}
-          board={playerTwo.playerBoard}
+          board={enemy.board}
           handleShoot={shootMissle}
-          playerId={playerOne.playerId}
+          playerId={player.id}
+          isTurn= {player.isMyTurn}
         />
+        </>
+        : 
+        <>
+           <AttackBoard
+          board={enemy.board}
+          handleShoot={shootMissle}
+          playerId={player.id}
+          isTurn= {player.isMyTurn}
+        />
+
+          <AttackBoard
+          board={player.board}
+          playerId={player.id}
+        />
+        </>
+      }
       </Flex>
     </div>
   )

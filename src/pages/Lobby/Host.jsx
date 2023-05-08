@@ -8,26 +8,25 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Host() {
   const [code, setCode] = useState(null)
-  const {host, setHost, setJoiner} = useContext(GameContext)
+  const {user,  setUser, lobby, setLobby} = useContext(GameContext)
   const [isJoined, setIsJoined] = useState(false)
   const [showCode, setShowCode] = useState(false)
   const[errorLogs, setErrorLogs] = useState([])
-  const user = JSON.parse(sessionStorage.getItem("user"))
   const navigate = useNavigate()
 
   const error_logs = []
+  console.log(user)
+  console.log(lobby)
 
-  const hostId = user.id
 
   async function generateLobbyCode() {
+    const hostId = user.id
     try {
       const response = await api.post("/lobbies", JSON.stringify({ hostId }))
-      localStorage.setItem("lobby",JSON.stringify(response));
       setCode(response.data.lobbyCode)
       setShowCode(true)
-
-      setHost({hostId: response.data.hostId, hostName: response.data.hostName})
-      console.log(host)
+      setUser(prev => ({...prev, isHost: true}))
+      setLobby(response.data)
 
       const stompClient = Stomp.client("ws://localhost:8080/ws")
       stompClient.connect({}, ()=> {
@@ -51,10 +50,9 @@ export default function Host() {
 
   function onJoiner(payload) {
     const payloadData = JSON.parse(payload.body)
-    setIsJoined(payloadData)
+    setIsJoined(true)
     console.log(payloadData)
-    setJoiner({joinerId: payloadData.joinerId, joinerName: payloadData.joinerName})
-
+    setLobby(lobby => ({...lobby, joinerId: payloadData.joinerId, joinerName: payloadData.joinerName}))
   }
 
   function confirmCode(){
@@ -84,8 +82,6 @@ export default function Host() {
   return (
     <div>
       <Button onClick={generateLobbyCode}>Get a Lobby Code</Button>
-      {/*  */}
-      
       {showCode && (
             <Box bg="gray.200" p="4" rounded="md" mt="4" position ="relative">
                {errorLogs.length > 0 &&
