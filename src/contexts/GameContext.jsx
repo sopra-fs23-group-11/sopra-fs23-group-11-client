@@ -6,37 +6,10 @@ import { api } from "../helpers/api"
 export const GameContext = createContext()
 
 export default function GameProvider({ children }) {
-  // const [host, setHost] = useState({hostId: "", hostName: ""})
-  // const [joiner, setJoiner] = useState({joinerId: "", joinerName: ""})
-  // const user = JSON.parse(sessionStorage.getItem("user"))
-  const userData = JSON.parse(sessionStorage.getItem("user"))
   const [direction, setDirection] = useState("Horizontal")
   const [lobby, setLobby] = useState(null)
   const [game, setGame] = useState(null)
-  // const [playerOne, setPlayerOne] = useState({
-  //   playerId: null,
-  //     playerName: "",
-  //     playerBoard: generateBoard(),
-  //     playerShips: shipsData,
-  //     receivedShots: [],
-  //     isReady: false,
-  //     isPlayerTurn: true
-      
 
-  // })
-
-
-  // const [playerTwo, setPlayerTwo] = useState({
-    
-  //     playerId: null,
-  //     playerName: "",
-  //     playerBoard: generateBoard(),
-  //     playerShips: shipsData,
-  //     receivedShots: [],
-  //     isReady: false,
-  //     isPlayerTurn: false
-
-  // })
 
   
   const [user, setUser] = useState({
@@ -46,18 +19,8 @@ export default function GameProvider({ children }) {
     isHost: false
   })
   
-  useEffect(() => {
 
-    if(userData) {
-      setUser((prev) => ({
-        ...prev,
-        name: userData.username,
-        id: userData.id,
-        avatar: userData.avatar,
-      }))
-    }
 
-}, [0])
 
   const [player, setPlayer] = useState({
     id: null,
