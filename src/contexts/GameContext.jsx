@@ -9,7 +9,7 @@ export default function GameProvider({ children }) {
   const [direction, setDirection] = useState("Horizontal")
   const [lobby, setLobby] = useState(null)
   const [game, setGame] = useState(null)
-  
+
   const [user, setUser] = useState({
     id: null,
     name: "",
@@ -23,7 +23,8 @@ export default function GameProvider({ children }) {
     name: "",
     board: generateBoard(),
     ships: shipsData,
-    receivedShots: [],
+    missesReceived: [],
+    hitsReceived: [],
     isReady: false,
     isMyTurn: false,
     hasWon: false,
