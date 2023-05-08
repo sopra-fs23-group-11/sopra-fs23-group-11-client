@@ -9,7 +9,8 @@ import {
   FormHelperText,
   InputGroup,
   InputRightElement,
-  Text
+  Text,
+    Flex
 } from "@chakra-ui/react"
 import {Form, redirect, useActionData} from "react-router-dom"
 import {api} from "../helpers/api"
@@ -39,12 +40,12 @@ export async function action({ request }) {
 
   return null
 }
-
 export default function Register() {
   const [show, setShow] = useState(false)
   const errors = useActionData()
   const [selectedAvatar, setSelectedAvatar] = useState(null)
-
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
   const handleSelect = (avatarUrl) => {
     setSelectedAvatar(avatarUrl)
@@ -53,43 +54,58 @@ export default function Register() {
 
   const handleClick = () => setShow(!show)
 
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value)
+  }
 
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value)
+  }
 
+  const isSignupDisabled = !selectedAvatar || !username || !password
   return (
     <>
     {errors?.errorMessage && <Text color="red.500">{errors.errorMessage}</Text>}
-        <Box maxW="480px">
-          <Form method="post" action="/register">
-            <FormControl mb="40px" isRequired>
-              <FormLabel>Username</FormLabel>
-              <Input
-                  type="text"
-                  name="username"
-                  placeholder="Enter username..."
-              />
-              <FormHelperText>Choose a cool name Comrade</FormHelperText>
-            </FormControl>
 
-            <FormControl mb="40px" isRequired>
-              <FormLabel>Password</FormLabel>
-              <InputGroup>
+          <Form method="post" action="/register">
+
+            <Flex direction="row" alignItems="center" w="100%">
+              <FormControl mb="40px" isRequired w="30%">
+                <FormControl my="4" pl="20">
+                <FormLabel>Username</FormLabel>
                 <Input
-                    name="password"
-                    placeholder="Enter password..."
-                    type={show ? "text" : "password"}
+                    type="text"
+                    name="username"
+                    placeholder="Choose a cool name Admiral!"
+                    value={username}
+                    onChange={handleUsernameChange}
                 />
-                <InputRightElement width="4.5rem">
-                  <Button onClick={handleClick} h="1.75rem" size="sm">
-                    {show ? "Hide" : "Show"}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-            </FormControl>
-            <Text>Choose your character!</Text>
-            <AvatarList onSelect={handleSelect} selectedAvatar={selectedAvatar}/>
-            <Button type="submit">signup</Button>
+                </FormControl>
+                <FormControl my="4" pl="20">
+                <FormLabel>Password</FormLabel>
+                <InputGroup>
+                  <Input
+                      name="password"
+                      placeholder="Enter password..."
+                      type={show ? "text" : "password"}
+                      value={password}
+                      onChange={handlePasswordChange}
+                  />
+                  <InputRightElement width="4.5rem">
+                    <Button onClick={handleClick} h="1.75rem" size="sm">
+                      {show ? "Hide" : "Show"}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+                  </FormControl>
+                <FormControl my="4" pl="20">
+                <Button type="submit" w="100%" isDisabled={isSignupDisabled}>signup</Button>
+                </FormControl>
+              </FormControl>
+
+              <AvatarList onSelect={handleSelect} selectedAvatar={selectedAvatar} />
+            </Flex>
           </Form>
-        </Box>
     </>
   )
 }

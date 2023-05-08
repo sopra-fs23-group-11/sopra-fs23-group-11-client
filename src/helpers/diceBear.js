@@ -1,14 +1,14 @@
 export const avatarStyles = [
   "avataaars",
   "bottts",
-  "fun-emoji",
   "pixel-art",
   "big-ears",
   "adventurer",
   "big-smile",
-  "identicon",
   "notionists",
   "micah",
+  "croodles",
+    "lorelei"
 ]
 
 export function randomAvatarStlye() {
