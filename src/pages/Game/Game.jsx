@@ -180,9 +180,9 @@ function Game() {
                 shipId={ship.id}
               />
             ))}
-            <button className="button-orientation" onClick={handleClick}>
+            {player.ships.length !== 0 && <button className="button-orientation" onClick={handleClick}>
               {direction}
-            </button>
+            </button>}
           </div>
         </Flex>
       ) : user.isHost ? (
