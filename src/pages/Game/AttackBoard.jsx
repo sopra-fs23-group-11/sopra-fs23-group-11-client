@@ -1,7 +1,7 @@
 import { Box, Grid, GridItem } from "@chakra-ui/react"
 import { React, } from "react"
 
-function AttackBoard({ socket, board, handlePlace, playerId, handleShoot }) {
+function AttackBoard({board, playerId, handleShoot, isTurn }) {
   return (
     <Grid
       templateColumns="repeat(11, 30px)"
@@ -20,7 +20,7 @@ function AttackBoard({ socket, board, handlePlace, playerId, handleShoot }) {
           w="30px"
           textAlign="center"
         >
-          {index + 1}
+          {index}
         </GridItem>
       ))}
       {board && board.map((row, rowIndex) => (
@@ -40,13 +40,12 @@ function AttackBoard({ socket, board, handlePlace, playerId, handleShoot }) {
               <Box
                 textAlign="center"
                 color="red"
-                id={`${String.fromCharCode(65 + rowIndex)}${colIndex + 1}`}
+                id={`${String.fromCharCode(65 + rowIndex)}${colIndex}`}
                 h="30px"
                 w="30px"
                 border="1px solid gray"
                 bg={board[rowIndex][colIndex].isOccupied ? "blue" : "white"}
-                onClick={() => handleShoot(playerId,rowIndex, colIndex)}
-                //onClick={()=> handlePlace(playerId, rowIndex, colIndex)}
+                onClick={ isTurn? () => handleShoot(rowIndex, colIndex) : () => alert("Hold your horses Captain its not your Turn to shoot")}
               >
                 {board[rowIndex][colIndex].isShotAt ? "X" : ""}
               </Box>

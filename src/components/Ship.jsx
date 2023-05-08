@@ -12,7 +12,7 @@ export default function Ships(props) {
         borderRadius="md"
         p={2}
         textAlign="center"
-        onClick={() => props.handleSelect(props.shipId, props.playerId)}
+        onClick={() => props.handleSelect(props.shipId)}
         bg={props.isHeld  ? "#59E391" : "white"}
         >
           <p>{props.type}</p>

@@ -4,6 +4,7 @@ class User {
       this.username = null;
       this.token = null;
       this.status = null;
+      this.isHost = false;
       Object.assign(this, data);
     }
   }

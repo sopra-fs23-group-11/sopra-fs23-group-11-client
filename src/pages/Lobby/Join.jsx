@@ -10,12 +10,10 @@ import { GameContext } from "../../contexts/GameContext.jsx"
 export default function Join() {
   const [lobbyCode, setLobbyCode] = useState("")
   const [isValidCode, setIsValidCode] = useState(false)
-  const [hostId, setHostId] = useState("")
-  const user = JSON.parse(sessionStorage.getItem("user"))
-  const joinerId = user.id
   const navigate = useNavigate()
-  const {host, setHost, joiner, setJoiner} = useContext(GameContext)
-
+  const {user, setUser, lobby, setLobby} = useContext(GameContext)
+  const joinerId = user.id
+  
 
 
   async function submitCode() {
@@ -27,9 +25,9 @@ export default function Join() {
       console.log(response.ok, response.status, response.data)
       if (response.status === 200) {
         setIsValidCode(true)
-        setHostId(response.data.hostId)
-        setHost({hostId: response.data.hostId, hostName: response.data.hostName})
-        setJoiner({joinerId: user.id, joinerName: user.username})
+        setLobby(response.data)
+
+
       }
     } catch (error) {
       console.error(
@@ -42,15 +40,14 @@ export default function Join() {
     }
   }
 
-  function toGame(){
-    navigate(`/game/${lobbyCode}`)
-  }
+  // function toGame(){
+  //   navigate(`/game/${lobbyCode}`)
+  // }
 
   useEffect(() => {
     // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
     if (isValidCode) {
       console.log("effect ran...")
-      localStorage.setItem("hostId" , hostId)
       //navigate(`/chatroom/${lobbyCode}`)
 
       // navigate(`/game/${lobbyCode}`)

@@ -1,5 +1,5 @@
 import { React, useState } from "react"
-import { Link, useActionData, Form, useNavigate } from "react-router-dom"
+import { Link, useActionData, Form, redirect } from "react-router-dom"
 
 import {
   Box,
@@ -15,7 +15,10 @@ import {
 import { api } from "../helpers/api"
 import User from "../models/User"
 
-
+/**the action is called once the user clicks on "sign up". 
+ * As stated in the react router documentation its use case is for form validation 
+ * with the addition of the useActionData hook
+ * **/
 export async function action({ request }) {
   const data = await request.formData()
   const username = data.get("username")
@@ -26,28 +29,28 @@ export async function action({ request }) {
       "/users",
       JSON.stringify({ username, password })
     )
-    return response
+    if(response.status === 202){
+      const user = new User(response.data)
+      sessionStorage.setItem("user", JSON.stringify(user))
+      return redirect("/lobby")
+    } 
   } catch (err) {
-    return {
-      error: err.response.data.message,
-    }
+    return err.response.data
   }
+
+  return null
 }
 
 export default function Login() {
   const [show, setShow] = useState(false)
-  const response = useActionData()
-  const navigate = useNavigate()
-  console.log(response?.data)
-  const user = new User(response?.data)
-  sessionStorage.setItem("user", JSON.stringify(user))
+  const errors = useActionData()
+
   const handleClick = () => setShow(!show)
 
-  if (response?.data?.token) navigate("/lobby")
   return (
     <div>
       <Box maxW="480px">
-        {response?.error && <Text color="red.500">{response.error}</Text>}
+      {errors?.errorMessage && <Text color="red.500">{errors.errorMessage}</Text>}
         <Form method="post" action="/login">
           <FormControl mb="40px">
             <FormLabel>Username</FormLabel>
