@@ -27,6 +27,9 @@ export async function action({ request }) {
       )
     if(response.status === 201){
       const user = new User(response.data)
+      console.log(user);
+      sessionStorage.clear();
+      localStorage.clear();
       sessionStorage.setItem("user", JSON.stringify(user))
       return redirect("/lobby")
     } 
