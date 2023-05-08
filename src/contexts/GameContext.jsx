@@ -1,4 +1,4 @@
-import React, { createContext, useMemo, useState } from "react"
+import React, { createContext, useEffect, useState } from "react"
 import { Stomp } from "stompjs/lib/stomp"
 import generateBoard from "../helpers/getBoard"
 import shipsData from "../models/ShipsData"
@@ -6,53 +6,88 @@ import { api } from "../helpers/api"
 export const GameContext = createContext()
 
 export default function GameProvider({ children }) {
-  const [host, setHost] = useState({hostId: "", hostName: ""})
-  const [joiner, setJoiner] = useState({joinerId: "", joinerName: ""})
-  const user = JSON.parse(sessionStorage.getItem("user"))
+  // const [host, setHost] = useState({hostId: "", hostName: ""})
+  // const [joiner, setJoiner] = useState({joinerId: "", joinerName: ""})
+  // const user = JSON.parse(sessionStorage.getItem("user"))
+  const userData = JSON.parse(sessionStorage.getItem("user"))
   const [direction, setDirection] = useState("Horizontal")
+  const [lobby, setLobby] = useState(null)
+  const [game, setGame] = useState(null)
+  // const [playerOne, setPlayerOne] = useState({
+  //   playerId: null,
+  //     playerName: "",
+  //     playerBoard: generateBoard(),
+  //     playerShips: shipsData,
+  //     receivedShots: [],
+  //     isReady: false,
+  //     isPlayerTurn: true
+      
 
-  const [playerOne, setPlayerOne] = useState({
-    playerId: null,
-      playerName: "",
-      playerBoard: generateBoard(),
-      playerShips: shipsData,
-      receivedShots: [],
-      isReady: false
+  // })
 
-  })
-
-  const [playerTwo, setPlayerTwo] = useState({
+  // const [playerTwo, setPlayerTwo] = useState({
     
-      playerId: null,
-      playerName: "",
-      playerBoard: generateBoard(),
-      playerShips: shipsData,
-      receivedShots: [],
-      isReady: false
+  //     playerId: null,
+  //     playerName: "",
+  //     playerBoard: generateBoard(),
+  //     playerShips: shipsData,
+  //     receivedShots: [],
+  //     isReady: false,
+  //     isPlayerTurn: false
 
+  // })
+
+  
+  const [user, setUser] = useState({
+    id: null,
+    name: "",
+    avatar: "",
+    isHost: false
   })
+  
+  useEffect(() => {
 
-  const handleShoot = (playerId, rowIndex, colIndex) => {
-    if(playerOne.playerId === playerId){
-      setPlayerTwo({...playerTwo, playerBoard: shootMissle(playerTwo.playerBoard,rowIndex,colIndex)})
-    }else{
-      setPlayerOne({...playerOne, playerBoard: shootMissle(playerOne.playerBoard, rowIndex, colIndex)})
+    if(userData) {
+      setUser((prev) => ({
+        ...prev,
+        name: userData.username,
+        id: userData.id,
+        avatar: userData.avatar,
+      }))
     }
 
+}, [0])
+
+  const [player, setPlayer] = useState({
+    id: null,
+    name: "",
+    board: generateBoard(),
+    ships: shipsData,
+    receivedShots: [],
+    isReady: false,
+    isMyTurn: false,
+    hasWon: false,
+  })
+
+  const [enemy, setEnemy] = useState({
+    id: null, 
+    name: "",
+    board: generateBoard(),
+    isReady: false
+  })
+
+  const handleShoot = (rowIndex, colIndex) => {
+
+      setEnemy(enemy => ({...enemy, board:shootMissle(enemy.board, rowIndex, colIndex)}))
+    
   }
 
-  const handlePlace = (playerId, rowIndex, colIndex) => {
-    playerOne.playerId === playerId ?
-      setPlayerOne(updatePlayerSetup(playerOne, rowIndex, colIndex))
-        :
-      setPlayerTwo(updatePlayerSetup(playerTwo, rowIndex, colIndex))
+  const handlePlace = (rowIndex, colIndex) => {
+      setPlayer(updatePlayerSetup(player, rowIndex, colIndex))
   }
 
-  const handleSelect = (shipId, playerId) => {
-    playerOne.playerId === playerId ? 
-      setPlayerOne({...playerOne, playerShips: highlightSelection(playerOne.playerShips, shipId)})
-       :
-      setPlayerTwo({...playerTwo, playerShips: highlightSelection(playerTwo.playerShips, shipId)})
+  const handleSelect = (shipId) => {
+      setPlayer({...player, ships: highlightSelection(player.ships, shipId)})
    
   }
   
@@ -88,7 +123,7 @@ export default function GameProvider({ children }) {
     if(shipToBePlaced){
       const length = shipToBePlaced.length
       const coordinatesToBeOccupied = []
-      let shipPlayerPlayerId = player.playerId;
+      let shipPlayerPlayerId = player.id;
       console.log("playerid:"+shipPlayerPlayerId)
       let shipPlayerShipId = shipToBePlaced.id;
       console.log("shipId:"+shipPlayerShipId)
@@ -105,7 +140,7 @@ export default function GameProvider({ children }) {
         startPosition = startY.toString() + startX.toString(); // A0
         endPosition = endY.toString() + endX.toString(); // A4
         for (let i = 0; i < length; i++) {
-          coordinatesToBeOccupied.push(player.playerBoard[rowIndex][colIndex + i].id)
+          coordinatesToBeOccupied.push(player.board[rowIndex][colIndex + i].id)
         }
       }
       if(direction === "Vertical"){
@@ -116,7 +151,7 @@ export default function GameProvider({ children }) {
         startPosition = startY.toString() + startX.toString() // A0
         endPosition = endY.toString() + endX.toString() // E0
         for(let i =0; i <length; i++){
-          coordinatesToBeOccupied.push(player.playerBoard[rowIndex + i][colIndex].id)
+          coordinatesToBeOccupied.push(player.board[rowIndex + i][colIndex].id)
         }
 
       }
@@ -124,7 +159,7 @@ export default function GameProvider({ children }) {
       submitShipPosition(shipPlayerPlayerId,shipPlayerShipId,startPosition,endPosition)
 
       let valid = true
-      player.playerBoard.forEach((row) =>
+      player.board.forEach((row) =>
         row.forEach((cell) => {
           if (cell.isOccupied && coordinatesToBeOccupied.includes(cell.id)) {
             valid = false
@@ -133,18 +168,18 @@ export default function GameProvider({ children }) {
       )
       if (valid) {
         //await submitShipPosition(coordinatesToBeOccupied, shipToBePlaced)
-        const newBoard = player.playerBoard.map((row) =>
+        const newBoard = player.board.map((row) =>
           row.map((cell) =>
             coordinatesToBeOccupied.includes(cell.id)
               ? { ...cell, isOccupied: shipToBePlaced }
               : cell
           )
         )
-        const updatedShips = player.playerShips.filter(ship => ship.id !== shipToBePlaced.id)
+        const updatedShips = player.ships.filter(ship => ship.id !== shipToBePlaced.id)
         sessionStorage.removeItem("selected") 
         
         
-        return {...player, playerBoard: newBoard, playerShips: updatedShips}
+        return {...player, board: newBoard, ships: updatedShips}
       } else {
         alert("invalid placement please try again")
         return player
@@ -158,7 +193,6 @@ export default function GameProvider({ children }) {
 
 
   const shootMissle = (board, rowIndex, colIndex) => {
-    // console.log("...still working on it")
       const newBoard = board.map((row, rIndex) =>
       row.map((col, cIndex) =>
         rIndex === rowIndex && cIndex === colIndex
@@ -168,7 +202,6 @@ export default function GameProvider({ children }) {
     )
     return newBoard
   }
-  //const providerHost = useMemo(() => ({host, setHost}), [host, setHost])
 
 
    const submitShipPosition = async (shipPlayerPlayerId,shipPlayerShipId,startPosition,endPosition) => {
@@ -191,7 +224,7 @@ export default function GameProvider({ children }) {
    }
 
   return (
-    <GameContext.Provider value={{direction, setDirection,host, setHost, joiner, setJoiner,playerOne, playerTwo,setPlayerOne, setPlayerTwo,  handleShoot, handleSelect, handlePlace}}>
+    <GameContext.Provider value={{direction, setDirection, user, setUser, player, setPlayer, lobby, setLobby, handlePlace, handleSelect, game, setGame, handleShoot, enemy, setEnemy}}>
       {children}
     </GameContext.Provider>
   )

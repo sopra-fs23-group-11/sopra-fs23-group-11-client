@@ -7,9 +7,10 @@ export default function generateBoard() {
       boardArray[i] = []
       for (let j = 0; j < cols; j++) {
         boardArray[i][j] = {
-          id: `${String.fromCharCode(65 + i)}${j + 1}`,
+          id: `${String.fromCharCode(65 + i)}${j}`,
           isShotAt: false,
           isOccupied: null,
+          isHit: false
         }
       }
     }

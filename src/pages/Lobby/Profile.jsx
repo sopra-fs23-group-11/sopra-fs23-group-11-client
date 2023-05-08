@@ -37,7 +37,7 @@ const Profile = () => {
 
             </Box>
             <Box textAlign="center">
-                <Text as='bold' textAlign="center" fontSize='3xl'>Welcome to your Profile</Text>
+                <Text fontWeight='bold' textAlign="center" fontSize='3xl'>Welcome to your Profile</Text>
                 <Text fontSize='xl'>
                     This is your Information:
                 </Text>
