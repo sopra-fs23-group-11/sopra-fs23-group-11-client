@@ -25,6 +25,7 @@ export default function GameProvider({ children }) {
 
   // })
 
+
   // const [playerTwo, setPlayerTwo] = useState({
     
   //     playerId: null,
@@ -106,10 +107,12 @@ export default function GameProvider({ children }) {
   
   }
 
+
 // get letter value for a  certain index
   function getYCords(ind){
     let characters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
     return characters[ind];
+
   }
 
   function getLastPart(url) {
