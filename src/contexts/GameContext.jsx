@@ -7,12 +7,22 @@ import waterSound from "../assets/sounds/water.mp3";
 import bigSplash1 from '../assets/sounds/bigSplash1.mp3'
 import bigSplash2 from '../assets/sounds/bigSplash2.mp3'
 import bigSplash3 from '../assets/sounds/bigSplash3.mp3'
+import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  Stack,
+} from "@chakra-ui/react";
+
 export const GameContext = createContext()
 
 export default function GameProvider({ children }) {
   const [direction, setDirection] = useState("Horizontal")
   const [lobby, setLobby] = useState(null)
   const [game, setGame] = useState(null)
+  const[errorLogs, setErrorLogs] = useState([])
+  let error_logs = []
 
   const [user, setUser] = useState({
     id: null,
@@ -35,7 +45,7 @@ export default function GameProvider({ children }) {
   })
 
   const [enemy, setEnemy] = useState({
-    id: null, 
+    id: null,
     name: "",
     board: generateBoard(),
     isReady: false
@@ -45,7 +55,26 @@ export default function GameProvider({ children }) {
 
       setEnemy(enemy => ({...enemy, board:shootMissle(enemy.board, rowIndex, colIndex)}))
     smallSplash();
-    
+    smallSplash();
+
+  }
+  function smallSplash() {
+    const audio = new Audio(waterSound);
+    audio.play();
+  }
+  function bigSplash() {
+    const audio1 = new Audio(bigSplash1);
+    const audio2 = new Audio(bigSplash2);
+    const audio3 = new Audio(bigSplash3);
+    const randomNumber = Math.random();
+    if (randomNumber < 0.33) {
+      audio1.play();
+    } else if (randomNumber < 0.66) {
+      audio2.play();
+    } else {
+      audio3.play();
+    }
+
   }
   function smallSplash() {
     const audio = new Audio(waterSound);
@@ -73,9 +102,9 @@ export default function GameProvider({ children }) {
 
   const handleSelect = (shipId) => {
       setPlayer({...player, ships: highlightSelection(player.ships, shipId)})
-   
+
   }
-  
+
   const highlightSelection = (ships, shipId) => {
     const selectedShip = ships.find((ship) => ship.id === shipId)
 
@@ -86,9 +115,7 @@ export default function GameProvider({ children }) {
     ))
 
     sessionStorage.setItem("selected", JSON.stringify(selectedShip))
-    
     return newShips
-  
   }
 
 
@@ -96,7 +123,6 @@ export default function GameProvider({ children }) {
   function getYCords(ind){
     let characters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
     return characters[ind];
-
   }
 
   function getLastPart(url) {
@@ -119,13 +145,15 @@ export default function GameProvider({ children }) {
       let startX; let startY; let endX; let endY
       // place ships either horizontally or vertically
       if(direction=== "Horizontal") {
+        setErrorLogs([])
         startY = getYCords(rowIndex); // 7 ==>  H
         endY = startY // horizontal has the same row // H
         startX = colIndex; // 7
         endX = colIndex + length-1; // 11
         console.log("rowIndex:" + rowIndex, "colIndex:" + colIndex, "endY:" + endY, "endX:" + endX)
         if(endX > 9){
-          alert("Out of boundary!")
+          error_logs.push("Out of boundary!")
+          setErrorLogs(error_logs)
           return player
         }
         else
@@ -138,13 +166,15 @@ export default function GameProvider({ children }) {
         }
       }
       if(direction === "Vertical"){
+        setErrorLogs([])
         startY = getYCords(rowIndex) // 7 ==> H
         endY = getYCords(rowIndex + length -1) // 11 ===> ?
         startX = colIndex // 0
         endX = startX // 0
 
-        if (rowIndex + length -1 >9)
-        {alert ("Out of boundary!")
+        if (rowIndex + length -1 > 9){
+          error_logs.push("Out of boundary!")
+          setErrorLogs(error_logs)
           return player
         }
 
@@ -177,16 +207,18 @@ export default function GameProvider({ children }) {
           )
         )
         const updatedShips = player.ships.filter(ship => ship.id !== shipToBePlaced.id)
-        sessionStorage.removeItem("selected") 
-        
-        
+        sessionStorage.removeItem("selected")
+
+
         return {...player, board: newBoard, ships: updatedShips}
       } else {
-        alert("invalid placement please try again")
+        error_logs.push("Invalid placement, please try again!")
+        setErrorLogs(error_logs)
         return player
       }
     }else {
-      alert("please select a ship first")
+      error_logs.push("Please select a ship first!")
+      setErrorLogs(error_logs)
       return player
     }
   }
@@ -225,7 +257,7 @@ export default function GameProvider({ children }) {
    }
 
   return (
-    <GameContext.Provider value={{direction, setDirection, user, setUser, player, setPlayer, lobby, setLobby, handlePlace, handleSelect, game, setGame, handleShoot, enemy, setEnemy}}>
+    <GameContext.Provider value={{errorLogs, setErrorLogs, direction, setDirection, user, setUser, player, setPlayer, lobby, setLobby, handlePlace, handleSelect, game, setGame, handleShoot, enemy, setEnemy}}>
       {children}
     </GameContext.Provider>
   )
