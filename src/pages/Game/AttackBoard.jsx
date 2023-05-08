@@ -47,7 +47,7 @@ function AttackBoard({board, playerId, handleShoot, isTurn }) {
                 bg={board[rowIndex][colIndex].isOccupied ? "blue" : "white"}
                 onClick={ isTurn? () => handleShoot(rowIndex, colIndex) : () => alert("Hold your horses Captain its not your Turn to shoot")}
               >
-                {board[rowIndex][colIndex].isShotAt ? "X" : ""}
+                {board[rowIndex][colIndex].isHit ? "X" : board[rowIndex][colIndex].isShotAt ? "O" : ""}
               </Box>
             </GridItem>
           ))}
