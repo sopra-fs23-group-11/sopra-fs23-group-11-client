@@ -3,6 +3,10 @@ import { Stomp } from "stompjs/lib/stomp"
 import generateBoard from "../helpers/getBoard"
 import shipsData from "../models/ShipsData"
 import { api } from "../helpers/api"
+import waterSound from "../assets/sounds/water.mp3";
+import bigSplash1 from '../assets/sounds/bigSplash1.mp3'
+import bigSplash2 from '../assets/sounds/bigSplash2.mp3'
+import bigSplash3 from '../assets/sounds/bigSplash3.mp3'
 export const GameContext = createContext()
 
 export default function GameProvider({ children }) {
@@ -43,11 +47,31 @@ export default function GameProvider({ children }) {
   const handleShoot = (rowIndex, colIndex) => {
 
       setEnemy(enemy => ({...enemy, board:shootMissle(enemy.board, rowIndex, colIndex)}))
+    smallSplash();
     
+  }
+  function smallSplash() {
+    const audio = new Audio(waterSound);
+    audio.play();
+  }
+  function bigSplash() {
+    const audio1 = new Audio(bigSplash1);
+    const audio2 = new Audio(bigSplash2);
+    const audio3 = new Audio(bigSplash3);
+    const randomNumber = Math.random();
+    if (randomNumber < 0.33) {
+      audio1.play();
+    } else if (randomNumber < 0.66) {
+      audio2.play();
+    } else {
+      audio3.play();
+    }
+
   }
 
   const handlePlace = (rowIndex, colIndex) => {
       setPlayer(updatePlayerSetup(player, rowIndex, colIndex))
+      bigSplash();
   }
 
   const handleSelect = (shipId) => {
