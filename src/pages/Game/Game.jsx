@@ -8,6 +8,14 @@ import { Flex, Button, Box, Text, Spinner } from "@chakra-ui/react"
 import { GameContext } from "../../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp"
 
+import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  Stack,
+} from "@chakra-ui/react";
+
 import { useParams, Link, useNavigate } from "react-router-dom"
 
 let socket = null
@@ -19,6 +27,8 @@ function Game() {
     lobby,
     direction,
     setDirection,
+    errorLogs,
+    setErrorLogs,
     handleSelect,
     handlePlace,
     game,
@@ -156,6 +166,19 @@ function Game() {
           {" "}
           Click the button on the right to make your ship vertical or horizontal
         </h2>
+        {errorLogs.length > 0 && <h3> Following error in placements:</h3>}
+        {errorLogs.length > 0 &&
+            <Stack spacing = {3} >
+              { errorLogs.map (error => {
+                return(
+                    <Alert status ='error'>
+                      <AlertIcon />
+                      {error}
+                    </Alert>
+                )
+              })}
+            </Stack>
+        }
       </>
       {isStartSetup ? (
         <Flex>
@@ -180,7 +203,8 @@ function Game() {
                 shipId={ship.id}
               />
             ))}
-            { player.ships.length !== 0 && <button className="button-orientation" onClick={handleClick}>
+            { player.ships.length !== 0 &&
+                <button className="button-orientation" onClick={handleClick}>
               {direction}
             </button>}
           </div>
