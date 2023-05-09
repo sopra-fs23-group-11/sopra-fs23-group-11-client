@@ -11,9 +11,10 @@
 .button-orientation {
   width: 120px;
   height: 40px;
-  position: absolute;
+  position: fixed;
   top: 50%;
-  right: 300px;
+  right: 950px;
+   z-index: 10;
   transform: translateY(-50%);
   padding: 10px;
   background-color: #0077be;

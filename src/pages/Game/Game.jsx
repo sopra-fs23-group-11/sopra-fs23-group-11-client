@@ -4,7 +4,7 @@ import Ship from "../../components/Ship.jsx"
 import { api } from "../../helpers/api.js"
 import "./Game.css"
 
-import { Flex, Button, Box, Text, Spinner } from "@chakra-ui/react"
+import {Flex, Button, Box, Text, Spinner, Grid, GridItem} from "@chakra-ui/react"
 import { GameContext } from "../../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp"
 
@@ -192,7 +192,9 @@ function Game() {
             />
           </div>
           <div className="ship-container">
-            {player.ships.map((ship) => (
+            <Grid templateColumns= "repeat(5, 1fr)" gap = {4}>
+            {player.ships.map((ship, index) => (
+             <GridItem key = {ship.id} gridRow={index + 1}>
               <Ship
                 key={ship.id}
                 type={ship.type}
@@ -202,7 +204,9 @@ function Game() {
                 playerId={player.id}
                 shipId={ship.id}
               />
+             </GridItem>
             ))}
+              </Grid>
             { player.ships.length !== 0 &&
                 <button className="button-orientation" onClick={handleClick}>
               {direction}
