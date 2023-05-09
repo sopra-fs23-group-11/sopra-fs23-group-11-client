@@ -1,5 +1,4 @@
 import React, { useEffect, useContext } from "react"
-import { api } from "../helpers/api.js"
 import { Flex } from "@chakra-ui/react"
 import { GameContext } from "../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp.js"
@@ -8,7 +7,7 @@ import BattleshipBoard from "../components/BattleShipBoard.jsx"
 
 let socket = null
 export default function Game() {
-  const { player, setPlayer, handleShoot, user, enemy } =
+  const { player, setPlayer, handleShoot, user, enemy, handleSunk } =
     useContext(GameContext)
   const { lobbyCode } = useParams()
 
@@ -51,11 +50,15 @@ export default function Game() {
 
   const onSunkenShip = (payload) => {
     const payloadData = JSON.parse(payload.body)
+    const shipType = payloadData.shipType
+    const shipId = payloadData.shipId
     console.log(payloadData)
     if (payloadData.defenderId === player.id) {
-      alert("one of your ships has been sunk")
+      alert(`Your ${shipType} has been sunk`)
+      handleSunk(player.id,shipId )
     } else {
-      alert("You have sunk a ship ")
+      alert(`You have sunk their ${shipType}`)
+      handleSunk(enemy.id, shipId)
     }
   }
 

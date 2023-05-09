@@ -4,7 +4,6 @@ import shipsData from "../models/ShipsData"
 import { api } from "../helpers/api"
 import { bigSplash, smallSplash } from "../helpers/soundEffects"
 
-
 export const GameContext = createContext()
 
 export default function GameProvider({ children }) {
@@ -48,7 +47,17 @@ export default function GameProvider({ children }) {
     smallSplash()
   }
 
-
+  const handleSunk = (playerId, shipId) => {
+    playerId === player.id
+      ? setPlayer((player) => ({
+          ...player,
+          board: renderSink(player.board, shipId),
+        }))
+      : setEnemy((enemy) => ({
+          ...enemy,
+          board: renderSink(enemy.board, shipId),
+        }))
+  }
 
   const handlePlace = (rowIndex, colIndex) => {
     setPlayer(updatePlayerSetup(player, rowIndex, colIndex))
@@ -194,12 +203,24 @@ export default function GameProvider({ children }) {
     const newBoard = board.map((row, rIndex) =>
       row.map((cell, cIndex) =>
         rIndex === rowIndex && cIndex === colIndex
-        ? cell.isOccupied
-          ? { ...cell, isHit: true }
-          : {...cell, isShotAt: true}
-        : cell
+          ? cell.isOccupied
+            ? { ...cell, isHit: true }
+            : { ...cell, isShotAt: true }
+          : cell
       )
     )
+    return newBoard
+  }
+
+  const renderSink = (board, shipId) => {
+    const newBoard = board.map((row) => {
+      return row.map((cell) => {
+         return cell.isOccupied?.id === shipId
+          ? { ...cell, isOccupied: { ...cell.isOccupied, isSunk: true } }
+          : cell
+      })
+    })
+
     return newBoard
   }
 
@@ -245,6 +266,7 @@ export default function GameProvider({ children }) {
         handleShoot,
         enemy,
         setEnemy,
+        handleSunk,
       }}
     >
       {children}

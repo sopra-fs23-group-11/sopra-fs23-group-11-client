@@ -52,11 +52,15 @@ function BattleshipBoard({
                   h="30px"
                   w="30px"
                   border="1px solid gray"
-                  _hover={isEnemy && { bg: "gray.100" }}
-                  cursor={isTurn ? "crosshair" : "wait"}
+                  _hover={isEnemy && 
+                        !(board[rowIndex][colIndex].isHit || board[rowIndex][colIndex].isShotAt) && 
+                        { bg: "gray.100" }}
+                  cursor={isSetUp ? "pointer" : isTurn ? "crosshair" : "wait"}
                   bg={
                     board[rowIndex][colIndex].isOccupied //first check if cell is occupied
-                      ? isEnemy // then check if its in enemyBoard
+                    ? board[rowIndex][colIndex].isOccupied.isSunk //check if ship is sunk
+                      ? "grey"
+                      : isEnemy // then check if its in enemyBoard
                         ? board[rowIndex][colIndex].isHit
                           ? "red" //red when enemyship has been hit
                           : "white" //"hide" the enemy ship otherwise
