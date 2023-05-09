@@ -46,36 +46,6 @@ function Game() {
   console.log(lobby, player, game)
 
   // console.log(playerOne.isReady, playerTwo.isReady)
-  async function startSetup() {
-    try {
-      const response = await api.post(
-        `/startgame`,
-        JSON.stringify({ lobbyCode, hostId })
-      )
-      //setGame(response.data)
-    } catch (error) {
-      console.log(error.message)
-    }
-  }
-
-  async function playerReady() {
-    setPlayer((player) => ({ ...player, isReady: true }))
-
-    const readyMessage = {
-      gameId: lobbyCode,
-      playerId: player.id,
-      playerName: player.name,
-    }
-    setWaitingSpinner(true)
-    socket.send(`/app/ready`, {}, JSON.stringify(readyMessage))
-    // if(isReady)
-    // setIsReady(true)
-  }
-
-  // function onReady(payload) {
-  //   const payloadData = JSON.parse(payload.body)
-  //   console.log(payloadData)
-  // }
 
   useEffect(() => {
     console.log("effect ran...")
@@ -98,6 +68,31 @@ function Game() {
       `/ready/${user.id === lobby.hostId ? lobby.joinerName : lobby.hostName}`,
       onReady
     )
+  }
+
+  async function startGame() {
+    try {
+      const response = await api.post(
+        `/startgame`,
+        JSON.stringify({ lobbyCode, hostId })
+      )
+      //setGame(response.data)
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  function playerReady() {
+    setPlayer((player) => ({ ...player, isReady: true }))
+
+    const readyMessage = {
+      gameId: lobbyCode,
+      playerId: player.id,
+      playerName: player.name,
+      playerBoard: JSON.stringify(player.board)
+    }
+    setWaitingSpinner(true)
+    socket.send(`/app/ready`, {}, JSON.stringify(readyMessage))
   }
 
   const onStartGame = (payload) => {
@@ -137,13 +132,17 @@ function Game() {
     setIsStartSetup(true)
   }
 
+
   const onReady = (payload) => {
     console.log("game starts on REady")
     const payloadData = JSON.parse(payload.body)
-    setEnemy(enemy => ({...enemy, isReady: true}))
+    setEnemy(enemy => ({...enemy, isReady: true, board: JSON.parse(payloadData.playerBoard)}))
 
   }
 
+
+
+//the following functions delegate to the functions from GameContext
   const selectShip = (shipId) => {
     handleSelect(shipId)
   }
@@ -184,11 +183,9 @@ function Game() {
         <Flex>
           <div className="board-container">
             <BattleshipBoard
-              socket={socket}
               board={player.board}
               handlePlace={placeShip}
-              playerId={player.id}
-              playerName={player.name}
+              isSetUp={true}
             />
           </div>
           <div className="ship-container">
@@ -214,7 +211,7 @@ function Game() {
           </div>
         </Flex>
       ) : user.isHost ? (
-        <Button onClick={startSetup}>Start Setup</Button>
+        <Button onClick={startGame}>Start Setup</Button>
       ) : (
         <Flex
           justifyContent="center"
