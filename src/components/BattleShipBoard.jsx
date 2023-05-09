@@ -72,13 +72,13 @@ function BattleshipBoard({
                           )
                   }
                 >
-                  {!isEnemy 
-                  ? board[rowIndex][colIndex].isHit
-                    ? "X"
-                    : board[rowIndex][colIndex].isShotAt
-                    ? "O"
-                    : ""
-                  : ""}
+                  {!isEnemy
+                    ? board[rowIndex][colIndex].isHit
+                      ? "X"
+                      : board[rowIndex][colIndex].isShotAt
+                      ? "O"
+                      : ""
+                    : isEnemy && board[rowIndex][colIndex].isShotAt && "O"}
                 </Box>
               </GridItem>
             ))}
