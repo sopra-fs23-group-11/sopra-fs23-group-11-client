@@ -33,17 +33,13 @@ export default function Host() {
       console.log("Stomp client connected !")
       stompClient.subscribe(`/join/${response.data.lobbyCode}`, onJoiner)
     })
-
-
-      // See here to get more data.
-      console.log(response.data)
     } catch (error) {
       console.error(
-        `Something went wrong while fetching the users: \n${handleError(error)}`
+        `Something went wrong while trying to create lobby: \n${handleError(error)}`
       )
       console.error("Details:", error)
       alert(
-        "Something went wrong while fetching the users! See the console for details."
+        "Something went wrong while trying to create lobby! See the console for details."
       )
     }
   }
@@ -58,7 +54,7 @@ export default function Host() {
   function confirmCode(){
     if(isJoined){
       setShowCode(false)
-      navigate(`/game/${code}`)
+      navigate(`/setup/${code}`)
     }else{
       alert("wait for player to join")
     }

@@ -11,12 +11,12 @@ export default function Ships(props) {
    
   return (
         <Box 
-        borderWidth="1px"
+        borderWidth="3px"
         borderRadius="md"
         p={2}
         textAlign="center"
         onClick={() => props.handleSelect(props.shipId)}
-        bg={props.isHeld  ? "#59E391" : "#F0F4F8"}
+        borderColor={props.isHeld  ? "#59E391" : "#F0F4F8"}
         opacity = {props.isHeld ? 1 : 0.5}
         backgroundImage = {
             props.type === "Destroyer" ? `url(${Destroyer})` :

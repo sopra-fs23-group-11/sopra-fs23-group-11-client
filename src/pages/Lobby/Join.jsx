@@ -31,28 +31,21 @@ export default function Join() {
       }
     } catch (error) {
       console.error(
-        `Something went wrong while fetching the users: \n${handleError(error)}`
+        `Something went wrong while trying to join: \n${handleError(error)}`
       )
       console.error("Details:", error)
       alert(
-        "Something went wrong while fetching the users! See the console for details."
+        "Something went wrong while trying to join! See the console for details."
       )
     }
   }
 
-  // function toGame(){
-  //   navigate(`/game/${lobbyCode}`)
-  // }
 
   useEffect(() => {
     // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
     if (isValidCode) {
       console.log("effect ran...")
-      //navigate(`/chatroom/${lobbyCode}`)
-
-      // navigate(`/game/${lobbyCode}`)
-      navigate(`/game/${lobbyCode}`)
-      //navigate(`/setup/${lobbyCode}`)
+      navigate(`/setup/${lobbyCode}`)
     }
   }, [isValidCode])
 
