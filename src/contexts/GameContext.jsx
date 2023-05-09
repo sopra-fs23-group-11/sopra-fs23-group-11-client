@@ -1,26 +1,15 @@
-import React, { createContext, useEffect, useState } from "react"
-import { Stomp } from "stompjs/lib/stomp"
+import React, { createContext, useState } from "react"
 import generateBoard from "../helpers/getBoard"
 import shipsData from "../models/ShipsData"
 import { api } from "../helpers/api"
-import waterSound from "../assets/sounds/water.mp3"
-import bigSplash1 from "../assets/sounds/bigSplash1.mp3"
-import bigSplash2 from "../assets/sounds/bigSplash2.mp3"
-import bigSplash3 from "../assets/sounds/bigSplash3.mp3"
-import {
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-  Stack,
-} from "@chakra-ui/react"
+import { bigSplash, smallSplash } from "../helpers/soundEffects"
+
 
 export const GameContext = createContext()
 
 export default function GameProvider({ children }) {
   const [direction, setDirection] = useState("Horizontal")
   const [lobby, setLobby] = useState(null)
-  const [game, setGame] = useState(null)
   const [errorLogs, setErrorLogs] = useState([])
   let error_logs = []
 
@@ -58,40 +47,8 @@ export default function GameProvider({ children }) {
     smallSplash()
     smallSplash()
   }
-  function smallSplash() {
-    const audio = new Audio(waterSound)
-    audio.play()
-  }
-  function bigSplash() {
-    const audio1 = new Audio(bigSplash1)
-    const audio2 = new Audio(bigSplash2)
-    const audio3 = new Audio(bigSplash3)
-    const randomNumber = Math.random()
-    if (randomNumber < 0.33) {
-      audio1.play()
-    } else if (randomNumber < 0.66) {
-      audio2.play()
-    } else {
-      audio3.play()
-    }
-  }
-  function smallSplash() {
-    const audio = new Audio(waterSound)
-    audio.play()
-  }
-  function bigSplash() {
-    const audio1 = new Audio(bigSplash1)
-    const audio2 = new Audio(bigSplash2)
-    const audio3 = new Audio(bigSplash3)
-    const randomNumber = Math.random()
-    if (randomNumber < 0.33) {
-      audio1.play()
-    } else if (randomNumber < 0.66) {
-      audio2.play()
-    } else {
-      audio3.play()
-    }
-  }
+
+
 
   const handlePlace = (rowIndex, colIndex) => {
     setPlayer(updatePlayerSetup(player, rowIndex, colIndex))
@@ -285,8 +242,6 @@ export default function GameProvider({ children }) {
         setLobby,
         handlePlace,
         handleSelect,
-        game,
-        setGame,
         handleShoot,
         enemy,
         setEnemy,

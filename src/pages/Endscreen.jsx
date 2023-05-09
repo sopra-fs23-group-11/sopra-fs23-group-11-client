@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import ship_loser1 from "../assets/ship_loser1.jpg"
 import ship_winner from "../assets/ship_winner.png"
 import {Box, Button, Flex, Image, Text} from "@chakra-ui/react";
-import {api} from "../helpers/api.js";
+import {api, handleError} from "../helpers/api.js";
 import {useParams, Link} from "react-router-dom";
 
 

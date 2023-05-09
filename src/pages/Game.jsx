@@ -1,24 +1,15 @@
-import React, { useState, useEffect, useContext } from "react"
-import { api } from "../../helpers/api.js"
+import React, { useEffect, useContext } from "react"
+import { api } from "../helpers/api.js"
 import { Flex } from "@chakra-ui/react"
-import { GameContext } from "../../contexts/GameContext.jsx"
+import { GameContext } from "../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp.js"
 import { useParams } from "react-router-dom"
-import BattleshipBoard from "../../components/BattleShipBoard.jsx"
+import BattleshipBoard from "../components/BattleShipBoard.jsx"
 
 let socket = null
-export default function MainGame() {
-  const {
-    player,
-    setPlayer,
-    game,
-    setGame,
-    handleShoot,
-    user,
-    lobby,
-    enemy,
-    setEnemy,
-  } = useContext(GameContext)
+export default function Game() {
+  const { player, setPlayer, handleShoot, user, enemy } =
+    useContext(GameContext)
   const { lobbyCode } = useParams()
 
   useEffect(() => {
@@ -61,9 +52,9 @@ export default function MainGame() {
   const onSunkenShip = (payload) => {
     const payloadData = JSON.parse(payload.body)
     console.log(payloadData)
-    if(payloadData.defenderId === player.id){
+    if (payloadData.defenderId === player.id) {
       alert("one of your ships has been sunk")
-    }else{
+    } else {
       alert("You have sunk a ship ")
     }
   }
@@ -100,12 +91,11 @@ export default function MainGame() {
       <Flex>
         {user.isHost ? (
           <>
-            <BattleshipBoard board={player.board} playerId={player.id} />
+            <BattleshipBoard board={player.board}/>
 
             <BattleshipBoard
               board={enemy.board}
               handleShoot={shootMissle}
-              playerId={player.id}
               isTurn={player.isMyTurn}
               isEnemy={true}
             />
@@ -115,12 +105,11 @@ export default function MainGame() {
             <BattleshipBoard
               board={enemy.board}
               handleShoot={shootMissle}
-              playerId={player.id}
               isTurn={player.isMyTurn}
               isEnemy={true}
             />
 
-            <BattleshipBoard board={player.board} playerId={player.id} />
+            <BattleshipBoard board={player.board}/>
           </>
         )}
       </Flex>

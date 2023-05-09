@@ -13,15 +13,12 @@ import Lobby from "./pages/Lobby/Lobby"
 import Register, { action as registerAction } from "./pages/Register"
 import Host from "./pages/Lobby/Host"
 import Join from "./pages/Lobby/Join"
-import Profile from "./pages/Lobby/Profile"
+import Profile from "./pages/Profile"
 import LobbyLayout from "./pages/Lobby/LobbyLayout"
 import Setup from "./pages/Setup/Setup.jsx"
-import Game from "./pages/Game/Game.jsx"
 import Chatroom from "./pages/Chatroom"
 import Endscreen from "./pages/Endscreen"
-import GameBoard from "./pages/Game/GameBoard.jsx"
-import MainGame from "./pages/Game/MainGame"
-
+import Game from "./pages/Game"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,13 +27,10 @@ const router = createBrowserRouter(
       <Route path="register" element={<Register />} action={registerAction} />
       <Route path="login" element={<Login />} action={loginAction} />
       <Route path="setup/:lobbyCode" element={<Setup />} />
-
-      <Route path="game/:lobbyCode" element={<Game />} />
       <Route path="chatroom/:lobbyCode" element={<Chatroom />} />
-        <Route path="endscreen/:lobbyCode" element={<Endscreen />} />
-        <Route path="profile/:userid" element={<Profile />} />
-        <Route path="main/:lobbyCode" element={<MainGame/>} />
-
+      <Route path="endscreen/:lobbyCode" element={<Endscreen />} />
+      <Route path="profile/:userid" element={<Profile />} />
+      <Route path="game/:lobbyCode" element={<Game />} />
 
       <Route path="lobby" element={<LobbyLayout />}>
         <Route index element={<Lobby />} />

@@ -52,27 +52,31 @@ function BattleshipBoard({
                   h="30px"
                   w="30px"
                   border="1px solid gray"
+                  _hover={isEnemy && { bg: "gray.100" }}
+                  cursor={isTurn ? "crosshair" : "wait"}
                   bg={
-                    board[rowIndex][colIndex].isOccupied
-                      ? isEnemy
+                    board[rowIndex][colIndex].isOccupied //first check if cell is occupied
+                      ? isEnemy // then check if its in enemyBoard
                         ? board[rowIndex][colIndex].isHit
-                          ? "red"
-                          : "white"
-                        : "blue"
-                      : "white"
+                          ? "red" //red when enemyship has been hit
+                          : "white" //"hide" the enemy ship otherwise
+                        : "blue" //for player render theri ships blue
+                      : "white" // else if there is nothing occupying the cell
                   }
                   onClick={
-                    isSetUp
-                      ? () => handlePlace(rowIndex, colIndex)
-                      : isTurn
-                      ? () => handleShoot(rowIndex, colIndex)
-                      : () =>
+                    isSetUp 
+                      ? () => handlePlace(rowIndex, colIndex) //only for the setup stage
+                      : isTurn // if game already started, check if its player's turn
+                      ? (board[rowIndex][colIndex].isHit || board[rowIndex][colIndex].isShotAt) //check if the cell has already been hit before
+                        ? () => alert("We already shot this place captain!")
+                        : () => handleShoot(rowIndex, colIndex)
+                      : () => //if its not the player's turn...
                           alert(
                             "Hold your horses Captain its not your Turn to shoot"
                           )
                   }
                 >
-                  {!isEnemy
+                  {!isEnemy // this is shown on the player's board
                     ? board[rowIndex][colIndex].isHit
                       ? "X"
                       : board[rowIndex][colIndex].isShotAt
