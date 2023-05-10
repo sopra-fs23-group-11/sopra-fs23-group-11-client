@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from "react"
 import { Flex } from "@chakra-ui/react"
 import { GameContext } from "../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp.js"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate} from "react-router-dom"
 import BattleshipBoard from "../components/BattleShipBoard.jsx"
 import { explosionSound, smallSplash, sinkShipSound} from "../helpers/soundEffects"
 
@@ -11,6 +11,8 @@ export default function Game() {
   const { player, setPlayer, handleShoot, user, enemy, handleSunk } =
     useContext(GameContext)
   const { lobbyCode } = useParams()
+  const navigate = useNavigate()
+
 
   useEffect(() => {
     socket = Stomp.client("ws://localhost:8080/ws")
@@ -20,6 +22,7 @@ export default function Game() {
   const onConnected = () => {
     socket.subscribe(`/game/${lobbyCode}/${player.id}`, onShotReceived)
     socket.subscribe(`/game/${lobbyCode}/sunk`, onSunkenShip)
+    socket.subscribe(`/game/${lobbyCode}/finish`, onFinished)
   }
 
   const onShotReceived = (payload) => {
@@ -52,6 +55,11 @@ export default function Game() {
       return { ...player, board: newBoard, isMyTurn: true }
     })
   }
+  const onFinished = (payload) => {
+    const payloadData = JSON.parse(payload.body)
+    navigate(`/endscreen/${lobbyCode}`)
+  }
+
 
   const onSunkenShip = (payload) => {
     sinkShipSound()
