@@ -4,6 +4,7 @@ import { GameContext } from "../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp.js"
 import { useParams } from "react-router-dom"
 import BattleshipBoard from "../components/BattleShipBoard.jsx"
+import { explosionSound, smallSplash, sinkShipSound} from "../helpers/soundEffects"
 
 let socket = null
 export default function Game() {
@@ -43,12 +44,17 @@ export default function Game() {
             : cell
         )
       )
-
+      if (isAHit) {
+        explosionSound()
+      }else {
+        smallSplash()
+      }
       return { ...player, board: newBoard, isMyTurn: true }
     })
   }
 
   const onSunkenShip = (payload) => {
+    sinkShipSound()
     const payloadData = JSON.parse(payload.body)
     const shipType = payloadData.shipType
     const shipId = payloadData.shipId
@@ -60,6 +66,7 @@ export default function Game() {
       alert(`You have sunk their ${shipType}`)
       handleSunk(enemy.id, shipId)
     }
+
   }
 
   const shootMissle = (rowIndex, colIndex) => {

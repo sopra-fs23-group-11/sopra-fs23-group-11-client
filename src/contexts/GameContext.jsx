@@ -2,7 +2,7 @@ import React, { createContext, useState } from "react"
 import generateBoard from "../helpers/getBoard"
 import shipsData from "../models/ShipsData"
 import { api } from "../helpers/api"
-import { bigSplash, smallSplash } from "../helpers/soundEffects"
+import {bigSplash, smallSplash, sinkShipSound, explosionSound} from "../helpers/soundEffects"
 
 export const GameContext = createContext()
 
@@ -43,11 +43,15 @@ export default function GameProvider({ children }) {
       ...enemy,
       board: shootMissle(enemy.board, rowIndex, colIndex),
     }))
-    smallSplash()
-    smallSplash()
+    if (enemy.board[rowIndex][colIndex].isOccupied == null ) {
+      smallSplash()
+    } else {
+      explosionSound()
+    }
   }
 
   const handleSunk = (playerId, shipId) => {
+    sinkShipSound()
     playerId === player.id
       ? setPlayer((player) => ({
           ...player,

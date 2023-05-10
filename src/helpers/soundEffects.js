@@ -2,6 +2,8 @@ import waterSound from "../assets/sounds/water.mp3"
 import bigSplash1 from "../assets/sounds/bigSplash1.mp3"
 import bigSplash2 from "../assets/sounds/bigSplash2.mp3"
 import bigSplash3 from "../assets/sounds/bigSplash3.mp3"
+import arcadeGameExplosion from "../assets/sounds/arcadeGameExplosion.mp3"
+import sinkingShipSound from "../assets/sounds/sinkingShipSound.mp3"
 
 
 export function smallSplash() {
@@ -23,3 +25,13 @@ export function bigSplash() {
       audio3.play()
     }
   }
+
+export function sinkShipSound() {
+    const audio = new Audio(sinkingShipSound)
+    audio.play()
+}
+
+export function explosionSound() {
+    const audio = new Audio(arcadeGameExplosion)
+    audio.play()
+}
