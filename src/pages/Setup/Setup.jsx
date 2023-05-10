@@ -121,7 +121,7 @@ function Setup() {
 
 
   const onReady = (payload) => {
-    console.log("game starts on REady")
+    console.log("game starts on Ready")
     const payloadData = JSON.parse(payload.body)
     setEnemy(enemy => ({...enemy, isReady: true, board: JSON.parse(payloadData.playerBoard)}))
 
