@@ -10,5 +10,5 @@ export const getDomain = () => {
   const prodUrl = 'https://sopra-fs23-group11-server.oa.r.appspot.com/' //
   const devUrl = 'http://localhost:8080'
 
-  return isProduction() ? prodUrl : devUrl
+  return isProduction ? prodUrl : devUrl
 }
