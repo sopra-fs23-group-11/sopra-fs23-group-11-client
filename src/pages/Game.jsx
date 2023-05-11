@@ -5,6 +5,7 @@ import { Stomp } from "stompjs/lib/stomp.js"
 import { useParams, useNavigate} from "react-router-dom"
 import BattleshipBoard from "../components/BattleShipBoard.jsx"
 import { explosionSound, smallSplash, sinkShipSound} from "../helpers/soundEffects"
+import { getDomainWebsocket } from "../helpers/getDomainWebsocket.js"
 
 let socket = null
 export default function Game() {
@@ -15,7 +16,7 @@ export default function Game() {
 
 
   useEffect(() => {
-    socket = Stomp.client("ws://localhost:8080/ws")
+    socket = Stomp.client(getDomainWebsocket())
     socket.connect({}, onConnected)
   }, [])
 
