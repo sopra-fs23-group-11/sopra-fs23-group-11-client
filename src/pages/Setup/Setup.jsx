@@ -7,6 +7,7 @@ import "./Setup.css"
 import {Flex, Button, Box, Text, Spinner, Grid, GridItem} from "@chakra-ui/react"
 import { GameContext } from "../../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp"
+import { getDomainWebsocket } from "../../helpers/getDomainWebsocket.js"
 
 import {
   Alert,
@@ -40,7 +41,7 @@ function Setup() {
 
   useEffect(() => {
     console.log("effect ran...")
-    socket = Stomp.client("ws://localhost:8080/ws")
+    socket = Stomp.client(getDomainWebsocket())
     socket.connect({}, onConnected, errorCallback)
 
     if(player.isReady && enemy.isReady)navigate(`/game/${lobbyCode}`)

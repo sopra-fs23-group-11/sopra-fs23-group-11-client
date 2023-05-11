@@ -4,6 +4,7 @@ import {Button, Stack, Alert, Text, Box, Spinner} from "@chakra-ui/react";
 import { GameContext } from '../../contexts/GameContext.jsx';
 import { Stomp } from 'stompjs/lib/stomp.js';
 import { useNavigate } from 'react-router-dom';
+import { getDomainWebsocket } from '../../helpers/getDomainWebsocket.js';
 
 
 export default function Host() {
@@ -28,7 +29,7 @@ export default function Host() {
       setUser(prev => ({...prev, isHost: true}))
       setLobby(response.data)
 
-      const stompClient = Stomp.client("ws://localhost:8080/ws")
+      const stompClient = Stomp.client(getDomainWebsocket())
       stompClient.connect({}, ()=> {
       console.log("Stomp client connected !")
       stompClient.subscribe(`/join/${response.data.lobbyCode}`, onJoiner)
