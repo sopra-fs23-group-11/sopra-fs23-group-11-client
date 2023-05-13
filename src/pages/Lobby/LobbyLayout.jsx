@@ -26,10 +26,9 @@ export default function LobbyLayout() {
   };
 
   return (
-    <Box style={bgStyle}>
-      <Box style={overlayStyle}></Box>
-      <Heading textAlign="center" mt="10rem" fontSize="5xl">
-      </Heading>
+    <Box>
+      {/* <Heading textAlign="center" mt="10rem" fontSize="5xl">
+      </Heading> */}
       <Outlet />
     </Box>
   );

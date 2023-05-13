@@ -35,12 +35,13 @@ export default function AvatarList({ onSelect, selectedAvatar }) {
               <Box
                   key={avatarUrl}
                   cursor="pointer"
+                  minW="100px"
                   borderRadius="md"
                   onClick={() => onSelect(avatarUrl)}
-                  bg={selectedAvatar === avatarUrl ? "blue.100" : "white"}
+                  bg={selectedAvatar === avatarUrl ? "blue.100" : "transparent"}
                   _hover={{ bg: "gray.100" }}
               >
-                <Image src={avatarUrl} alt="Avatar" w="100px" h="100px" />
+                <Image src={avatarUrl} alt="Avatar" h="100px" />
               </Box>
             </Tooltip>
         ))}

@@ -28,10 +28,8 @@ export async function action({ request }) {
     )
     if (response.status === 201) {
       const user = new User(response.data)
-      console.log(user)
-      sessionStorage.clear()
-      localStorage.clear()
-      sessionStorage.setItem("user", JSON.stringify(user))
+      sessionStorage.setItem("userId", user.id) //for fetching userInfo
+      localStorage.setItem("token", user.token) //for authentication
       return redirect("/lobby")
     }
   } catch (err) {
@@ -61,7 +59,7 @@ export default function Register() {
 
       <Form method="post" action="/register">
         <Flex direction="row" alignItems="center" w="100%">
-          <Box mb="40px" w="30%">
+          <Box mb="40px"  minW="250px">
             <FormControl my="4" pl="20" isRequired>
               <FormLabel>Username</FormLabel>
               <Input

@@ -1,20 +1,16 @@
-
-import React, { useState, useEffect, useContext} from "react"
+import React, { useState, useEffect, useContext } from "react"
 import { Button, Heading, Input, Box } from "@chakra-ui/react"
 
 import { api, handleError } from "../../helpers/api.js"
 import { useNavigate } from "react-router"
 import { GameContext } from "../../contexts/GameContext.jsx"
 
-
 export default function Join() {
   const [lobbyCode, setLobbyCode] = useState("")
   const [isValidCode, setIsValidCode] = useState(false)
   const navigate = useNavigate()
-  const {user, setUser, lobby, setLobby} = useContext(GameContext)
+  const { user, setUser, lobby, setLobby } = useContext(GameContext)
   const joinerId = user.id
-  
-
 
   async function submitCode() {
     try {
@@ -26,8 +22,7 @@ export default function Join() {
       if (response.status === 200) {
         setIsValidCode(true)
         setLobby(response.data)
-
-
+        setUser({ ...user, isHost: false }) //a user that hosted a lobby before, but wants to join a lobby now
       }
     } catch (error) {
       console.error(
@@ -39,7 +34,6 @@ export default function Join() {
       )
     }
   }
-
 
   useEffect(() => {
     // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
@@ -55,20 +49,21 @@ export default function Join() {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      flexDirection="column">
-
+      flexDirection="column"
+    >
       <Heading as="h1" color="blackAlpha.900" frontsize="4x1" mb={6}>
-        Enter Roomcode</Heading>
-      <div style={{display:"flex", alignItems:"center"}}>
-      <Input
-        value={lobbyCode}
-        name="code"
-        onChange={(e) => setLobbyCode(e.target.value)}
-        htmlSize={4}
-        width="auto"
-        mr={6}
-      />
-      <Button onClick={submitCode}>submit code</Button>
+        Enter Roomcode
+      </Heading>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Input
+          value={lobbyCode}
+          name="code"
+          onChange={(e) => setLobbyCode(e.target.value)}
+          htmlSize={4}
+          width="auto"
+          mr={6}
+        />
+        <Button onClick={submitCode}>submit code</Button>
       </div>
     </Box>
   )

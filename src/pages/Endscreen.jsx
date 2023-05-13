@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import ship_loser1 from "../assets/ship_loser1.jpg"
 import ship_winner from "../assets/ship_winner.png"
 import {Box, Button, Flex, Image, Text} from "@chakra-ui/react";
 import {api, handleError} from "../helpers/api.js";
 import {useParams, Link} from "react-router-dom";
+import { GameContext } from "../contexts/GameContext";
 
 
 
 function EndScreen() {
 
-    const user = JSON.parse(sessionStorage.getItem("user"))
     let [boardUser, setBoardUser] = useState(null);
     const { lobbyCode } = useParams();
+    const {user} = useContext(GameContext)
 
 
     useEffect(() => {
