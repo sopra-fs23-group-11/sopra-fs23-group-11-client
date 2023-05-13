@@ -46,6 +46,7 @@ function BattleshipBoard({
             {row.map((col, colIndex) => (
               <GridItem key={`${rowIndex}-${colIndex}`}>
                 <Box
+
                   textAlign="center"
                   color="red.500"
                   id={`${String.fromCharCode(65 + rowIndex)}${colIndex}`}
@@ -63,9 +64,9 @@ function BattleshipBoard({
                       : isEnemy // then check if its in enemyBoard
                         ? board[rowIndex][colIndex].isHit
                           ? "red" //red when enemyship has been hit
-                          : "white" //"hide" the enemy ship otherwise
+                          : "transparent" //"hide" the enemy ship otherwise
                         : "blue" //for player render theri ships blue
-                      : "white" // else if there is nothing occupying the cell
+                      : "transparent" // else if there is nothing occupying the cell
                   }
                   onClick={
                     isSetUp 

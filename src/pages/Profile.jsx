@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { api, handleError } from "../helpers/api"
 import { Box, Button, Text, Avatar } from "@chakra-ui/react"
+import {GameContext} from "../contexts/GameContext"
 
 const Profile = () => {
-  const user = JSON.parse(sessionStorage.getItem("user"))
-  console.log(user)
+  const {user} = useContext(GameContext)
   const navigate = useNavigate()
 
   const goBack = () => {
@@ -16,7 +16,7 @@ const Profile = () => {
     <div className="game">
       <ul className="game user-list">
         <Avatar size="2xl" src={user.avatar} />
-        <li> Account username: {user.username}</li>
+        <li> Account username: {user.name}</li>
         <li>Account ID: {user.id}</li>
         <li> Account Status: {user.status}</li>
         <li> Account Wins: {user.totalWins}</li>

@@ -1,14 +1,25 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import { Button } from "@chakra-ui/react"
+import { Button, Box, Flex, chakra, shouldForwardProp, Heading } from "@chakra-ui/react"
+import { motion, isValidMotionProp } from "framer-motion"
+import withAnimation from "../HOC/withAnimation"
 
-export default function Home() {
-    return (
-        <div>
-            <h1>Welcome Comrade! Join our Battle NOW!</h1>
-            <Button>
-                <Link to="login">Join Now</Link>
-            </Button>
-        </div>
-    )
+
+function Home() {
+  return (
+    <Flex
+      direction="column"
+      justifyContent="center"
+      alignItems="center"
+      h="80vh"
+    >
+      <Heading>Welcome To Battleship</Heading>
+      <Button size="lg">
+        <Link to="login">Join The Battle!</Link>
+      </Button>
+    </Flex>
+  )
 }
+
+
+export default withAnimation(Home, "HOME")

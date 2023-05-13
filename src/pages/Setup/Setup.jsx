@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useState, useRef } from "react"
 import BattleshipBoard from "../../components/BattleShipBoard.jsx"
 import Ship from "../../components/Ship.jsx"
 import { api } from "../../helpers/api.js"
@@ -16,7 +16,6 @@ import {
 } from "@chakra-ui/react";
 
 import { useParams, useNavigate } from "react-router-dom"
-
 let socket = null
 function Setup() {
   const {
@@ -30,11 +29,13 @@ function Setup() {
     handleSelect,
     handlePlace,
     setEnemy, 
-    enemy
+    enemy,
+    resetState,
   } = useContext(GameContext)
 
   const [isStartSetup, setIsStartSetup] = useState(false)
   const [waitingSpinner, setWaitingSpinner] = useState(false)
+  const [isConnected, setIsConnected] = useState(false)
   const { lobbyCode } = useParams()
   const navigate = useNavigate()
   const hostId = lobby.hostId
@@ -45,7 +46,25 @@ function Setup() {
     socket.connect({}, onConnected, errorCallback)
 
     if(player.isReady && enemy.isReady)navigate(`/game/${lobbyCode}`)
+    
+
   }, [enemy.isReady, player.isReady])
+
+  // useEffect(() => {
+  //   const handleBeforeUnload = (event) => {
+  //     event.preventDefault()
+  //     event.returnValue = ""
+  //   }
+  //   window.addEventListener("popstate", handleBeforeUnload)
+
+  //   return () => {
+  //     if(isConnected){
+  //       socket.send(`/app/leave`, {}, JSON.stringify(user.name))
+  //       window.removeEventListener("popstate", handleBeforeUnload)
+  //       socket.disconnect()
+  //     }
+  //   }
+  // }, [isConnected])
 
   const errorCallback = (m) => {
     console.log("mmm", m)
@@ -53,13 +72,14 @@ function Setup() {
 
   const onConnected = () => {
     console.log("Stomp client connected !", lobbyCode)
-
+    setIsConnected(true)
     socket.subscribe(`/startgame/${lobbyCode}`, onStartGame)
     console.log("websocket connected!")
     socket.subscribe(
       `/ready/${user.id === lobby.hostId ? lobby.joinerName : lobby.hostName}`,
       onReady
     )
+    socket.subscribe(`/leave/${lobbyCode}`, onLeave)
   }
 
   async function startGame() {
@@ -126,6 +146,10 @@ function Setup() {
     const payloadData = JSON.parse(payload.body)
     setEnemy(enemy => ({...enemy, isReady: true, board: JSON.parse(payloadData.playerBoard)}))
 
+  }
+
+  const onLeave = () => {
+    console.log("player left the game")
   }
 
 
@@ -197,6 +221,24 @@ function Setup() {
               {direction}
             </button>}
           </div>
+          {player.ships.length === 0 && (
+        <Button onClick={playerReady} isDisabled={waitingSpinner} top="-5">
+          {!waitingSpinner ? (
+            "Ready"
+          ) : (
+            <>
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="md"
+              />
+              <Text>Good Luck Captain, See you on the other side 🫡</Text>
+            </>
+          )}
+        </Button>
+      )}
         </Flex>
       ) : user.isHost ? (
         <Button onClick={startGame}>Start Setup</Button>
@@ -219,24 +261,7 @@ function Setup() {
           </Text>
         </Flex>
       )}
-      {player.ships.length === 0 && (
-        <Button onClick={playerReady} isDisabled={waitingSpinner}>
-          {!waitingSpinner ? (
-            "Ready"
-          ) : (
-            <>
-              <Spinner
-                thickness="4px"
-                speed="0.65s"
-                emptyColor="gray.200"
-                color="blue.500"
-                size="lg"
-              />
-              <Text>Good Luck Captain, See you on the other side 🫡</Text>
-            </>
-          )}
-        </Button>
-      )}
+      
     </Box>
   )
 }

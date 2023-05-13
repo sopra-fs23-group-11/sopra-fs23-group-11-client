@@ -1,5 +1,5 @@
 import { React, useState } from "react"
-import { Link, useActionData, Form, redirect } from "react-router-dom"
+import { Link, useActionData, Form, redirect, useLocation } from "react-router-dom"
 
 import {
   Box,
@@ -10,8 +10,8 @@ import {
   InputGroup,
   InputRightElement,
   Text,
+  Container, 
 } from "@chakra-ui/react"
-
 import { api } from "../helpers/api"
 import User from "../models/User"
 
@@ -31,7 +31,8 @@ export async function action({ request }) {
     )
     if(response.status === 202){
       const user = new User(response.data)
-      sessionStorage.setItem("user", JSON.stringify(user))
+      sessionStorage.setItem("userId", user.id) //for fetching userInfo
+      localStorage.setItem("token", user.token) //for authentication
       return redirect("/lobby")
     } 
   } catch (err) {
@@ -44,12 +45,14 @@ export async function action({ request }) {
 export default function Login() {
   const [show, setShow] = useState(false)
   const errors = useActionData()
+  const locaction = useLocation()
 
   const handleClick = () => setShow(!show)
 
   return (
-    <div>
+    <Container h="70vh" pt="4em">
       <Box maxW="480px">
+      {locaction.state?.message && <Text color="red.500">{locaction.state.message}</Text>}
       {errors?.errorMessage && <Text color="red.500">{errors.errorMessage}</Text>}
         <Form method="post" action="/login">
           <FormControl mb="40px">
@@ -83,6 +86,6 @@ export default function Login() {
       <Box color="teal.400" textDecoration="underline">
         <Link to="../register">No account? Sign up here</Link>
       </Box>
-    </div>
+    </Container>
   )
 }
