@@ -9,15 +9,16 @@ import {
   Spinner,
   IconButton,
   useToast,
-  position
+  position,
+  Collapse
 } from "@chakra-ui/react"
 import { GameContext } from "../../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp.js"
 import { useNavigate } from "react-router-dom"
 import { getDomainWebsocket } from "../../helpers/getDomainWebsocket.js"
 import { CopyIcon } from "@chakra-ui/icons"
-
-export default function Host() {
+import AnimationContainer from "../../components/AnimationContainer.jsx"
+function Host() {
   const [code, setCode] = useState(null)
   const { user, setUser, lobby, setLobby } = useContext(GameContext)
   const [isJoined, setIsJoined] = useState(false)
@@ -32,7 +33,9 @@ export default function Host() {
 
   useEffect(() => {
     if (isJoined) {
-      navigate(`/setup/${code}`)
+      setTimeout(()=>{
+        navigate(`/setup/${code}`)
+      }, 1000)
     }
   }, [isJoined])
 
@@ -105,6 +108,8 @@ export default function Host() {
     }
   }
   return (
+    <AnimationContainer>
+
     <Box
       height="50vh"
       display="flex"
@@ -112,7 +117,7 @@ export default function Host() {
       justifyContent="center"
       alignItems="center"
     >
-      {showCode && (
+      <Collapse in={showCode} animateOpacity>
         <Box bg="transparent" p="4" rounded="md" mt="4" position="relative">
           {/* {errorLogs.length > 0 && (
             <Stack position="absolute" top="0" right="0">
@@ -139,7 +144,8 @@ export default function Host() {
             Copy code
           </Button> */}
         </Box>
-      )}
+      </Collapse>
+      
       <Button onClick={generateLobbyCode}>Get a Lobby Code</Button>
       {!isJoined && showCode && (
         <Box pt="1em" marginRight="auto" marginLeft="auto">
@@ -155,6 +161,10 @@ export default function Host() {
           />
         </Box>
       )}
+      {isJoined && <Text>Player Joined, will redirect shortly</Text>}
     </Box>
+    </AnimationContainer>
   )
 }
+
+export default Host

@@ -15,6 +15,7 @@ function BattleshipBoard({
       templateRows="repeat(11, 30px)"
       gap={0}
       margin="20px"
+      marginRight="30px"
     >
       <GridItem />
 
@@ -56,7 +57,7 @@ function BattleshipBoard({
                   _hover={isEnemy && 
                         !(board[rowIndex][colIndex].isHit || board[rowIndex][colIndex].isShotAt) && 
                         { bg: "gray.100" }}
-                  cursor={isSetUp ? "pointer" : isTurn ? "crosshair" : "wait"}
+                  cursor={isSetUp ? "pointer" : isTurn ? "crosshair" : isEnemy ? "wait" : ""}
                   bg={
                     board[rowIndex][colIndex].isOccupied //first check if cell is occupied
                     ? board[rowIndex][colIndex].isOccupied.isSunk //check if ship is sunk
@@ -75,10 +76,12 @@ function BattleshipBoard({
                       ? (board[rowIndex][colIndex].isHit || board[rowIndex][colIndex].isShotAt) //check if the cell has already been hit before
                         ? () => alert("We already shot this place captain!")
                         : () => handleShoot(rowIndex, colIndex)
-                      : () => //if its not the player's turn...
+                        : isEnemy
+                         ? () => //if its not the player's turn...
                           alert(
                             "Hold your horses Captain its not your Turn to shoot"
                           )
+                      : () => alert("Captain are you trying to kill us?!")
                   }
                 >
                   {!isEnemy // this is shown on the player's board

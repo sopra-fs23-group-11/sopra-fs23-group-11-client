@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { api, handleError } from "../helpers/api"
 import { Box, Button, Text, Avatar } from "@chakra-ui/react"
 import {GameContext} from "../contexts/GameContext"
-
+import AnimationContainer from "../components/AnimationContainer"
 const Profile = () => {
   const {user} = useContext(GameContext)
   const navigate = useNavigate()
@@ -24,7 +24,7 @@ const Profile = () => {
     </div>
   )
   return (
-    <div>
+    <AnimationContainer>
       <Button mt={4} width="10%" onClick={() => goBack()}>
         Back
       </Button>
@@ -36,7 +36,7 @@ const Profile = () => {
         <Text fontSize="xl">This is your Information:</Text>
         <Box>{content}</Box>
       </Box>
-    </div>
+    </AnimationContainer>
   )
 }
 export default Profile

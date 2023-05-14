@@ -1,11 +1,60 @@
 import React, { useEffect, useContext } from "react"
-import { Flex } from "@chakra-ui/react"
+import { Divider, Flex, Text, Box, Center } from "@chakra-ui/react"
 import { GameContext } from "../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp.js"
-import { useParams, useNavigate} from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import BattleshipBoard from "../components/BattleShipBoard.jsx"
-import { explosionSound, smallSplash, sinkShipSound} from "../helpers/soundEffects"
+import {
+  explosionSound,
+  smallSplash,
+  sinkShipSound,
+} from "../helpers/soundEffects"
 import { getDomainWebsocket } from "../helpers/getDomainWebsocket.js"
+import AnimationContainer from "../components/AnimationContainer.jsx"
+
+const enemyVariant = {
+  hidden: {
+    opacity: 0,
+    y: "100vh",
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", delay: 0.5 },
+  },
+}
+
+const playerVariant = {
+  hidden: {
+    opacity: 0,
+    y: "-100vh",
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", delay: 0.5 },
+  },
+}
+
+const playerTurnVariants = {
+  hidden: { 
+    x: '100vw' 
+  },
+  visible: {
+    x: 0,
+    transition: { type: 'spring', stiffness: 120 }
+  } 
+}
+
+const enemyTurnVariants = {
+  hidden: { 
+    x: '100vw' 
+  },
+  visible: {
+    x: 0,
+    transition: { type: 'spring', stiffness: 120 }
+  }
+}
 
 let socket = null
 export default function Game() {
@@ -13,7 +62,6 @@ export default function Game() {
     useContext(GameContext)
   const { lobbyCode } = useParams()
   const navigate = useNavigate()
-
 
   useEffect(() => {
     socket = Stomp.client(getDomainWebsocket())
@@ -50,7 +98,7 @@ export default function Game() {
       )
       if (isAHit) {
         explosionSound()
-      }else {
+      } else {
         smallSplash()
       }
       return { ...player, board: newBoard, isMyTurn: true }
@@ -61,7 +109,6 @@ export default function Game() {
     navigate(`/endscreen/${lobbyCode}`)
   }
 
-
   const onSunkenShip = (payload) => {
     sinkShipSound()
     const payloadData = JSON.parse(payload.body)
@@ -70,12 +117,11 @@ export default function Game() {
     console.log(payloadData)
     if (payloadData.defenderId === player.id) {
       alert(`Your ${shipType} has been sunk`)
-      handleSunk(player.id,shipId )
+      handleSunk(player.id, shipId)
     } else {
       alert(`You have sunk their ${shipType}`)
       handleSunk(enemy.id, shipId)
     }
-
   }
 
   const shootMissle = (rowIndex, colIndex) => {
@@ -99,39 +145,31 @@ export default function Game() {
   }
 
   return (
-    <div>
-      <>
-        <h2>Player1: {user.isHost ? player.name : enemy.name}</h2>
-        <h2>Player2: {user.isHost ? enemy.name : player.name}</h2>
-        <h3>
-          {player.isMyTurn ? "Your Turn to Shoot" : "Enemy Shot Incoming!"}
-        </h3>
-      </>
-      <Flex>
-        {user.isHost ? (
-          <>
-            <BattleshipBoard board={player.board}/>
+    <Flex justifyContent="space-around" width="80%" m="auto">
+      <AnimationContainer variants={playerVariant}>
+        <Flex direction="column" alignItems="center">
+          <Text>{player.name}</Text>
+          <BattleshipBoard board={player.board} />
+          {player.isMyTurn && <AnimationContainer variants={playerTurnVariants}>Your Turn Captain</AnimationContainer>}
+        </Flex>
+      </AnimationContainer>
 
-            <BattleshipBoard
-              board={enemy.board}
-              handleShoot={shootMissle}
-              isTurn={player.isMyTurn}
-              isEnemy={true}
-            />
-          </>
-        ) : (
-          <>
-            <BattleshipBoard
-              board={enemy.board}
-              handleShoot={shootMissle}
-              isTurn={player.isMyTurn}
-              isEnemy={true}
-            />
+      <Center>
+        <Divider orientation="vertical" borderColor="red" border="2px solid" />
+      </Center>
 
-            <BattleshipBoard board={player.board}/>
-          </>
-        )}
-      </Flex>
-    </div>
+      <AnimationContainer variants={enemyVariant}>
+        <Flex direction="column" alignItems="center">
+          <Text>{enemy.name}</Text>
+          <BattleshipBoard
+            board={enemy.board}
+            handleShoot={shootMissle}
+            isTurn={player.isMyTurn}
+            isEnemy={true}
+          />
+          {!player.isMyTurn && <AnimationContainer variants={enemyTurnVariants}>Enemy Shot Incoming</AnimationContainer>}
+        </Flex>
+      </AnimationContainer>
+    </Flex>
   )
 }

@@ -5,9 +5,20 @@ import React, { useContext, useEffect} from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { GameContext } from "../../contexts/GameContext"
 import {api} from "../../helpers/api.js";
-import withAnimation from "../../HOC/withAnimation";
 import { motion } from "framer-motion";
+import AnimationContainer from "../../components/AnimationContainer";
 
+const lobbyVariants = {
+  hidden: {
+    opacity: 0,
+    x: "100vw",
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { type: "spring", delay: 0.5 },
+  },
+}
 
 function Lobby() {
   const userId = JSON.parse(sessionStorage.getItem("userId"))
@@ -35,6 +46,8 @@ function Lobby() {
   }
 
     return (
+      <AnimationContainer variants={lobbyVariants}>
+
           <Flex
               flexDirection="column"
               height="70vh"
@@ -68,9 +81,10 @@ function Lobby() {
               Log Out
             </Button>
           </Flex>
+      </AnimationContainer>
         
     )
   }
 
 
-export default withAnimation(Lobby, "LOBBY")
+export default Lobby

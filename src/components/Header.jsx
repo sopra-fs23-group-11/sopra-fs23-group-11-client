@@ -1,13 +1,22 @@
 import React from "react"
 import { Flex, Box } from "@chakra-ui/react"
 import { Link, useNavigate } from "react-router-dom"
-import { IconButton } from "@chakra-ui/react"
-import {FaHome} from "react-icons/fa"
-import withAnimation from "../HOC/withAnimation"
+import AnimationContainer from "./AnimationContainer"
 
+const headerVariants = {
+  hidden: {
+    y: -300,
+  },
+  visible: {
+    y: -10,
+    transition: { delay: 0.8 },
+  },
+}
 
 function Header() {
   return (
+    <AnimationContainer variants={headerVariants}>
+
     <Box
       as="header"
       backgroundColor="transparent"
@@ -33,7 +42,8 @@ function Header() {
         /> */}
 
     </Box>
+    </AnimationContainer>
   )
 }
 
-export default withAnimation(Header, "HEADER")
+export default Header
