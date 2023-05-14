@@ -209,12 +209,6 @@ function Setup() {
   return (
     <Box display="flex" flexDirection="column" justifyContent="center" h="70vh">
       <>
-        {/* <h2>Player1: {user.isHost ? player.name : enemy.name}</h2>
-        <h2>Player2: {user.isHost ? enemy.name : player.name}</h2>
-        <h2>
-          {" "}
-          Click the button on the right to make your ship vertical or horizontal
-        </h2> */}
         {errorLogs.length > 0 && <h3> Following error in placements:</h3>}
         {errorLogs.length > 0 && (
           <Stack spacing={3}>
@@ -232,18 +226,20 @@ function Setup() {
       {isStartSetup ? (
         <Flex justifyContent="center">
           <AnimationContainer variants={boardVariant}>
+            <Box mr={10}>
             <BattleshipBoard
               board={player.board}
               handlePlace={placeShip}
               isSetUp={true}
             />
+            </Box>
           </AnimationContainer>
-          <Flex direction="column" minW="250px">
+          <Flex direction="column" minW="250px" ml={10} marginTop="50px">
             <AnimationContainer variants={shipsVariant}>
               {player.ships.length !== 0 && (
                 <>
-                  <FormLabel htmlFor="direction">{direction}</FormLabel>
-                  <Switch id="direction" onChange={handleToggle} />
+                  <FormLabel htmlFor="direction" mb={4}>{direction}</FormLabel>
+                  <Switch id="direction" mb={10} onChange={handleToggle} />
                 </>
               )}
               {player.ships.map((ship) => (
