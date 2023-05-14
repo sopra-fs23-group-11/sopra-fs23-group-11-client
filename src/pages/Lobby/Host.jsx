@@ -43,6 +43,7 @@ function Host() {
     const hostId = user.id
     try {
       const response = await api.post("/lobbies", JSON.stringify({ hostId }))
+      console.log(response.data)
       setCode(response.data.lobbyCode)
       setShowCode(true)
       setUser((prev) => ({ ...prev, isHost: true }))
