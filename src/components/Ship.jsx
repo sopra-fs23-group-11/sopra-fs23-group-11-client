@@ -13,7 +13,6 @@ export default function Ships(props) {
         <Box 
         borderWidth="3px"
         borderRadius="md"
-        p={2}
         textAlign="center"
         onClick={() => props.handleSelect(props.shipId)}
         borderColor={props.isHeld  ? "#59E391" : "#F0F4F8"}
@@ -32,7 +31,8 @@ export default function Ships(props) {
         borderBottomWidth = "4px"
         borderBottomStyle = "solid"
         borderBottomColor = "#3C4E5A"
-        width={`calc(50px * ${props.length})`}
+        width={`calc(60px * ${props.length})`}
+        margin="0 0 40px 0"
         />
   )
 }
