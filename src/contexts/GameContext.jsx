@@ -152,7 +152,7 @@ export default function GameProvider({ children }) {
         } else {
           startPosition = startY.toString() + startX.toString() // H7
           endPosition = endY.toString() + endX.toString()// H11
-          bigSplash()
+
           for (let i = 0; i < length; i++) {
             coordinatesToBeOccupied.push(
               player.board[rowIndex][colIndex + i].id
@@ -174,7 +174,6 @@ export default function GameProvider({ children }) {
         } else {
           startPosition = startY.toString() + startX.toString() // H0
           endPosition = endY.toString() + endX.toString() // ?0
-          bigSplash()
           for (let i = 0; i < length; i++) {
             coordinatesToBeOccupied.push(
               player.board[rowIndex + i][colIndex].id
@@ -208,6 +207,7 @@ export default function GameProvider({ children }) {
               : cell
           )
         )
+        bigSplash()
         const updatedShips = player.ships.filter(
           (ship) => ship.id !== shipToBePlaced.id
         )
