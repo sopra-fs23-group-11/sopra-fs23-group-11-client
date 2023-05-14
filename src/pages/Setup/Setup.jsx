@@ -2,20 +2,61 @@ import React, { useContext, useEffect, useState, useRef } from "react"
 import BattleshipBoard from "../../components/BattleShipBoard.jsx"
 import Ship from "../../components/Ship.jsx"
 import { api } from "../../helpers/api.js"
-import "./Setup.css"
+import AnimationContainer from "../../components/AnimationContainer.jsx"
 
-import {Flex, Button, Box, Text, Spinner, Grid, GridItem} from "@chakra-ui/react"
+import {
+  Flex,
+  Button,
+  Box,
+  Text,
+  Spinner,
+  Grid,
+  GridItem,
+  Switch,
+  FormLabel,
+} from "@chakra-ui/react"
 import { GameContext } from "../../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp"
 import { getDomainWebsocket } from "../../helpers/getDomainWebsocket.js"
 
-import {
-  Alert,
-  AlertIcon,
-  Stack,
-} from "@chakra-ui/react";
+import { Alert, AlertIcon, Stack } from "@chakra-ui/react"
 
 import { useParams, useNavigate } from "react-router-dom"
+import { motion } from "framer-motion"
+
+const shipsVariant = {
+  hidden: {
+    opacity: 0,
+    x: "100vw",
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { type: "spring", delay: 0.7, stiffness: 50 },
+  },
+}
+
+const boardVariant = {
+  hidden: {
+    opacity: 0,
+    x: "-100vw",
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { type: "spring", delay: 0.4, stiffness: 50 },
+  },
+}
+
+const readyVariants = {
+  hidden: {
+    y: "-100vh",
+  },
+  visible: {
+    y: 0,
+    transition: { stiffness: 120, type: "spring" },
+  },
+}
 let socket = null
 function Setup() {
   const {
@@ -28,7 +69,7 @@ function Setup() {
     errorLogs,
     handleSelect,
     handlePlace,
-    setEnemy, 
+    setEnemy,
     enemy,
     resetState,
   } = useContext(GameContext)
@@ -45,9 +86,7 @@ function Setup() {
     socket = Stomp.client(getDomainWebsocket())
     socket.connect({}, onConnected, errorCallback)
 
-    if(player.isReady && enemy.isReady)navigate(`/game/${lobbyCode}`)
-    
-
+    if (player.isReady && enemy.isReady) navigate(`/game/${lobbyCode}`)
   }, [enemy.isReady, player.isReady])
 
   // useEffect(() => {
@@ -84,10 +123,7 @@ function Setup() {
 
   async function startGame() {
     try {
-      await api.post(
-        `/startgame`,
-        JSON.stringify({ lobbyCode, hostId })
-      )
+      await api.post(`/startgame`, JSON.stringify({ lobbyCode, hostId }))
     } catch (error) {
       console.log(error.message)
     }
@@ -100,7 +136,7 @@ function Setup() {
       gameId: lobbyCode,
       playerId: player.id,
       playerName: player.name,
-      playerBoard: JSON.stringify(player.board)
+      playerBoard: JSON.stringify(player.board),
     }
     setWaitingSpinner(true)
     socket.send(`/app/ready`, {}, JSON.stringify(readyMessage))
@@ -115,13 +151,13 @@ function Setup() {
         ...player,
         id: payloadData.player1Id,
         name: payloadData.player1Name,
-        isMyTurn: true
+        isMyTurn: true,
       }))
 
-      setEnemy(enemy => ({
+      setEnemy((enemy) => ({
         ...enemy,
         id: payloadData.player2Id,
-        name: payloadData.player2Name
+        name: payloadData.player2Name,
       }))
     } else {
       setPlayer((player) => ({
@@ -129,32 +165,31 @@ function Setup() {
         id: payloadData.player2Id,
         name: payloadData.player2Name,
       }))
-      setEnemy(enemy => ({
+      setEnemy((enemy) => ({
         ...enemy,
         id: payloadData.player1Id,
-        name: payloadData.player1Name
+        name: payloadData.player1Name,
       }))
-
     }
 
     setIsStartSetup(true)
   }
 
-
   const onReady = (payload) => {
     console.log("game starts on Ready")
     const payloadData = JSON.parse(payload.body)
-    setEnemy(enemy => ({...enemy, isReady: true, board: JSON.parse(payloadData.playerBoard)}))
-
+    setEnemy((enemy) => ({
+      ...enemy,
+      isReady: true,
+      board: JSON.parse(payloadData.playerBoard),
+    }))
   }
 
   const onLeave = () => {
     console.log("player left the game")
   }
 
-
-
-//the following functions delegate to the functions from GameContext
+  //the following functions delegate to the functions from GameContext
   const selectShip = (shipId) => {
     handleSelect(shipId)
   }
@@ -163,85 +198,82 @@ function Setup() {
     handlePlace(rowIndex, colIndex)
   }
 
-  const handleClick = () => {
+  const handleToggle = () => {
     setDirection(direction === "Horizontal" ? "Vertical" : "Horizontal")
   }
 
- 
   return (
-    <Box>
+    <Box display="flex" flexDirection="column" justifyContent="center" h="70vh">
       <>
-        <h2>Player1: {user.isHost ? player.name : enemy.name}</h2>
+        {/* <h2>Player1: {user.isHost ? player.name : enemy.name}</h2>
         <h2>Player2: {user.isHost ? enemy.name : player.name}</h2>
         <h2>
           {" "}
           Click the button on the right to make your ship vertical or horizontal
-        </h2>
+        </h2> */}
         {errorLogs.length > 0 && <h3> Following error in placements:</h3>}
-        {errorLogs.length > 0 &&
-            <Stack spacing = {3} >
-              { errorLogs.map (error => {
-                return(
-                    <Alert status ='error' key={error}>
-                      <AlertIcon />
-                      {error}
-                    </Alert>
-                )
-              })}
-            </Stack>
-        }
+        {errorLogs.length > 0 && (
+          <Stack spacing={3}>
+            {errorLogs.map((error) => {
+              return (
+                <Alert status="error" key={error}>
+                  <AlertIcon />
+                  {error}
+                </Alert>
+              )
+            })}
+          </Stack>
+        )}
       </>
       {isStartSetup ? (
-        <Flex>
-          <div className="board-container">
+        <Flex justifyContent="center">
+          <AnimationContainer variants={boardVariant}>
             <BattleshipBoard
               board={player.board}
               handlePlace={placeShip}
               isSetUp={true}
             />
-          </div>
-          <div className="ship-container">
-            <Grid templateColumns= "repeat(5, 1fr)" gap = {4}>
-            {player.ships.map((ship, index) => (
-             <GridItem key = {ship.id} gridRow={index + 1}>
-              <Ship
-                key={ship.id}
-                type={ship.type}
-                length={ship.length}
-                isHeld={ship.isHeld}
-                handleSelect={selectShip}
-                playerId={player.id}
-                shipId={ship.id}
-              />
-             </GridItem>
-            ))}
-              </Grid>
-            { player.ships.length !== 0 &&
-                <button className="button-orientation" onClick={handleClick}>
-              {direction}
-            </button>}
-          </div>
-          {player.ships.length === 0 && (
-        <Button onClick={playerReady} isDisabled={waitingSpinner} top="-5">
-          {!waitingSpinner ? (
-            "Ready"
-          ) : (
-            <>
-              <Spinner
-                thickness="4px"
-                speed="0.65s"
-                emptyColor="gray.200"
-                color="blue.500"
-                size="md"
-              />
-              <Text>Good Luck Captain, See you on the other side 🫡</Text>
-            </>
-          )}
-        </Button>
-      )}
+          </AnimationContainer>
+          <Flex direction="column" minW="250px">
+            <AnimationContainer variants={shipsVariant}>
+              {player.ships.length !== 0 && (
+                <>
+                  <FormLabel htmlFor="direction">{direction}</FormLabel>
+                  <Switch id="direction" onChange={handleToggle} />
+                </>
+              )}
+              {player.ships.map((ship) => (
+                <Ship
+                  key={ship.id}
+                  type={ship.type}
+                  length={ship.length}
+                  isHeld={ship.isHeld}
+                  handleSelect={selectShip}
+                  playerId={player.id}
+                  shipId={ship.id}
+                />
+              ))}
+            </AnimationContainer>
+
+            {player.ships.length === 0 && (
+              <AnimationContainer variants={readyVariants}>
+                <Button
+                  onClick={playerReady}
+                  isLoading={waitingSpinner}
+                  spinnerPlacement="start"
+                  loadingText="Good Luck Captain 🫡"
+                  alignSelf="center"
+                >
+                  Ready
+                </Button>
+              </AnimationContainer>
+            )}
+          </Flex>
         </Flex>
       ) : user.isHost ? (
-        <Button onClick={startGame}>Start Setup</Button>
+        <Button onClick={startGame} alignSelf="center">
+          Start Setup
+        </Button>
       ) : (
         <Flex
           justifyContent="center"
@@ -261,7 +293,6 @@ function Setup() {
           </Text>
         </Flex>
       )}
-      
     </Box>
   )
 }

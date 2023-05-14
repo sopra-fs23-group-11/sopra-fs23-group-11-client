@@ -4,8 +4,9 @@ import { Button, Heading, Input, Box } from "@chakra-ui/react"
 import { api, handleError } from "../../helpers/api.js"
 import { useNavigate } from "react-router"
 import { GameContext } from "../../contexts/GameContext.jsx"
+import AnimationContainer from "../../components/AnimationContainer.jsx"
 
-export default function Join() {
+function Join() {
   const [lobbyCode, setLobbyCode] = useState("")
   const [isValidCode, setIsValidCode] = useState(false)
   const navigate = useNavigate()
@@ -39,11 +40,15 @@ export default function Join() {
     // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
     if (isValidCode) {
       console.log("effect ran...")
-      navigate(`/setup/${lobbyCode}`)
+      setTimeout(() => {
+        navigate(`/setup/${lobbyCode}`)
+      }, 1000)
     }
   }, [isValidCode])
 
   return (
+    <AnimationContainer>
+
     <Box
       height="20vh"
       display="flex"
@@ -63,8 +68,11 @@ export default function Join() {
           width="auto"
           mr={6}
         />
-        <Button onClick={submitCode}>submit code</Button>
+        <Button onClick={submitCode} isDisabled={isValidCode}>{!isValidCode ? "submit code" : "will redirect shortly..."}</Button>
       </div>
     </Box>
+    </AnimationContainer>
   )
 }
+
+export default Join
