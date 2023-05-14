@@ -1,6 +1,7 @@
 import { Box, Grid, GridItem } from "@chakra-ui/react"
 import { React } from "react"
 
+
 function BattleshipBoard({
   board,
   handlePlace,
@@ -28,6 +29,7 @@ function BattleshipBoard({
           h="50px"
           w="50px"
           textAlign="center"
+          display ="flex"
         >
           {index}
         </GridItem>
@@ -42,14 +44,18 @@ function BattleshipBoard({
               h="50px"
               w="50px"
               textAlign="center"
+              display ="flex"
             >
               {String.fromCharCode(65 + rowIndex)}
             </GridItem>
             {row.map((col, colIndex) => (
               <GridItem key={`${rowIndex}-${colIndex}`}>
                 <Box
-
+                  display ="flex"
                   textAlign="center"
+                  fontSize="xx-large"
+                  alignItems="center"
+                  justifyContent="center"
                   color="red.500"
                   id={`${String.fromCharCode(65 + rowIndex)}${colIndex}`}
                   h="50px"
@@ -59,17 +65,20 @@ function BattleshipBoard({
                         !(board[rowIndex][colIndex].isHit || board[rowIndex][colIndex].isShotAt) && 
                         { bg: "gray.100" }}
                   cursor={isSetUp ? "pointer" : isTurn ? "crosshair" : isEnemy ? "wait" : ""}
-                  bg={
+
+
+                 bg={
                     board[rowIndex][colIndex].isOccupied //first check if cell is occupied
                     ? board[rowIndex][colIndex].isOccupied.isSunk //check if ship is sunk
                       ? "grey"
                       : isEnemy // then check if its in enemyBoard
                         ? board[rowIndex][colIndex].isHit
-                          ? "red" //red when enemyship has been hit
+                          ? "red" //red when enemy ship has been hit
                           : "transparent" //"hide" the enemy ship otherwise
-                        : "blue" //for player render theri ships blue
+                        : "blue" //for player render their ships blue
                       : "transparent" // else if there is nothing occupying the cell
                   }
+
                   onClick={
                     isSetUp 
                       ? () => handlePlace(rowIndex, colIndex) //only for the setup stage
@@ -80,9 +89,9 @@ function BattleshipBoard({
                         : isEnemy
                          ? () => //if its not the player's turn...
                           handleError(
-                            "Hold your horses Captain its not your Turn to shoot"
+                            "Hold your horses,Captain! It's not your turn to shoot!"
                           )
-                      : () => handleError("Captain are you trying to kill us?!")
+                      : () => handleError("Captain, are you trying to kill us?!")
                   }
                 >
                   {!isEnemy // this is shown on the player's board
