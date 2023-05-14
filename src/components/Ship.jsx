@@ -17,7 +17,7 @@ export default function Ships(props) {
         textAlign="center"
         onClick={() => props.handleSelect(props.shipId)}
         borderColor={props.isHeld  ? "#59E391" : "#F0F4F8"}
-        opacity = {props.isHeld ? 1 : 0.5}
+        opacity = {props.isHeld ? 1 : 0.6}
         backgroundImage = {
             props.type === "Destroyer" ? `url(${Destroyer})` :
             props.type === "Submarine" ? `url(${Submarine})`:
