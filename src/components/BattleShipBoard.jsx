@@ -8,6 +8,7 @@ function BattleshipBoard({
   isEnemy,
   isTurn,
   isSetUp,
+  handleError
 }) {
   return (
     <Grid
@@ -74,14 +75,14 @@ function BattleshipBoard({
                       ? () => handlePlace(rowIndex, colIndex) //only for the setup stage
                       : isTurn // if game already started, check if its player's turn
                       ? (board[rowIndex][colIndex].isHit || board[rowIndex][colIndex].isShotAt) //check if the cell has already been hit before
-                        ? () => alert("We already shot this place captain!")
+                        ? () => handleError("We already shot this place captain!")
                         : () => handleShoot(rowIndex, colIndex)
                         : isEnemy
                          ? () => //if its not the player's turn...
-                          alert(
+                          handleError(
                             "Hold your horses Captain its not your Turn to shoot"
                           )
-                      : () => alert("Captain are you trying to kill us?!")
+                      : () => handleError("Captain are you trying to kill us?!")
                   }
                 >
                   {!isEnemy // this is shown on the player's board

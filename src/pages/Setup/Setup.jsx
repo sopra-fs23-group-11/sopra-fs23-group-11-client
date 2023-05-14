@@ -14,6 +14,7 @@ import {
   GridItem,
   Switch,
   FormLabel,
+  useToast,
 } from "@chakra-ui/react"
 import { GameContext } from "../../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp"
@@ -79,6 +80,7 @@ function Setup() {
   const [isConnected, setIsConnected] = useState(false)
   const { lobbyCode } = useParams()
   const navigate = useNavigate()
+  const toast= useToast()
   const hostId = lobby.hostId
 
   useEffect(() => {
@@ -201,6 +203,8 @@ function Setup() {
   const handleToggle = () => {
     setDirection(direction === "Horizontal" ? "Vertical" : "Horizontal")
   }
+
+
 
   return (
     <Box display="flex" flexDirection="column" justifyContent="center" h="70vh">
