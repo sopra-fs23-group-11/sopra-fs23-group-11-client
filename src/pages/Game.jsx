@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react"
-import { Divider, Flex, Text, Box, Center } from "@chakra-ui/react"
+import { Divider, Flex, Text, Box, Center, useToast } from "@chakra-ui/react"
 import { GameContext } from "../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp.js"
 import { useParams, useNavigate } from "react-router-dom"
@@ -62,6 +62,7 @@ export default function Game() {
     useContext(GameContext)
   const { lobbyCode } = useParams()
   const navigate = useNavigate()
+  const toast = useToast()
 
   useEffect(() => {
     socket = Stomp.client(getDomainWebsocket())
@@ -116,10 +117,10 @@ export default function Game() {
     const shipId = payloadData.shipId
     console.log(payloadData)
     if (payloadData.defenderId === player.id) {
-      alert(`Your ${shipType} has been sunk`)
+      handleAlerts(`Your ship has been sunk`, "warning")
       handleSunk(player.id, shipId)
     } else {
-      alert(`You have sunk their ${shipType}`)
+      handleAlerts(`You have sunk their ship`, "info")
       handleSunk(enemy.id, shipId)
     }
   }
@@ -144,12 +145,33 @@ export default function Game() {
     }
   }
 
+  const handleError = (text) => {
+    toast({
+      title: "Invalid Shot",
+      description: text,
+        position: "bottom",
+        isClosable: true,
+        duration: 4000,
+        status: "error",
+    })
+  }
+
+  const handleAlerts = (text, status) => {
+    toast({
+      title: text,
+        position: "bottom",
+        isClosable: true,
+        duration: 4000,
+        status: status,
+    })
+  }
+
   return (
     <Flex justifyContent="space-around" width="80%" m="auto">
       <AnimationContainer variants={playerVariant}>
         <Flex direction="column" alignItems="center">
           <Text>{player.name}</Text>
-          <BattleshipBoard board={player.board} />
+          <BattleshipBoard board={player.board} handleError={handleError}/>
           {player.isMyTurn && <AnimationContainer variants={playerTurnVariants}>Your Turn Captain</AnimationContainer>}
         </Flex>
       </AnimationContainer>
@@ -166,6 +188,7 @@ export default function Game() {
             handleShoot={shootMissle}
             isTurn={player.isMyTurn}
             isEnemy={true}
+            handleError={handleError}
           />
           {!player.isMyTurn && <AnimationContainer variants={enemyTurnVariants}>Enemy Shot Incoming</AnimationContainer>}
         </Flex>
