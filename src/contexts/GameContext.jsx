@@ -86,7 +86,6 @@ export default function GameProvider({ children }) {
 
   const handlePlace = (rowIndex, colIndex) => {
     setPlayer(updatePlayerSetup(player, rowIndex, colIndex))
-    bigSplash()
   }
 
   const handleSelect = (shipId) => {
@@ -152,7 +151,8 @@ export default function GameProvider({ children }) {
           return player
         } else {
           startPosition = startY.toString() + startX.toString() // H7
-          endPosition = endY.toString() + endX.toString() // H11
+          endPosition = endY.toString() + endX.toString()// H11
+          bigSplash()
           for (let i = 0; i < length; i++) {
             coordinatesToBeOccupied.push(
               player.board[rowIndex][colIndex + i].id
@@ -174,6 +174,7 @@ export default function GameProvider({ children }) {
         } else {
           startPosition = startY.toString() + startX.toString() // H0
           endPosition = endY.toString() + endX.toString() // ?0
+          bigSplash()
           for (let i = 0; i < length; i++) {
             coordinatesToBeOccupied.push(
               player.board[rowIndex + i][colIndex].id
@@ -197,6 +198,7 @@ export default function GameProvider({ children }) {
           }
         })
       )
+
       if (valid) {
         //await submitShipPosition(coordinatesToBeOccupied, shipToBePlaced)
         const newBoard = player.board.map((row) =>

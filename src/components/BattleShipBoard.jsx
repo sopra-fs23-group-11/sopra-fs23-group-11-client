@@ -12,8 +12,8 @@ function BattleshipBoard({
 }) {
   return (
     <Grid
-      templateColumns="repeat(11, 30px)"
-      templateRows="repeat(11, 30px)"
+      templateColumns="repeat(11, 50px)"
+      templateRows="repeat(11, 50px)"
       gap={0}
       margin="20px"
       marginRight="30px"
@@ -25,8 +25,8 @@ function BattleshipBoard({
           key={`row-label-${index}`}
           justifyContent="center"
           alignItems="center"
-          h="30px"
-          w="30px"
+          h="50px"
+          w="50px"
           textAlign="center"
         >
           {index}
@@ -39,8 +39,8 @@ function BattleshipBoard({
               key={`col-label-${rowIndex}`}
               justifyContent="center"
               alignItems="center"
-              h="30px"
-              w="30px"
+              h="50px"
+              w="50px"
               textAlign="center"
             >
               {String.fromCharCode(65 + rowIndex)}
@@ -52,8 +52,8 @@ function BattleshipBoard({
                   textAlign="center"
                   color="red.500"
                   id={`${String.fromCharCode(65 + rowIndex)}${colIndex}`}
-                  h="30px"
-                  w="30px"
+                  h="50px"
+                  w="50px"
                   border="1px solid gray"
                   _hover={isEnemy && 
                         !(board[rowIndex][colIndex].isHit || board[rowIndex][colIndex].isShotAt) && 
