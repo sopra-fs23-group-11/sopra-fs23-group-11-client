@@ -3,6 +3,7 @@ import generateBoard from "../helpers/getBoard"
 import shipsData from "../models/ShipsData"
 import { api } from "../helpers/api"
 import {bigSplash, smallSplash, sinkShipSound, explosionSound} from "../helpers/soundEffects"
+import { useToast } from "@chakra-ui/react"
 
 export const GameContext = createContext()
 
@@ -11,6 +12,7 @@ export default function GameProvider({ children }) {
   const [lobby, setLobby] = useState(null)
   const [errorLogs, setErrorLogs] = useState([])
   let error_logs = []
+  const toast = useToast()
 
   const [user, setUser] = useState({
     id: null,
@@ -95,13 +97,25 @@ export default function GameProvider({ children }) {
   const highlightSelection = (ships, shipId) => {
     const selectedShip = ships.find((ship) => ship.id === shipId)
 
-    const newShips = ships.map((ship) =>
-      ship.id === shipId
-        ? { ...ship, isHeld: !ship.isHeld }
-        : { ...ship, isHeld: false }
+    const newShips = ships.map((ship) => {
+      if(ship.id === shipId){
+        if(ship.isHeld){
+          sessionStorage.removeItem("selected")
+          return {...ship, isHeld: false}
+        }else{
+          sessionStorage.setItem("selected", JSON.stringify(selectedShip))
+          return {...ship, isHeld: true}
+        }
+      }else{
+        return {...ship, isHeld: false}
+      }
+    }
+      
+        // ? { ...ship, isHeld: !ship.isHeld }
+        // : { ...ship, isHeld: false }
     )
 
-    sessionStorage.setItem("selected", JSON.stringify(selectedShip))
+    
     return newShips
   }
 
@@ -146,8 +160,14 @@ export default function GameProvider({ children }) {
           "endX:" + endX
         )
         if (endX > 9) {
-          error_logs.push("Out of boundary!")
-          setErrorLogs(error_logs)
+          toast({
+            title: "Invalid Placement",
+            description: "Out of Boundary",
+              position: "bottom",
+              isClosable: true,
+              duration: 3000,
+              status: "error",
+          })
           return player
         } else {
           startPosition = startY.toString() + startX.toString() // H7
@@ -168,8 +188,14 @@ export default function GameProvider({ children }) {
         endX = startX // 0
 
         if (rowIndex + length - 1 > 9) {
-          error_logs.push("Out of boundary!")
-          setErrorLogs(error_logs)
+          toast({
+            title: "Invalid Placement",
+            description: "Out of Boundary",
+              position: "bottom",
+              isClosable: true,
+              duration: 3000,
+              status: "error",
+          })
           return player
         } else {
           startPosition = startY.toString() + startX.toString() // H0
@@ -215,13 +241,25 @@ export default function GameProvider({ children }) {
 
         return { ...player, board: newBoard, ships: updatedShips }
       } else {
-        error_logs.push("Invalid placement, please try again!")
-        setErrorLogs(error_logs)
+        toast({
+          title: "Invalid Placement",
+          description: "Ships are overlapping",
+            position: "bottom",
+            isClosable: true,
+            duration: 3000,
+            status: "error",
+        })
         return player
       }
     } else {
-      error_logs.push("Please select a ship first!")
-      setErrorLogs(error_logs)
+      toast({
+        title: "Invalid Placement",
+        description: "Select a ship first!",
+          position: "bottom",
+          isClosable: true,
+          duration: 3000,
+          status: "error",
+      })
       return player
     }
   }
