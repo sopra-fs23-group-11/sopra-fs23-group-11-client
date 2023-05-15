@@ -10,9 +10,9 @@ import {
   InputGroup,
   InputRightElement,
   Text,
-  Flex, Link,
+  Flex,
 } from "@chakra-ui/react"
-import { Form, redirect, useActionData } from "react-router-dom"
+import { Form, redirect, useActionData, Link } from "react-router-dom"
 import { api } from "../helpers/api"
 import User from "../models/User"
 import Login from "./Login.jsx";
