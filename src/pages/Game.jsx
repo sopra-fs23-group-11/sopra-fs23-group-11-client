@@ -70,6 +70,7 @@ export default function Game() {
   }, [])
 
   const onConnected = () => {
+    if(socket && socket.connected)socket.disconnect
     socket.subscribe(`/game/${lobbyCode}/${player.id}`, onShotReceived)
     socket.subscribe(`/game/${lobbyCode}/sunk`, onSunkenShip)
     socket.subscribe(`/game/${lobbyCode}/finish`, onFinished)
