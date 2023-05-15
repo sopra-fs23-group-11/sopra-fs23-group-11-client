@@ -10,7 +10,7 @@ import {
   InputGroup,
   InputRightElement,
   Text,
-  Container, 
+  Container, Flex,
 } from "@chakra-ui/react"
 import { api } from "../helpers/api"
 import User from "../models/User"
@@ -50,13 +50,14 @@ export default function Login() {
   const handleClick = () => setShow(!show)
 
   return (
-    <Container h="70vh" pt="4em">
+    <Container h="70vh" pt="4em" display="flex" justifyContent="center" alignItems="center">
+      <Flex direction="column" >
       <Box maxW="480px">
       {locaction.state?.message && <Text color="red.500">{locaction.state.message}</Text>}
       {errors?.errorMessage && <Text color="red.500">{errors.errorMessage}</Text>}
         <Form method="post" action="/login">
           <FormControl mb="40px">
-            <FormLabel>Username</FormLabel>
+            <FormLabel fontSize="lg">Username</FormLabel>
             <Input
               type="text"
               name="username"
@@ -65,7 +66,7 @@ export default function Login() {
           </FormControl>
 
           <FormControl mb="40px">
-            <FormLabel>Password</FormLabel>
+            <FormLabel fontSize="lg">Password</FormLabel>
             <InputGroup>
               <Input
                 name="password"
@@ -80,12 +81,13 @@ export default function Login() {
             </InputGroup>
           </FormControl>
 
-          <Button type="submit">login</Button>
+          <Button type="submit" w="100%">Log in</Button>
         </Form>
       </Box>
-      <Box color="teal.400" textDecoration="underline">
+      <Box color="teal.400" textDecoration="underline" mt='1em' >
         <Link to="../register">No account? Sign up here</Link>
       </Box>
+     </Flex>
     </Container>
   )
 }
