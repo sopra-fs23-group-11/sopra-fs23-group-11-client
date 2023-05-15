@@ -236,12 +236,8 @@ function Setup() {
           </AnimationContainer>
           <Flex direction="column" minW="250px" ml={10} marginTop="50px">
             <AnimationContainer variants={shipsVariant}>
-              {player.ships.length !== 0 && (
-                <>
-                  <FormLabel htmlFor="direction" mb={4}>{direction}</FormLabel>
-                  <Switch id="direction" mb={10} onChange={handleToggle} />
-                </>
-              )}
+              {player.ships.length !== 0 &&
+              <h2 style={{fontSize: '20px', marginBottom: '20px'}}> Place your ships </h2>}
               {player.ships.map((ship) => (
                 <Ship
                   key={ship.id}
@@ -253,6 +249,13 @@ function Setup() {
                   shipId={ship.id}
                 />
               ))}
+
+              {player.ships.length !== 0 && (
+                <>
+                  <FormLabel fontSize='20px'   htmlFor="direction" mb={4}>{direction}</FormLabel>
+                  <Switch id="direction" mb={10} onChange={handleToggle} />
+                </>
+              )}
             </AnimationContainer>
 
             {player.ships.length === 0 && (
