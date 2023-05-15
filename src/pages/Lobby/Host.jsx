@@ -10,19 +10,22 @@ import {
   IconButton,
   useToast,
   position,
-  Collapse
+  Collapse,
+  Toast
 } from "@chakra-ui/react"
 import { GameContext } from "../../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp.js"
 import { useNavigate } from "react-router-dom"
 import { getDomainWebsocket } from "../../helpers/getDomainWebsocket.js"
-import { CopyIcon } from "@chakra-ui/icons"
+import { CopyIcon, CheckIcon } from "@chakra-ui/icons"
 import AnimationContainer from "../../components/AnimationContainer.jsx"
 function Host() {
   const [code, setCode] = useState(null)
   const { user, setUser, lobby, setLobby } = useContext(GameContext)
   const [isJoined, setIsJoined] = useState(false)
   const [showCode, setShowCode] = useState(false)
+  const [showMessage, setShowMessage] = useState(false)
+  const [copied, setCopied] = useState(false)
   const [errorLogs, setErrorLogs] = useState([])
   const navigate = useNavigate()
   const toast = useToast()
@@ -38,6 +41,7 @@ function Host() {
       }, 1000)
     }
   }, [isJoined])
+
 
   async function generateLobbyCode() {
     const hostId = user.id
@@ -87,27 +91,19 @@ function Host() {
     }
   }
 
-  async function copyCodeToClipboard() {
-    try {
-      await navigator.clipboard.writeText(code)
 
-      error_logs.push("✓ Copied!")
-      toast({
-        title: "Code Copied to Clipboard",
-        position: "bottom",
-        isClosable: true,
-        duration: 1200,
-        status: "success",
-        colorScheme: "black"
-      })
-    } catch (error) {
-      console.error("Failed to copy code to clipboard: ", error)
-      error_logs.push("Failed to copy code to clipboard.")
-    }
-    if (error_logs.length > 0) {
-      setErrorLogs(error_logs)
-    }
+  const copyCode = () => {
+    navigator.clipboard.writeText(code).then(() => {
+
+      setCopied(true)
+
+      setTimeout(() => {
+
+        setCopied(false)
+      }, 3000)
+    })
   }
+
   return (
     <AnimationContainer>
 
@@ -120,33 +116,33 @@ function Host() {
     >
       <Collapse in={showCode} animateOpacity>
         <Box bg="transparent" p="4" rounded="md" mt="4" position="relative">
-          {/* {errorLogs.length > 0 && (
-            <Stack position="absolute" top="0" right="0">
-              {errorLogs.map((error) => (
-                <Alert status="error" variant="ghost" key={1}>
-                  {error}
-                </Alert>
-              ))}
-            </Stack>
-          )} */}
+
           <Box
             w="100%"
             display="flex"
             flexDirection="column"
             alignItems="center"
           >
-            <Text md="2"> Your lobby code: </Text>
+            <Text md="2" fontSize='lg' mb='5' > Your lobby code: </Text>
             <Box width="100%">
               <code>{code}</code>
-              <IconButton icon={<CopyIcon />} onClick={copyCodeToClipboard} ml="20px"/>
+              <Button
+                  icon={copied ? <CheckIcon /> : <CopyIcon />}
+                  onClick={copyCode}
+                  ml="20px">
+                {copied ? "✓ Copied!" : "📋 Copy code"}
+              </Button>
             </Box>
+
           </Box>
+
           {/* <Button mt="2" onClick={copyCodeToClipboard}>
             Copy code
           </Button> */}
         </Box>
       </Collapse>
-      
+
+
       <Button onClick={generateLobbyCode}>Get a Lobby Code</Button>
       {!isJoined && showCode && (
         <Box pt="1em" marginRight="auto" marginLeft="auto">
@@ -162,6 +158,7 @@ function Host() {
           />
         </Box>
       )}
+
       {isJoined && <Text>Player Joined, will redirect shortly</Text>}
     </Box>
     </AnimationContainer>
