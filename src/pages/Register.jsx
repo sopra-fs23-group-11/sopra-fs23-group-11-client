@@ -10,11 +10,12 @@ import {
   InputGroup,
   InputRightElement,
   Text,
-  Flex,
+  Flex, Link,
 } from "@chakra-ui/react"
 import { Form, redirect, useActionData } from "react-router-dom"
 import { api } from "../helpers/api"
 import User from "../models/User"
+import Login from "./Login.jsx";
 
 export async function action({ request }) {
   const data = await request.formData()
@@ -53,23 +54,34 @@ export default function Register() {
   const isSignupDisabled = !selectedAvatar
   return (
     <>
+      <Flex
+        minHeight = "100vh"
+        alignItems = "center"
+        justifyContent="center"
+        flexDirection="column"
+      >
+
+      <Flex justifyContent= "flex-start">
       {errors?.errorMessage && (
-        <Text color="red.500">{errors.errorMessage}</Text>
+        <Text color="red.500" my='4' textAlign="left" fontSize= "lg">
+          {errors.errorMessage}
+        </Text>
       )}
+      </Flex>
 
       <Form method="post" action="/register">
         <Flex direction="row" alignItems="center" w="100%">
-          <Box mb="40px"  minW="250px">
-            <FormControl my="4" pl="20" isRequired>
-              <FormLabel>Username</FormLabel>
+          <Box mb="40px"  minW="250px" mr= "20">
+            <FormControl my="4"  isRequired>
+              <FormLabel fontSize = "lg" >Username</FormLabel>
               <Input
                 type="text"
                 name="username"
-                placeholder="Choose a cool name Admiral!"
+                placeholder="Choose a cool name, Admiral!"
               />
             </FormControl>
-            <FormControl my="4" pl="20" isRequired>
-              <FormLabel>Password</FormLabel>
+            <FormControl my="4"  isRequired>
+              <FormLabel fontSize = "lg">Password</FormLabel>
               <InputGroup>
                 <Input
                   name="password"
@@ -83,15 +95,21 @@ export default function Register() {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
-            <FormControl my="4" pl="20">
+            <FormControl my="4" >
               <Button type="submit" w="100%" isDisabled={isSignupDisabled}>
-                signup
+                Sign up
               </Button>
             </FormControl>
+
+            <Box color="teal.400" textDecoration="underline">
+            <Link to="../login"> Already an account? Log in here.</Link>
+            </Box>
+
           </Box>
           <AvatarList onSelect={handleSelect} selectedAvatar={selectedAvatar} />
         </Flex>
       </Form>
+        </Flex>
     </>
   )
 }
