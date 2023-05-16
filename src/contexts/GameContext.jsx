@@ -19,6 +19,7 @@ export default function GameProvider({ children }) {
     name: "",
     avatar: "",
     isHost: false,
+    totalWins: 0
   })
 
   const [player, setPlayer] = useState({

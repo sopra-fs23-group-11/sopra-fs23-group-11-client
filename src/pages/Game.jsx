@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react"
+import React, { useEffect, useContext, useState } from "react"
 import { Divider, Flex, Text, Box, Center, useToast } from "@chakra-ui/react"
 import { GameContext } from "../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp.js"
@@ -11,6 +11,7 @@ import {
 } from "../helpers/soundEffects"
 import { getDomainWebsocket } from "../helpers/getDomainWebsocket.js"
 import AnimationContainer from "../components/AnimationContainer.jsx"
+import EnemyExitModal from "../components/EnemyExitModal.jsx"
 
 const enemyVariant = {
   hidden: {
@@ -60,6 +61,7 @@ let socket = null
 export default function Game() {
   const { player, setPlayer, handleShoot, user, enemy, handleSunk } =
     useContext(GameContext)
+  const [enemyExit, setEnemyExit] = useState(false)
   const { lobbyCode } = useParams()
   const navigate = useNavigate()
   const toast = useToast()
@@ -74,6 +76,8 @@ export default function Game() {
     socket.subscribe(`/game/${lobbyCode}/${player.id}`, onShotReceived)
     socket.subscribe(`/game/${lobbyCode}/sunk`, onSunkenShip)
     socket.subscribe(`/game/${lobbyCode}/finish`, onFinished)
+    socket.subscribe(`/game/${lobbyCode}/leave`, onLeave)
+
   }
 
   const onShotReceived = (payload) => {
@@ -108,6 +112,9 @@ export default function Game() {
   }
   const onFinished = (payload) => {
     const payloadData = JSON.parse(payload.body)
+    if(payloadData.winnerId === player.id){
+      setPlayer(player => ({...player, hasWon: true}))
+    }
     navigate(`/endscreen/${lobbyCode}`)
   }
 
@@ -118,12 +125,17 @@ export default function Game() {
     const shipId = payloadData.shipId
     console.log(payloadData)
     if (payloadData.defenderId === player.id) {
-      handleAlerts(`Your ship has been sunk`, "warning")
+      handleAlerts(`Your ${shipType} has been sunk`, "warning")
       handleSunk(player.id, shipId)
     } else {
-      handleAlerts(`You have sunk their ship`, "info")
+      handleAlerts(`You have sunk their ${shipType}`, "info")
       handleSunk(enemy.id, shipId)
     }
+  }
+
+  const onLeave = () => {
+    console.log("player left the game")
+    setEnemyExit(true)
   }
 
   const shootMissle = (rowIndex, colIndex) => {
@@ -194,6 +206,7 @@ export default function Game() {
           {!player.isMyTurn && <AnimationContainer variants={enemyTurnVariants}>Enemy Shot Incoming</AnimationContainer>}
         </Flex>
       </AnimationContainer>
+      {enemyExit && <EnemyExitModal enemyExit={enemyExit}/>}
     </Flex>
   )
 }
