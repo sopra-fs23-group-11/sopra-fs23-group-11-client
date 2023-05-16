@@ -32,7 +32,7 @@ export default function Ships(props) {
         borderBottomStyle = "solid"
         borderBottomColor = "#3C4E5A"
         width={`calc(60px * ${props.length})`}
-        margin="0 0 40px 0"
+        mb="20px"
         />
   )
 }

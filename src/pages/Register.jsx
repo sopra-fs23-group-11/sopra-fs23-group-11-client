@@ -12,7 +12,7 @@ import {
   Text,
   Flex,
 } from "@chakra-ui/react"
-import { Form, redirect, useActionData, Link } from "react-router-dom"
+import { Form, redirect, useActionData, Link, useNavigation } from "react-router-dom"
 import { api } from "../helpers/api"
 import User from "../models/User"
 import Login from "./Login.jsx";
@@ -42,7 +42,9 @@ export async function action({ request }) {
 export default function Register() {
   const [show, setShow] = useState(false)
   const errors = useActionData()
+  const navigation = useNavigation()
   const [selectedAvatar, setSelectedAvatar] = useState(null)
+  const [password, setPassword] = useState("")
 
   const handleSelect = (avatarUrl) => {
     setSelectedAvatar(avatarUrl)
@@ -55,7 +57,7 @@ export default function Register() {
   return (
     <>
       <Flex
-        minHeight = "100vh"
+        minHeight = "100%"
         alignItems = "center"
         justifyContent="center"
         flexDirection="column"
@@ -87,22 +89,24 @@ export default function Register() {
                   name="password"
                   placeholder="Enter password..."
                   type={show ? "text" : "password"}
+                  value={password}
+                  onChange={(e)=>setPassword(e.target.value)}
                 />
                 <InputRightElement width="4.5rem">
-                  <Button onClick={handleClick} h="1.75rem" size="sm">
+                  {password && <Button onClick={handleClick} h="1.75rem" size="sm">
                     {show ? "Hide" : "Show"}
-                  </Button>
+                  </Button>}
                 </InputRightElement>
               </InputGroup>
             </FormControl>
             <FormControl my="4" >
-              <Button type="submit" w="100%" isDisabled={isSignupDisabled}>
-                Sign up
+              <Button type="submit" w="100%" isDisabled={isSignupDisabled || navigation.state === "submitting"}>
+                {navigation.state === "submitting" ? "Submitting..." : "Sign up"}
               </Button>
             </FormControl>
 
             <Box color="teal.400" textDecoration="underline">
-            <Link to="../login"> Already an account? Log in here.</Link>
+            <Link to="../login"> Already have an account? Log in here.</Link>
             </Box>
 
           </Box>

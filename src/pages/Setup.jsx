@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState, useRef } from "react"
-import BattleshipBoard from "../../components/BattleShipBoard.jsx"
-import Ship from "../../components/Ship.jsx"
-import { api } from "../../helpers/api.js"
-import AnimationContainer from "../../components/AnimationContainer.jsx"
+import BattleshipBoard from "../components/BattleShipBoard.jsx"
+import Ship from "../components/Ship.jsx"
+import { api } from "../helpers/api.js"
+import AnimationContainer from "../components/AnimationContainer.jsx"
+import EnemyExitModal from "../components/EnemyExitModal.jsx"
 
 import {
   Flex,
@@ -16,9 +17,9 @@ import {
   FormLabel,
   useToast,
 } from "@chakra-ui/react"
-import { GameContext } from "../../contexts/GameContext.jsx"
+import { GameContext } from "../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp"
-import { getDomainWebsocket } from "../../helpers/getDomainWebsocket.js"
+import { getDomainWebsocket } from "../helpers/getDomainWebsocket.js"
 
 import { Alert, AlertIcon, Stack } from "@chakra-ui/react"
 
@@ -77,10 +78,9 @@ function Setup() {
 
   const [isStartSetup, setIsStartSetup] = useState(false)
   const [waitingSpinner, setWaitingSpinner] = useState(false)
-  const [isConnected, setIsConnected] = useState(false)
+  const [enemyExit, setEnemyExit] = useState(false)
   const { lobbyCode } = useParams()
   const navigate = useNavigate()
-  const toast= useToast()
   const hostId = lobby.hostId
 
   useEffect(() => {
@@ -91,21 +91,6 @@ function Setup() {
     if (player.isReady && enemy.isReady) navigate(`/game/${lobbyCode}`)
   }, [enemy.isReady, player.isReady])
 
-  // useEffect(() => {
-  //   const handleBeforeUnload = (event) => {
-  //     event.preventDefault()
-  //     event.returnValue = ""
-  //   }
-  //   window.addEventListener("popstate", handleBeforeUnload)
-
-  //   return () => {
-  //     if(isConnected){
-  //       socket.send(`/app/leave`, {}, JSON.stringify(user.name))
-  //       window.removeEventListener("popstate", handleBeforeUnload)
-  //       socket.disconnect()
-  //     }
-  //   }
-  // }, [isConnected])
 
   const errorCallback = (m) => {
     console.log("mmm", m)
@@ -113,14 +98,13 @@ function Setup() {
 
   const onConnected = () => {
     console.log("Stomp client connected !", lobbyCode)
-    setIsConnected(true)
     socket.subscribe(`/startgame/${lobbyCode}`, onStartGame)
     console.log("websocket connected!")
     socket.subscribe(
       `/ready/${user.id === lobby.hostId ? lobby.joinerName : lobby.hostName}`,
       onReady
     )
-    socket.subscribe(`/leave/${lobbyCode}`, onLeave)
+    socket.subscribe(`/game/${lobbyCode}/leave`, onLeave)
   }
 
   async function startGame() {
@@ -189,6 +173,7 @@ function Setup() {
 
   const onLeave = () => {
     console.log("player left the game")
+    setEnemyExit(true)
   }
 
   //the following functions delegate to the functions from GameContext
@@ -204,58 +189,45 @@ function Setup() {
     setDirection(direction === "Horizontal" ? "Vertical" : "Horizontal")
   }
 
-
-
   return (
     <Box display="flex" flexDirection="column" justifyContent="center" h="70vh">
-      <>
-        {errorLogs.length > 0 && <h3> Following error in placements:</h3>}
-        {errorLogs.length > 0 && (
-          <Stack spacing={3}>
-            {errorLogs.map((error) => {
-              return (
-                <Alert status="error" key={error}>
-                  <AlertIcon />
-                  {error}
-                </Alert>
-              )
-            })}
-          </Stack>
-        )}
-      </>
       {isStartSetup ? (
-        <Flex justifyContent="center">
+        <Flex justifyContent="center" alignItems="center">
           <AnimationContainer variants={boardVariant}>
-            <Box mr={10}>
             <BattleshipBoard
               board={player.board}
               handlePlace={placeShip}
               isSetUp={true}
             />
-            </Box>
           </AnimationContainer>
-          <Flex direction="column" minW="250px" ml={10} marginTop="50px">
+          <Flex direction="column" minW="300px" justifyContent="center">
             <AnimationContainer variants={shipsVariant}>
-              {player.ships.length !== 0 &&
-              <h2 style={{fontSize: '20px', marginBottom: '20px'}}> Place your ships </h2>}
-              {player.ships.map((ship) => (
-                <Ship
-                  key={ship.id}
-                  type={ship.type}
-                  length={ship.length}
-                  isHeld={ship.isHeld}
-                  handleSelect={selectShip}
-                  playerId={player.id}
-                  shipId={ship.id}
-                />
-              ))}
-
               {player.ships.length !== 0 && (
-                <>
-                  <FormLabel fontSize='20px'   htmlFor="direction" mb={4}>{direction}</FormLabel>
-                  <Switch id="direction" mb={10} onChange={handleToggle} />
-                </>
+                <h2 style={{ fontSize: "20px", marginBottom: "20px" }}>
+                  Place your ships
+                </h2>
               )}
+              <Flex direction="column" minH="400px">
+                {player.ships.map((ship) => (
+                  <Ship
+                    key={ship.id}
+                    type={ship.type}
+                    length={ship.length}
+                    isHeld={ship.isHeld}
+                    handleSelect={selectShip}
+                    playerId={player.id}
+                    shipId={ship.id}
+                  />
+                ))}
+                {player.ships.length !== 0 && (
+                  <>
+                    <FormLabel fontSize="20px" htmlFor="direction">
+                      {direction}
+                    </FormLabel>
+                    <Switch id="direction" mb={10} onChange={handleToggle} />
+                  </>
+                )}
+              </Flex>
             </AnimationContainer>
 
             {player.ships.length === 0 && (
@@ -274,7 +246,7 @@ function Setup() {
           </Flex>
         </Flex>
       ) : user.isHost ? (
-        <Button onClick={startGame} alignSelf="center">
+        <Button onClick={startGame} alignSelf="center" size="lg">
           Start Setup
         </Button>
       ) : (
@@ -296,6 +268,7 @@ function Setup() {
           </Text>
         </Flex>
       )}
+      {enemyExit && <EnemyExitModal enemyExit={enemyExit}/>}
     </Box>
   )
 }
