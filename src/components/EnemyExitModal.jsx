@@ -23,10 +23,9 @@ export default function EnemyExitModal({ enemyExit }) {
       onOpen()
       setTimeout(() => {
         navigate("/lobby")
+        onClose()
+        resetState()
       }, 2000)
-
-      onClose()
-      resetState()
     }
   }, [enemyExit, onOpen])
 
