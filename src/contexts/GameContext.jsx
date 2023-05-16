@@ -59,6 +59,8 @@ export default function GameProvider({ children }) {
       board: generateBoard(),
       isReady: false,
     })
+
+    setLobby(null)
   }
 
   const handleShoot = (rowIndex, colIndex) => {
@@ -110,9 +112,6 @@ export default function GameProvider({ children }) {
         return {...ship, isHeld: false}
       }
     }
-      
-        // ? { ...ship, isHeld: !ship.isHeld }
-        // : { ...ship, isHeld: false }
     )
 
     

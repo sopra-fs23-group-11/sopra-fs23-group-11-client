@@ -13,11 +13,11 @@ function BattleshipBoard({
 }) {
   return (
     <Grid
-      templateColumns="repeat(11, 50px)"
-      templateRows="repeat(11, 50px)"
+      templateColumns="repeat(11, 40px)"
+      templateRows="repeat(11, 40px)"
       gap={0}
       margin="20px"
-      marginRight="30px"
+      marginRight="40px"
     >
       <GridItem />
 
@@ -26,8 +26,8 @@ function BattleshipBoard({
           key={`row-label-${index}`}
           justifyContent="center"
           alignItems="center"
-          h="50px"
-          w="50px"
+          h="40px"
+          w="40px"
           textAlign="center"
           display ="flex"
         >
@@ -41,8 +41,8 @@ function BattleshipBoard({
               key={`col-label-${rowIndex}`}
               justifyContent="center"
               alignItems="center"
-              h="50px"
-              w="50px"
+              h="40px"
+              w="40px"
               textAlign="center"
               display ="flex"
             >
@@ -58,24 +58,24 @@ function BattleshipBoard({
                   justifyContent="center"
                   color="red.500"
                   id={`${String.fromCharCode(65 + rowIndex)}${colIndex}`}
-                  h="50px"
-                  w="50px"
+                  h="40px"
+                  w="40px"
                   border="1px solid gray"
                   _hover={isEnemy && 
                         !(board[rowIndex][colIndex].isHit || board[rowIndex][colIndex].isShotAt) && 
-                        { bg: "gray.100" }}
-                  cursor={isSetUp ? "pointer" : isTurn ? "crosshair" : isEnemy ? "wait" : ""}
+                        { bg: "gray.300" }}
+                  cursor={isSetUp ? "pointer" : isTurn ? "crosshair" : isEnemy ? "not-allowed" : ""}
 
 
                  bg={
                     board[rowIndex][colIndex].isOccupied //first check if cell is occupied
                     ? board[rowIndex][colIndex].isOccupied.isSunk //check if ship is sunk
-                      ? "grey"
+                      ? "gray.700"
                       : isEnemy // then check if its in enemyBoard
                         ? board[rowIndex][colIndex].isHit
-                          ? "red" //red when enemy ship has been hit
+                          ? "red.500" //red when enemy ship has been hit
                           : "transparent" //"hide" the enemy ship otherwise
-                        : "blue" //for player render their ships blue
+                        : "cyan.700" //for player render their ships blue
                       : "transparent" // else if there is nothing occupying the cell
                   }
 

@@ -19,6 +19,8 @@ import { useNavigate } from "react-router-dom"
 import { getDomainWebsocket } from "../../helpers/getDomainWebsocket.js"
 import { CopyIcon, CheckIcon } from "@chakra-ui/icons"
 import AnimationContainer from "../../components/AnimationContainer.jsx"
+
+
 function Host() {
   const [code, setCode] = useState(null)
   const { user, setUser, lobby, setLobby } = useContext(GameContext)
@@ -82,16 +84,6 @@ function Host() {
     }))
   }
 
-  function confirmCode() {
-    if (isJoined) {
-      setShowCode(false)
-      navigate(`/setup/${code}`)
-    } else {
-      alert("wait for player to join")
-    }
-  }
-
-
   const copyCode = () => {
     navigator.clipboard.writeText(code).then(() => {
 
@@ -135,10 +127,6 @@ function Host() {
             </Box>
 
           </Box>
-
-          {/* <Button mt="2" onClick={copyCodeToClipboard}>
-            Copy code
-          </Button> */}
         </Box>
       </Collapse>
 

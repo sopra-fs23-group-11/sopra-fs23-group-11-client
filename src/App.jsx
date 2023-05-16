@@ -15,7 +15,7 @@ import Host from "./pages/Lobby/Host"
 import Join from "./pages/Lobby/Join"
 import Profile from "./pages/Profile"
 import LobbyLayout from "./pages/Lobby/LobbyLayout"
-import Setup from "./pages/Setup/Setup.jsx"
+import Setup from "./pages/Setup.jsx"
 import Chatroom from "./pages/Chatroom"
 import Endscreen from "./pages/Endscreen"
 import Game from "./pages/Game"
@@ -29,7 +29,7 @@ const router = createBrowserRouter(
       <Route path="login" element={<Login />} action={loginAction} />
 
       {/* user needs to log in first to access the below routes */}
-      
+
       <Route element={<AuthRequired />}>
         <Route path="lobby" element={<LobbyLayout />}>
           <Route index element={<Lobby />} />
