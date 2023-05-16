@@ -1,80 +1,93 @@
 import React, { useState, useEffect, useContext } from "react"
 import ship_loser1 from "../assets/ship_loser1.jpg"
-import ship_winner from "../assets/ship_winner.png"
-import {Box, Button, Flex, Image, Text} from "@chakra-ui/react";
+import ship_winner from "../assets/ship_winner.jpg"
+import {Avatar, Box, Button, Flex, Image, Spacer, Text} from "@chakra-ui/react";
 import {api, handleError} from "../helpers/api.js";
-import {useParams, Link} from "react-router-dom";
+import {useParams, Link, useNavigate } from "react-router-dom";
 import { GameContext } from "../contexts/GameContext";
-
+import AnimationContainer from "../components/AnimationContainer.jsx"
+import { Stomp } from "stompjs/lib/stomp.js"
+import { getDomainWebsocket } from "../helpers/getDomainWebsocket.js"
 
 
 function EndScreen() {
 
-    let [boardUser, setBoardUser] = useState(null);
     const { lobbyCode } = useParams();
-    const {user, player} = useContext(GameContext)
+    const {user, player, enemy, lobby, setLobby} = useContext(GameContext)
+    const {isReady, setIsReady} = useState(false)
+    const navigate = useNavigate()
 
 
-    // useEffect(() => {
-    //         async function fetchData() {
-    //             try {
+    const goSetup = () => {
+        navigate(`/setup/${lobbyCode}`)
+        // start new game
+    }
 
-    //                 setBoardUser((await api.get('/board/' + user.id)).data.shipsRemaining)
 
-
-    //             } catch (error) {
-    //                 console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
-    //                 console.error("Details:", error);
-    //                 alert("Something went wrong while fetching the users! See the console for details.");
-    //             }
-    //         }
-
-    //         fetchData();
-    //     },
-    //     []);
 
 
 
     if(player.hasWon){
         return (
-            <div>
-                <Flex alignItems="center" justifyContent="center">
-                    <Box textAlign="center">
-                        <Text Text as='b' fontSize='2xl' mt={4}>CONGRATULATIONS</Text>
-                        <Image src={ship_winner} alt="Image 1" width="500px" height="500px"/>
-                        <Text Text as='b' fontSize='1xl' mt={4}>{user.name}</Text>
-                        <Text>ships remaining : {boardUser} </Text>
-                        <Text>total wins: {user.totalWins+1}</Text>
-                    </Box>
-                </Flex>
-                <Button as={Link} to={`/game/${lobbyCode}`} colorScheme="blue">
-                    New Game
-                </Button>
-            </div>
-
+            <AnimationContainer>
+                <Box display="flex" flexDirection="column" justifyContent="center" h="70vh">
+                    <Flex alignItems="center" justifyContent="center">
+                        <Box marginTop={20} marginLeft={120} textAlign="center">
+                            <Text as="b" fontSize="2xl" vh={20}>
+                               !! CONGRATULATIONS !!
+                            </Text>
+                            <Image src={ship_loser1} alt="Image 1" width="500px" height="500px" />
+                            <Text as="b" fontSize="1xl" mt={4}>
+                                {user.name}
+                            </Text>
+                            <Text>total wins: {user.totalWins}</Text>
+                        </Box>
+                        <Box>
+                            <Avatar size="2xl" src={user.avatar} />
+                        </Box>
+                    </Flex>
+                    <Flex alignItems="center" justifyContent="center">
+                        <Button as={Link} to={`/lobby`} mr={200} colorScheme="blue">
+                            New Game!
+                        </Button>
+                        <Button onClick={goSetup} ml={150} colorScheme="blue">
+                            Revenge!
+                        </Button>
+                    </Flex>
+                </Box>
+    </AnimationContainer>
         );
     }
     else{
             return (
-                <div>
-                    <Flex alignItems="center" justifyContent="center">
-                        <Box textAlign="center">
-                            <Text Text as='b' fontSize='2xl' mt={4}>BETTER LUCK NEXT TIME</Text>
-                            <Image src={ship_loser1} alt="Image 1" width="500px" height="500px"/>
-                            <Text Text as='b' fontSize='1xl' mt={4}>{user.name}</Text>
-                            <Text>ships remaining : 0 </Text>
-                            <Text>total wins: {user.totalWins}</Text>
-                        </Box>
-                    </Flex>
-                    <Button as={Link} to={`/game/${lobbyCode}`} colorScheme="blue">
-                        New Game
-                    </Button>
-                </div>
-
+                <AnimationContainer>
+                    <Box display="flex" flexDirection="column" justifyContent="center" h="70vh">
+                        <Flex alignItems="center" justifyContent="center">
+                            <Box  marginTop={20} marginLeft={100} textAlign="center">
+                                <Text as="b" fontSize="2xl" vh={20}>
+                                    Better Luck next Time !
+                                </Text>
+                                <Image src={ship_loser1} alt="Image 1" width="500px" height="500px" />
+                                <Text as="b" fontSize="1xl" mt={4}>
+                                    {user.name}
+                                </Text>
+                                <Text>total wins: {user.totalWins}</Text>
+                            </Box>
+                            <Box>
+                                <Avatar size="2xl" src={user.avatar} />
+                            </Box>
+                        </Flex>
+                        <Flex alignItems="center" justifyContent="center">
+                            <Button as={Link} to={`/lobby`} mr={200} colorScheme="blue">
+                                New Game!
+                            </Button>
+                            <Button onClick={goSetup} ml={150} colorScheme="blue">
+                                Revenge!
+                            </Button>
+                        </Flex>
+                    </Box>
+                </AnimationContainer>
             );
     }
-
-
-
 }
 export default EndScreen

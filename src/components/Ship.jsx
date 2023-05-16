@@ -1,10 +1,10 @@
 import React from "react"
 import { Grid, GridItem, Box } from "@chakra-ui/react"
-import Destroyer from "../assets/Destroyer.jpeg"
-import Submarine from "../assets/Submarine.jpeg"
-import Cruiser from "../assets/Cruiser.jpeg"
-import Carrier from "../assets/Carrier.jpeg"
-import Battleship from "../assets/Battleship.jpeg"
+import Destroyer from "../assets/Destroyer.jpg"
+import Submarine from "../assets/Submarine.jpg"
+import Cruiser from "../assets/Cruiser.jpg"
+import Carrier from "../assets/Carrier.jpg"
+import Battleship from "../assets/Battleship.jpg"
 
 
 export default function Ships(props) {
