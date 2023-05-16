@@ -18,7 +18,7 @@ const Profile = () => {
         <Avatar size="2xl" src={user.avatar} />
         <li> Account username: {user.name}</li>
         <li>Account ID: {user.id}</li>
-        <li> Account Status: {user.status}</li>
+        {/* <li> Account Status: {user.status}</li> */}
         <li> Account Wins: {user.totalWins}</li>
       </ul>
     </div>
