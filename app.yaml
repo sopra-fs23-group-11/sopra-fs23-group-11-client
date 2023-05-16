@@ -17,7 +17,7 @@ handlers:
     mime_type: audio/mpeg
     upload: dist/.*\.(mp3|wav)
 
-   - url: /(.*\.jpg)
+  - url: /(.*\.jpg)
     static_files: dist/\1
     mime_type: image/jpeg
     upload: dist/.*\.jpg
