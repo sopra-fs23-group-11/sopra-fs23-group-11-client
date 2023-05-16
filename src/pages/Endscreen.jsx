@@ -34,9 +34,9 @@ function EndScreen() {
                     <Flex alignItems="center" justifyContent="center">
                         <Box marginTop={20} marginLeft={120} textAlign="center">
                             <Text as="b" fontSize="2xl" vh={20}>
-                               !! CONGRATULATIONS !!
+                               Congratulations !
                             </Text>
-                            <Image src={ship_loser1} alt="Image 1" width="500px" height="500px" />
+                            <Image src={ship_winner} alt="Image 1" width="500px" height="500px" />
                             <Text as="b" fontSize="1xl" mt={4}>
                                 {user.name}
                             </Text>
