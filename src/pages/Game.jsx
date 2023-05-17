@@ -1,5 +1,19 @@
 import React, { useEffect, useContext, useState } from "react"
-import {Divider, Flex, Text, Box, Center, useToast, Avatar} from "@chakra-ui/react"
+import {morse} from "../helpers/soundEffects"
+import {
+  Divider,
+  Flex,
+  Text,
+  Box,
+  Center,
+  useToast,
+  Avatar,
+  Button,
+  InputGroup,
+  Input,
+  InputRightElement
+} from "@chakra-ui/react"
+import { ChatIcon } from "@chakra-ui/icons";
 import { GameContext } from "../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp.js"
 import { useParams, useNavigate } from "react-router-dom"
@@ -13,6 +27,7 @@ import { getDomainWebsocket } from "../helpers/getDomainWebsocket.js"
 import AnimationContainer from "../components/AnimationContainer.jsx"
 import EnemyExitModal from "../components/EnemyExitModal.jsx"
 import {api} from "../helpers/api.js";
+import lobby from "./Lobby/Lobby.jsx";
 
 const enemyVariant = {
   hidden: {
@@ -63,6 +78,10 @@ export default function Game() {
   const { player, setPlayer, handleShoot, enemy, handleSunk } =
     useContext(GameContext)
   const [enemyExit, setEnemyExit] = useState(false)
+  const [inputValue, setInputValue] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
   const { lobbyCode } = useParams()
   const navigate = useNavigate()
   const toast = useToast()
@@ -80,6 +99,7 @@ export default function Game() {
     socket.subscribe(`/game/${lobbyCode}/sunk`, onSunkenShip)
     socket.subscribe(`/game/${lobbyCode}/finish`, onFinished)
     socket.subscribe(`/game/${lobbyCode}/leave`, onLeave)
+    socket.subscribe(`/chatroom/${lobbyCode}`, onMessage);
 
   }
 
@@ -121,6 +141,35 @@ export default function Game() {
     }
     navigate(`/endscreen/${lobbyCode}`)
   }
+
+  const onMessage = (payload) => {
+    let payloadData = JSON.parse(payload.body);
+    console.log("message payload:" + payload.body)
+    setMessages((prevMessages) => [...prevMessages, payloadData.content]);
+    console.log(payloadData.content)
+    morse()
+  };
+
+  const sendMessage = (newMessage) => {
+    newMessage = player.name + ": " + newMessage;
+    const message = {
+      lobbyCode: lobbyCode,
+      content: newMessage,
+    };
+      socket.send(`/chatroom/${lobbyCode}`, {}, JSON.stringify(message));
+  };
+
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSendMessage();
+    }
+  };
+
+  const handleSendMessage = () => {
+    sendMessage(inputValue);
+    setInputValue("");
+  };
 
   const onSunkenShip = (payload) => {
     sinkShipSound()
@@ -212,6 +261,61 @@ export default function Game() {
         </Flex>
       </AnimationContainer>
       {enemyExit && <EnemyExitModal enemyExit={enemyExit}/>}
+
+      <Button
+          onClick={() => setIsChatOpen(!isChatOpen)}
+          bgColor="teal.500"
+          color="white"
+          borderRadius="lg"
+          p={4}
+          fontWeight="medium"
+          _hover={{ bgColor: "teal.400" }}
+      >
+        Toggle Radio
+      </Button>
+      {isChatOpen && (
+          <Box
+              position="fixed"
+              bottom="0"
+              right="0"
+              bgColor="white"
+              boxShadow="0px -5px 10px rgba(0, 0, 0, 0.2)"
+              borderRadius="lg"
+              maxHeight="600px"
+              overflowY="auto"
+              p={4}
+          >
+            <Box mb={4}>
+              {messages.map((message, index) => (
+                  <Box key={index} mb={2}>
+                    {message}
+                  </Box>
+              ))}
+            </Box>
+            <InputGroup>
+              <Input
+                  type="text"
+                  placeholder="Type your message here..."
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={handleKeyPress}
+              />
+              <InputRightElement>
+                <Button
+                    onClick={handleSendMessage}
+                    bgColor="teal.500"
+                    color="white"
+                    borderRadius="lg"
+                    p={4}
+                    fontWeight="medium"
+                    _hover={{ bgColor: "teal.400" }}
+                >
+                  Send
+                </Button>
+              </InputRightElement>
+            </InputGroup>
+          </Box>
+      )}
     </Flex>
   )
 }
