@@ -15,7 +15,7 @@ import {
   GridItem,
   Switch,
   FormLabel,
-  useToast,
+  useToast, IconButton, Collapse,
 } from "@chakra-ui/react"
 import { GameContext } from "../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp"
@@ -25,6 +25,7 @@ import { Alert, AlertIcon, Stack } from "@chakra-ui/react"
 
 import { useParams, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
+import {InfoIcon} from "@chakra-ui/icons";
 
 const shipsVariant = {
   hidden: {
@@ -79,6 +80,7 @@ function Setup() {
   const [isStartSetup, setIsStartSetup] = useState(false)
   const [waitingSpinner, setWaitingSpinner] = useState(false)
   const [enemyExit, setEnemyExit] = useState(false)
+  const [showRules, setShowRules] = useState(false)
   const { lobbyCode } = useParams()
   const navigate = useNavigate()
   const hostId = lobby?.hostId
@@ -188,11 +190,23 @@ function Setup() {
   const handleToggle = () => {
     setDirection(direction === "Horizontal" ? "Vertical" : "Horizontal")
   }
+  const toggleRules = () => {
+    setShowRules(!showRules)
+  }
 
   return (
     <Box display="flex" flexDirection="column" justifyContent="center" h="70vh">
       {isStartSetup ? (
-        <Flex justifyContent="center" alignItems="center">
+        <Flex justifyContent="center" alignItems="center" position="relative">
+          <IconButton
+              aria-label="Show Rules"
+              icon={<InfoIcon />}
+              position="absolute"
+              top="1rem"
+              right="1rem"
+              onClick={toggleRules}
+              variant="ghost"
+          />
           <AnimationContainer variants={boardVariant}>
             <BattleshipBoard
               board={player.board}
@@ -245,6 +259,17 @@ function Setup() {
               </AnimationContainer>
             )}
           </Flex>
+          <Collapse in={showRules}>
+            <Text fontSize="sm" color="gray.500" textAlign="center">
+              <Text as="b">Set-up: </Text><br />
+              Select the ship you want to be placing and hover over the field in order to see the arrangement.
+              When clicking the field the ship will be placed, but be careful once a ship is placed there is no turning back!
+              Your ships may be touching but they cannot overlap.
+              With the button you can switch between horizontal and vertical placement of the ships.
+              Be sure to place all your ships to start the game. <br />
+              Good Luck, Captain!
+            </Text>
+          </Collapse>
         </Flex>
       ) : user.isHost ? (
         <Button onClick={startGame} alignSelf="center" size="lg">
