@@ -261,14 +261,14 @@ function Setup() {
             )}
           </Flex>
           <Collapse in={showRules}>
-            <Text fontSize="sm" color="gray.500" textAlign="center">
+            <Text fontSize="sm" color="gray.500" textAlign="left">
               <Text as="b">Set-up: </Text><br />
-              Select the ship you want to be placing and hover over the field in order to see the arrangement.
-              When clicking the field the ship will be placed, but be careful once a ship is placed there is no turning back!
-              Your ships may be touching but they cannot overlap.
-              With the button you can switch between horizontal and vertical placement of the ships.
-              Be sure to place all your ships to start the game. <br />
-              Good Luck, Captain!
+              Select the ship you want to place and hover over the field to see its arrangement. <br />
+              Click on the field to place the ship, but keep in mind that once a ship is placed, you cannot undo it!<br/>
+              Your ships can touch each other, but they cannot overlap.<br/>
+              Use the button to switch between horizontal and vertical placement of the ships.<br/>
+              Make sure to place all your ships before starting the game.  <br/>
+              Good Luck, Captain!<br />
             </Text>
           </Collapse>
         </Flex>
