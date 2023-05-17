@@ -110,10 +110,13 @@ export default function Register() {
             </Box>
 
           </Box>
-          <div>
+
+          <FormControl isRequired>
+
           <Text  as="b" >You need to select an Avatar to play!</Text>
           <AvatarList onSelect={handleSelect} selectedAvatar={selectedAvatar} />
-          </div>
+          </FormControl>
+
         </Flex>
       </Form>
         </Flex>
