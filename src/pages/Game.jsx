@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from "react"
-import { Divider, Flex, Text, Box, Center, useToast } from "@chakra-ui/react"
+import {Divider, Flex, Text, Box, Center, useToast, Avatar} from "@chakra-ui/react"
 import { GameContext } from "../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp.js"
 import { useParams, useNavigate } from "react-router-dom"
@@ -12,6 +12,7 @@ import {
 import { getDomainWebsocket } from "../helpers/getDomainWebsocket.js"
 import AnimationContainer from "../components/AnimationContainer.jsx"
 import EnemyExitModal from "../components/EnemyExitModal.jsx"
+import {api} from "../helpers/api.js";
 
 const enemyVariant = {
   hidden: {
@@ -59,12 +60,14 @@ const enemyTurnVariants = {
 
 let socket = null
 export default function Game() {
-  const { player, setPlayer, handleShoot, user, enemy, handleSunk } =
+  const { player, setPlayer, handleShoot, enemy, handleSunk } =
     useContext(GameContext)
   const [enemyExit, setEnemyExit] = useState(false)
   const { lobbyCode } = useParams()
   const navigate = useNavigate()
   const toast = useToast()
+
+
 
   useEffect(() => {
     socket = Stomp.client(getDomainWebsocket())
@@ -79,6 +82,7 @@ export default function Game() {
     socket.subscribe(`/game/${lobbyCode}/leave`, onLeave)
 
   }
+
 
   const onShotReceived = (payload) => {
     console.log("shot received")
@@ -178,6 +182,7 @@ export default function Game() {
         status: status,
     })
   }
+
 
   return (
     <Flex justifyContent="space-around" width="80%" m="auto">

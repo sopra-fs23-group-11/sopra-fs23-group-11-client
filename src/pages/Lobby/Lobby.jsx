@@ -1,12 +1,13 @@
-import { Text, Button, Flex, Box } from "@chakra-ui/react"
+import {Text, Button, Flex, Box, IconButton, Collapse} from "@chakra-ui/react"
 
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useState} from "react"
 
 import { Link, useNavigate } from "react-router-dom"
 import { GameContext } from "../../contexts/GameContext"
 import { api } from "../../helpers/api.js"
 import { motion } from "framer-motion"
 import AnimationContainer from "../../components/AnimationContainer"
+import {InfoIcon} from "@chakra-ui/icons";
 
 const lobbyVariants = {
   hidden: {
@@ -23,6 +24,7 @@ const lobbyVariants = {
 function Lobby() {
   const userId = JSON.parse(sessionStorage.getItem("userId"))
   const { user, setUser } = useContext(GameContext)
+  const [showRules, setShowRules] = useState(false);
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -50,6 +52,9 @@ function Lobby() {
     localStorage.removeItem("token")
     navigate("/")
   }
+  const toggleRules = () => {
+    setShowRules(!showRules)
+  }
 
   return (
     <AnimationContainer variants={lobbyVariants}>
@@ -59,7 +64,17 @@ function Lobby() {
         gap="20px"
         justifyContent="center"
         alignItems="center"
+        position="relative"
       >
+        <IconButton
+          aria-label="Show Rules"
+          icon={<InfoIcon />}
+          position="absolute"
+          top="1rem"
+          right="1rem"
+          onClick={toggleRules}
+          variant="ghost"
+          />
         <Text fontWeight="bold" color="black">
           {`Welcome ${user.name}`}
         </Text>
@@ -107,6 +122,16 @@ function Lobby() {
         >
           Log Out
         </Button>
+        <Collapse in={showRules}>
+          <Text fontSize="sm" color="gray.500" textAlign="center">
+            <Text as="b">Rules: </Text><br />
+            At the start of the game, each player has to place 5 ships of different length either horizontal or vertical.<br />
+            After that the players take turns shooting at the opponents field.<br />
+            When hitting a ship the square will turn red, if it's a miss a circle appears. In both cases it's the opponents turn.<br />
+            The first player to sink all the opponents ships wins.<br />
+            Have fun, Captain!
+          </Text>
+        </Collapse>
       </Flex>
     </AnimationContainer>
   )
