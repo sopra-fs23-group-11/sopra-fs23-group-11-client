@@ -12,7 +12,7 @@ import {
   position,
   Collapse,
   Toast,
-  AlertIcon,
+  AlertIcon, Flex,
 } from "@chakra-ui/react"
 import { GameContext } from "../../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp.js"
@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom"
 import { getDomainWebsocket } from "../../helpers/getDomainWebsocket.js"
 import { CopyIcon, CheckIcon } from "@chakra-ui/icons"
 import AnimationContainer from "../../components/AnimationContainer.jsx"
+import {motion} from "framer-motion";
 
 function Host() {
   const [code, setCode] = useState(null)
@@ -61,6 +62,11 @@ function Host() {
       setErrorLogs(error.response.data)
     }
   }
+
+      const goLobby = () => {
+        navigate(`/lobby`)
+        // start new game
+    }
 
   function onJoiner(payload) {
     const payloadData = JSON.parse(payload.body)
@@ -148,9 +154,24 @@ function Host() {
           </Box>
         </Collapse>
 
-        <Button onClick={generateLobbyCode} variant="brand">
+
+
+        <Flex
+         flexDirection="column"
+        >
+          <Button
+              onClick={generateLobbyCode} variant="brand" mb = "4"
+              size="lg" w="200px">
           Get a Lobby Code
-        </Button>
+          </Button>
+          <Button
+              onClick={goLobby} variant="brand" size="lg" w="200px"
+          >
+            Back to Lobby
+          </Button>
+        </Flex>
+
+
         {!isJoined && showCode && (
           <Box pt="1em" marginRight="auto" marginLeft="auto">
             {/* <Button mt="2" bg="blue.500"> */}

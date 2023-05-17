@@ -41,6 +41,11 @@ function Join() {
     }
   }, [isValidCode])
 
+  const goLobby = () => {
+        navigate(`/lobby`)
+        // start new game
+    }
+
   return (
     <AnimationContainer>
       <Box
@@ -51,7 +56,7 @@ function Join() {
         flexDirection="column"
       >
         <Heading as="h1" color="blackAlpha.900" frontsize="4x1" mb={6}>
-          Enter Roomcode
+          Enter RoomCode
         </Heading>
         <div style={{ display: "flex", alignItems: "center" }}>
           <Input
@@ -72,6 +77,15 @@ function Join() {
             {errorLogs.errorMessage}
           </Alert>
         )}
+        <Button
+              onClick={goLobby}
+              variant="brand"
+              size="lg"
+              w="230px"
+              mt="10"
+          >
+            Back to Lobby
+          </Button>
       </Box>
     </AnimationContainer>
   )
