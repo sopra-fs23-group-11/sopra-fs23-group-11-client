@@ -13,7 +13,7 @@ import { getDomainWebsocket } from "../helpers/getDomainWebsocket.js"
 function EndScreen() {
 
     const { lobbyCode } = useParams();
-    const {user, player, enemy, lobby, setLobby, resetState} = useContext(GameContext)
+    const {user, player, enemy, lobby, setLobby, resetState, setState} = useContext(GameContext)
     const {isReady, setIsReady} = useState(false)
     const navigate = useNavigate()
 
@@ -21,6 +21,12 @@ function EndScreen() {
     const goLobby = () => {
         resetState()
         navigate(`/lobby`)
+        // start new game
+    }
+
+    const goSetup = () => {
+        setState()
+        navigate(`/setup/${lobbyCode}`)
         // start new game
     }
 
@@ -52,6 +58,9 @@ function EndScreen() {
                         <Button Align="center" mr={5} mt={10} onClick={goLobby} colorScheme="blue">
                             New Game!
                         </Button>
+                        <Button Align="center" mr={10} mt={10} onClick={goSetup} colorScheme="blue">
+                            Revenge
+                        </Button>
                     </Flex>
                 </Box>
     </AnimationContainer>
@@ -79,6 +88,9 @@ function EndScreen() {
                         <Flex alignItems="center" justifyContent="center">
                             <Button Align="center" mr={10} mt={10} onClick={goLobby} colorScheme="blue">
                                 New Game!
+                            </Button>
+                            <Button Align="center" mr={10} mt={10} onClick={goSetup} colorScheme="blue">
+                                Revenge
                             </Button>
                         </Flex>
                     </Box>

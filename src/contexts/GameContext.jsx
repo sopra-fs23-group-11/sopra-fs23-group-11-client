@@ -64,6 +64,28 @@ export default function GameProvider({ children }) {
     setLobby(null)
   }
 
+    const setState = () => {
+    setPlayer({
+      id: null,
+      name: "",
+      board: generateBoard(),
+      ships: shipsData,
+      missesReceived: [],
+      hitsReceived: [],
+      isReady: false,
+      isMyTurn: false,
+      hasWon: false,
+    })
+
+    setEnemy({
+      id: null,
+      name: "",
+      board: generateBoard(),
+      isReady: false,
+    })
+
+  }
+
   const handleShoot = (rowIndex, colIndex) => {
     setEnemy((enemy) => ({
       ...enemy,
@@ -343,7 +365,8 @@ export default function GameProvider({ children }) {
         enemy,
         setEnemy,
         handleSunk,
-        resetState
+        resetState,
+        setState
       }}
     >
       {children}

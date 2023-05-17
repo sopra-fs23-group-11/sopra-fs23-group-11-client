@@ -106,6 +106,9 @@ function Setup() {
       `/ready/${user.id === lobby?.hostId ? lobby?.joinerName : lobby?.hostName}`,
       onReady
     )
+    console.log("user.id", user.id, "lobby.hostId", lobby.hostId,
+        "joinerName", lobby.joinerName, "hostName", lobby.hostName)
+    console.log(user.id)
     socket.subscribe(`/game/${lobbyCode}/leave`, onLeave)
   }
 
@@ -113,7 +116,11 @@ function Setup() {
     try {
       await api.post(`/startgame`, JSON.stringify({ lobbyCode, hostId }))
     } catch (error) {
-      console.log(error.message)
+      console.log("server error",error.message)
+      console.log(hostId)
+      console.log(lobbyCode)
+      console.log(user.id)
+      console.log(lobby.hostName)
     }
   }
 
