@@ -12,7 +12,7 @@ import {
   position,
   Collapse,
   Toast,
-  AlertIcon
+  AlertIcon,
 } from "@chakra-ui/react"
 import { GameContext } from "../../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp.js"
@@ -20,7 +20,6 @@ import { useNavigate } from "react-router-dom"
 import { getDomainWebsocket } from "../../helpers/getDomainWebsocket.js"
 import { CopyIcon, CheckIcon } from "@chakra-ui/icons"
 import AnimationContainer from "../../components/AnimationContainer.jsx"
-
 
 function Host() {
   const [code, setCode] = useState(null)
@@ -37,12 +36,11 @@ function Host() {
 
   useEffect(() => {
     if (isJoined) {
-      setTimeout(()=>{
+      setTimeout(() => {
         navigate(`/setup/${code}`)
       }, 1000)
     }
   }, [isJoined])
-
 
   async function generateLobbyCode() {
     const hostId = user.id
@@ -76,76 +74,100 @@ function Host() {
   }
 
   const copyCode = () => {
-    navigator.clipboard.writeText(code).then(() => {
+    if (window.isSecureContext && navigator.clipboard) {
+      navigator.clipboard.writeText(code).then(() => {
+        setCopied(true)
 
+        setTimeout(() => {
+          setCopied(false)
+        }, 3000)
+      })
+    } else {
+      unsecuredCopyToClipboard(code)
       setCopied(true)
 
       setTimeout(() => {
-
         setCopied(false)
       }, 3000)
-    })
+    }
+  }
+
+  function unsecuredCopyToClipboard(text) {
+    const textArea = document.createElement("textarea")
+    textArea.value = text
+    document.body.appendChild(textArea)
+    textArea.focus()
+    textArea.select()
+    try {
+      document.execCommand("copy")
+    } catch (err) {
+      console.error("Unable to copy to clipboard", err)
+    }
+    document.body.removeChild(textArea)
   }
 
   return (
     <AnimationContainer>
-
-    <Box
-      height="50vh"
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-    >
-      {errorLogs && 
-      <Alert status="error" maxW={200} >
-        <AlertIcon/>
-        {errorLogs.errorMessage}
-      </Alert>
-      }
-      <Collapse in={showCode} animateOpacity>
-        <Box bg="transparent" p="4" rounded="md" mt="4" position="relative">
-
-          <Box
-            w="100%"
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-          >
-            <Text md="2" fontSize='lg' mb='5' > Your lobby code: </Text>
-            <Box width="100%">
-              <code>{code}</code>
-              <Button
+      <Box
+        height="50vh"
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+      >
+        {errorLogs && (
+          <Alert status="error" maxW={200}>
+            <AlertIcon />
+            {errorLogs.errorMessage}
+          </Alert>
+        )}
+        <Collapse in={showCode} animateOpacity>
+          <Box bg="transparent" p="4" rounded="md" mt="4" position="relative">
+            <Box
+              w="100%"
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+            >
+              <Text md="2" fontSize="lg" mb="5">
+                {" "}
+                Your lobby code:{" "}
+              </Text>
+              <Box width="100%">
+                <code>{code}</code>
+                <Button
+                  variant="brand"
                   icon={copied ? <CheckIcon /> : <CopyIcon />}
                   onClick={copyCode}
-                  ml="20px">
-                {copied ? "✓ Copied!" : "📋 Copy code"}
-              </Button>
+                  ml="20px"
+                >
+                  {copied ? "✓ Copied!" : "📋 Copy code"}
+                </Button>
+              </Box>
             </Box>
-
           </Box>
-        </Box>
-      </Collapse>
+        </Collapse>
 
+        <Button onClick={generateLobbyCode} variant="brand">
+          Get a Lobby Code
+        </Button>
+        {!isJoined && showCode && (
+          <Box pt="1em" marginRight="auto" marginLeft="auto">
+            {/* <Button mt="2" bg="blue.500"> */}
 
-      <Button onClick={generateLobbyCode}>Get a Lobby Code</Button>
-      {!isJoined && showCode && (
-        <Box pt="1em" marginRight="auto" marginLeft="auto">
-          {/* <Button mt="2" bg="blue.500"> */}
+            <Text>Waiting for Player to join</Text>
+            <Spinner
+              thickness="4px"
+              speed="0.95s"
+              emptyColor="gray.200"
+              color="blue.500"
+              size="lg"
+            />
+          </Box>
+        )}
 
-          <Text>Waiting for Player to join</Text>
-          <Spinner
-            thickness="4px"
-            speed="0.95s"
-            emptyColor="gray.200"
-            color="blue.500"
-            size="lg"
-          />
-        </Box>
-      )}
-
-      {isJoined && <Text>Player Joined, will redirect shortly</Text>}
-    </Box>
+        {isJoined && <Text>Player Joined, will redirect shortly</Text>}
+      </Box>
     </AnimationContainer>
   )
 }

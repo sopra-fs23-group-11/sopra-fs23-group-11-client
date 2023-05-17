@@ -86,6 +86,7 @@ function Lobby() {
             size="lg"
             as={motion.button}
             whileHover={{ scale: 1.1 }}
+            variant="brand"
           >
             Host a Lobby
           </Button>
@@ -97,6 +98,7 @@ function Lobby() {
             size="lg"
             as={motion.button}
             whileHover={{ scale: 1.1 }}
+            variant="brand"
           >
             Join a Lobby
           </Button>
@@ -108,6 +110,7 @@ function Lobby() {
             size="lg"
             as={motion.button}
             whileHover={{ scale: 1.1 }}
+            variant="brand"
           >
             Profile
           </Button>
@@ -119,6 +122,7 @@ function Lobby() {
           size="lg"
           as={motion.button}
           whileHover={{ scale: 1.1 }}
+          variant="brand"
         >
           Log Out
         </Button>

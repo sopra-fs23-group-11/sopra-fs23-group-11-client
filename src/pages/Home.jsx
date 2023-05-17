@@ -39,7 +39,7 @@ function Home() {
     >
       <Heading>Welcome To Battleship</Heading>
       <AnimationContainer variants={buttonVariants}>
-        <Button size="lg">
+        <Button size="lg" variant="brand">
           <Link to="login">Join The Battle!</Link>
         </Button>
       </AnimationContainer>
