@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react"
-import ship_loser1 from "../assets/ship_loser1.jpg"
+import ship_loser from "../assets/ship_loser2.png"
 import ship_winner from "../assets/ship_winner.jpg"
 import {Avatar, Box, Button, Flex, Image, Spacer, Text} from "@chakra-ui/react";
 import {api, handleError} from "../helpers/api.js";
@@ -67,7 +67,7 @@ function EndScreen() {
                                 <Text as="b" fontSize="2xl" vh={20}>
                                     Better Luck next Time !
                                 </Text>
-                                <Image src={ship_loser1} alt="Image 1" width="500px" height="500px" />
+                                <Image src={ship_loser} alt="Image 1" width="500px" height="500px" />
                                 <Text as="b" fontSize="1xl" mt={4}>
                                     {user.name}
                                 </Text>
