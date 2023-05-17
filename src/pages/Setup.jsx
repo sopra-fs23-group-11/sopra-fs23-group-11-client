@@ -253,6 +253,7 @@ function Setup() {
                   spinnerPlacement="start"
                   loadingText="Good Luck Captain 🫡"
                   alignSelf="center"
+                  variant="brand"
                 >
                   Ready
                 </Button>
@@ -272,7 +273,7 @@ function Setup() {
           </Collapse>
         </Flex>
       ) : user.isHost ? (
-        <Button onClick={startGame} alignSelf="center" size="lg">
+        <Button onClick={startGame} alignSelf="center" size="lg" variant="brand">
           Start Setup
         </Button>
       ) : (

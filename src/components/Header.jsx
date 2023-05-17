@@ -70,7 +70,7 @@ function Header() {
           margin="auto"
           minWidth="200px"
         >
-          <Box color="#015871" onClick={isLobbyOrProfile ? toMenu : onOpen} cursor="pointer">
+          <Box bgGradient='linear(to-tr, #0172AF, #4FD1C5)' bgClip = "text" onClick={isLobbyOrProfile ? toMenu : onOpen} cursor="pointer">
             BATTLESHIP
           </Box>
           <Modal closeOnOverlayClick={false} isOpen={isOpen} size="xs" onClose={onClose}>

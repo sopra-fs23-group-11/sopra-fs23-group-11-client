@@ -43,35 +43,36 @@ function Join() {
 
   return (
     <AnimationContainer>
-
-    <Box
-      height="20vh"
-      display="flex"
-      justifyContent="space around"
-      alignItems="center"
-      flexDirection="column"
-    >
-      <Heading as="h1" color="blackAlpha.900" frontsize="4x1" mb={6}>
-        Enter Roomcode
-      </Heading>
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <Input
-          value={lobbyCode}
-          name="code"
-          onChange={(e) => setLobbyCode(e.target.value)}
-          htmlSize={4}
-          width="auto"
-          mr={6}
-        />
-        <Button onClick={submitCode} isDisabled={isValidCode}>{!isValidCode ? "submit code" : "will redirect shortly..."}</Button>
-      </div>
-      {errorLogs && 
-      <Alert status="error" maxW={200} >
-        <AlertIcon/>
-        {errorLogs.errorMessage}
-      </Alert>
-      }
-    </Box>
+      <Box
+        height="20vh"
+        display="flex"
+        justifyContent="space around"
+        alignItems="center"
+        flexDirection="column"
+      >
+        <Heading as="h1" color="blackAlpha.900" frontsize="4x1" mb={6}>
+          Enter Roomcode
+        </Heading>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Input
+            value={lobbyCode}
+            name="code"
+            onChange={(e) => setLobbyCode(e.target.value)}
+            htmlSize={4}
+            width="auto"
+            mr={6}
+          />
+          <Button variant="brand" onClick={submitCode} isDisabled={isValidCode}>
+            {!isValidCode ? "submit code" : "will redirect shortly..."}
+          </Button>
+        </div>
+        {errorLogs && (
+          <Alert status="error" maxW={200}>
+            <AlertIcon />
+            {errorLogs.errorMessage}
+          </Alert>
+        )}
+      </Box>
     </AnimationContainer>
   )
 }

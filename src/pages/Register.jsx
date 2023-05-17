@@ -100,7 +100,7 @@ export default function Register() {
               </InputGroup>
             </FormControl>
             <FormControl my="4" >
-              <Button type="submit" w="100%" isDisabled={isSignupDisabled || navigation.state === "submitting"}>
+              <Button type="submit" w="100%" isDisabled={isSignupDisabled || navigation.state === "submitting"} variant="brand">
                 {navigation.state === "submitting" ? "Submitting..." : "Sign up"}
               </Button>
             </FormControl>

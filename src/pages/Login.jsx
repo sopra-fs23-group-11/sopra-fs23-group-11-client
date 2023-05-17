@@ -109,6 +109,7 @@ export default function Login() {
               type="submit"
               w="100%"
               isDisabled={navigation.state === "submitting"}
+              variant="brand"
             >
               {navigation.state === "submitting" ? "Loggin in..." : "Log in"}
             </Button>
