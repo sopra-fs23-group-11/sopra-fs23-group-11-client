@@ -1,6 +1,6 @@
 import { Box, Grid, GridItem } from "@chakra-ui/react"
-import { React } from "react"
-
+import { React, useState } from "react"
+import Cell from "./Cell"
 
 function BattleshipBoard({
   board,
@@ -9,13 +9,34 @@ function BattleshipBoard({
   isEnemy,
   isTurn,
   isSetUp,
-  handleError
+  handleError,
+  direction,
 }) {
+  const shipToBePlaced = JSON.parse(sessionStorage.getItem("selected"))
+  const length = shipToBePlaced?.length
+  const [hoveredCells, setHoveredCells] = useState([])
+  const [isValid, setIsValid] = useState(true)
+
+  const handleCellHover = (rowIndex, colIndex) => {
+    const shadowCells = []
+    for (let i = 0; i < length; i++) {
+      try {
+        if (direction === "Horizontal")
+          shadowCells.push(board[rowIndex][colIndex + i].id)
+        else shadowCells.push(board[rowIndex + i][colIndex].id)
+        setIsValid(true)
+      } catch (error) {
+        setIsValid(false)
+      }
+    }
+    setHoveredCells(shadowCells)
+  }
+
   return (
     <Grid
       templateColumns="repeat(11, 40px)"
       templateRows="repeat(11, 40px)"
-      gap={0}
+      gap={0.5}
       margin="20px"
       marginRight="40px"
     >
@@ -29,7 +50,7 @@ function BattleshipBoard({
           h="40px"
           w="40px"
           textAlign="center"
-          display ="flex"
+          display="flex"
         >
           {index}
         </GridItem>
@@ -44,13 +65,75 @@ function BattleshipBoard({
               h="40px"
               w="40px"
               textAlign="center"
-              display ="flex"
+              display="flex"
             >
               {String.fromCharCode(65 + rowIndex)}
             </GridItem>
             {row.map((col, colIndex) => (
               <GridItem key={`${rowIndex}-${colIndex}`}>
-                <Box
+                <Cell
+                  key={`${String.fromCharCode(65 + rowIndex)}${colIndex}`}
+                  hasShip={board[rowIndex][colIndex].isOccupied}
+                  isHovered={hoveredCells.some(
+                    (id) => board[rowIndex][colIndex].id === id
+                  )}
+                  handleCellHover={() => handleCellHover(rowIndex, colIndex)}
+                  isValid={isValid}
+                  cellHover={
+                    isEnemy &&
+                    !(
+                      board[rowIndex][colIndex].isHit ||
+                      board[rowIndex][colIndex].isShotAt
+                    ) && { bg: "gray.300" }
+                  }
+                  cursor={
+                    isSetUp
+                      ? "pointer"
+                      : isTurn
+                      ? "crosshair"
+                      : isEnemy
+                      ? "not-allowed"
+                      : ""
+                  }
+                  handleClick={
+                    isSetUp
+                      ? () => handlePlace(rowIndex, colIndex) //only for the setup stage
+                      : isTurn // if game already started, check if its player's turn
+                      ? board[rowIndex][colIndex].isHit ||
+                        board[rowIndex][colIndex].isShotAt //check if the cell has already been hit before
+                        ? () =>
+                            handleError("We already shot this place captain!")
+                        : () => handleShoot(rowIndex, colIndex)
+                      : isEnemy
+                      ? () =>
+                          //if its not the player's turn...
+                          handleError(
+                            "Hold your horses,Captain! It's not your turn to shoot!"
+                          )
+                      : () =>
+                          handleError("Captain, are you trying to kill us?!")
+                  }
+                  cellColor={
+                    board[rowIndex][colIndex].isOccupied //first check if cell is occupied
+                      ? board[rowIndex][colIndex].isOccupied.isSunk //check if ship is sunk
+                        ? "gray.700"
+                        : isEnemy // then check if its in enemyBoard
+                        ? board[rowIndex][colIndex].isHit
+                          ? "red.500" //red when enemy ship has been hit
+                          : "transparent" //"hide" the enemy ship otherwise
+                        : "cyan.700" //for player render their ships blue
+                      : "transparent" // else if there is nothing occupying the cell
+                  }
+                >
+                  {!isEnemy // this is shown on the player's board
+                    ? board[rowIndex][colIndex].isHit
+                      ? "X"
+                      : board[rowIndex][colIndex].isShotAt
+                      ? "O"
+                      : ""
+                    : isEnemy && board[rowIndex][colIndex].isShotAt && "O"}
+                </Cell>
+                {/* <Box
                   display ="flex"
                   textAlign="center"
                   fontSize="xx-large"
@@ -101,7 +184,7 @@ function BattleshipBoard({
                       ? "O"
                       : ""
                     : isEnemy && board[rowIndex][colIndex].isShotAt && "O"}
-                </Box>
+                </Box> */}
               </GridItem>
             ))}
           </>

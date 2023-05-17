@@ -198,6 +198,7 @@ function Setup() {
               board={player.board}
               handlePlace={placeShip}
               isSetUp={true}
+              direction={direction}
             />
           </AnimationContainer>
           <Flex direction="column" minW="300px" justifyContent="center">

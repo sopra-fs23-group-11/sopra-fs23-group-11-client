@@ -133,6 +133,17 @@ export default function GameProvider({ children }) {
   const updatePlayerSetup = (player, rowIndex, colIndex) => {
     const shipToBePlaced = JSON.parse(sessionStorage.getItem("selected"))
     console.log("row:" + rowIndex, "col:" + colIndex)
+    if(player.ships.length === 0){
+      toast({
+        title: "Invalid Placement",
+        description: "No more ships left, please press Ready",
+          position: "bottom",
+          isClosable: true,
+          duration: 3000,
+          status: "error",
+      })
+      return player
+    }
     if (shipToBePlaced) {
       const length = shipToBePlaced.length
       const coordinatesToBeOccupied = []
