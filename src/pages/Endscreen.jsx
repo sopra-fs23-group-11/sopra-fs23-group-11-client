@@ -13,15 +13,17 @@ import { getDomainWebsocket } from "../helpers/getDomainWebsocket.js"
 function EndScreen() {
 
     const { lobbyCode } = useParams();
-    const {user, player, enemy, lobby, setLobby} = useContext(GameContext)
+    const {user, player, enemy, lobby, setLobby, resetState} = useContext(GameContext)
     const {isReady, setIsReady} = useState(false)
     const navigate = useNavigate()
 
 
-    const goSetup = () => {
-        navigate(`/setup/${lobbyCode}`)
+    const goLobby = () => {
+        resetState()
+        navigate(`/lobby`)
         // start new game
     }
+
 
 
 
@@ -40,18 +42,15 @@ function EndScreen() {
                             <Text as="b" fontSize="1xl" mt={4}>
                                 {user.name}
                             </Text>
-                            <Text>total wins: {user.totalWins}</Text>
+                            <Text>total wins: {user.totalWins + 1}</Text>
                         </Box>
                         <Box>
                             <Avatar size="2xl" src={user.avatar} />
                         </Box>
                     </Flex>
                     <Flex alignItems="center" justifyContent="center">
-                        <Button as={Link} to={`/lobby`} mr={200} colorScheme="blue">
+                        <Button Align="center" mr={5} mt={10} onClick={goLobby} colorScheme="blue">
                             New Game!
-                        </Button>
-                        <Button onClick={goSetup} ml={150} colorScheme="blue">
-                            Revenge!
                         </Button>
                     </Flex>
                 </Box>
@@ -78,11 +77,8 @@ function EndScreen() {
                             </Box>
                         </Flex>
                         <Flex alignItems="center" justifyContent="center">
-                            <Button as={Link} to={`/lobby`} mr={200} colorScheme="blue">
+                            <Button Align="center" mr={10} mt={10} onClick={goLobby} colorScheme="blue">
                                 New Game!
-                            </Button>
-                            <Button onClick={goSetup} ml={150} colorScheme="blue">
-                                Revenge!
                             </Button>
                         </Flex>
                     </Box>
