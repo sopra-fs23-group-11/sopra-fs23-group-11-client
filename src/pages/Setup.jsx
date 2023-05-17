@@ -81,7 +81,7 @@ function Setup() {
   const [enemyExit, setEnemyExit] = useState(false)
   const { lobbyCode } = useParams()
   const navigate = useNavigate()
-  const hostId = lobby.hostId
+  const hostId = lobby?.hostId
 
   useEffect(() => {
     console.log("effect ran...")
@@ -101,7 +101,7 @@ function Setup() {
     socket.subscribe(`/startgame/${lobbyCode}`, onStartGame)
     console.log("websocket connected!")
     socket.subscribe(
-      `/ready/${user.id === lobby.hostId ? lobby.joinerName : lobby.hostName}`,
+      `/ready/${user.id === lobby?.hostId ? lobby?.joinerName : lobby?.hostName}`,
       onReady
     )
     socket.subscribe(`/game/${lobbyCode}/leave`, onLeave)

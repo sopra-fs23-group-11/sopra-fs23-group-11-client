@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react"
-import { Button, Heading, Input, Box } from "@chakra-ui/react"
+import { Button, Heading, Input, Box, Alert, AlertIcon } from "@chakra-ui/react"
 
 import { api, handleError } from "../../helpers/api.js"
 import { useNavigate } from "react-router"
@@ -9,6 +9,7 @@ import AnimationContainer from "../../components/AnimationContainer.jsx"
 function Join() {
   const [lobbyCode, setLobbyCode] = useState("")
   const [isValidCode, setIsValidCode] = useState(false)
+  const [errorLogs, setErrorLogs] = useState(null)
   const navigate = useNavigate()
   const { user, setUser, lobby, setLobby } = useContext(GameContext)
   const joinerId = user.id
@@ -26,13 +27,7 @@ function Join() {
         setUser({ ...user, isHost: false }) //a user that hosted a lobby before, but wants to join a lobby now
       }
     } catch (error) {
-      console.error(
-        `Something went wrong while trying to join: \n${handleError(error)}`
-      )
-      console.error("Details:", error)
-      alert(
-        "Something went wrong while trying to join! See the console for details."
-      )
+      setErrorLogs(error.response.data)
     }
   }
 
@@ -52,7 +47,7 @@ function Join() {
     <Box
       height="20vh"
       display="flex"
-      justifyContent="center"
+      justifyContent="space around"
       alignItems="center"
       flexDirection="column"
     >
@@ -70,6 +65,12 @@ function Join() {
         />
         <Button onClick={submitCode} isDisabled={isValidCode}>{!isValidCode ? "submit code" : "will redirect shortly..."}</Button>
       </div>
+      {errorLogs && 
+      <Alert status="error" maxW={200} >
+        <AlertIcon/>
+        {errorLogs.errorMessage}
+      </Alert>
+      }
     </Box>
     </AnimationContainer>
   )

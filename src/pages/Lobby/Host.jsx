@@ -11,7 +11,8 @@ import {
   useToast,
   position,
   Collapse,
-  Toast
+  Toast,
+  AlertIcon
 } from "@chakra-ui/react"
 import { GameContext } from "../../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp.js"
@@ -28,11 +29,9 @@ function Host() {
   const [showCode, setShowCode] = useState(false)
   const [showMessage, setShowMessage] = useState(false)
   const [copied, setCopied] = useState(false)
-  const [errorLogs, setErrorLogs] = useState([])
+  const [errorLogs, setErrorLogs] = useState(null)
   const navigate = useNavigate()
-  const toast = useToast()
 
-  const error_logs = []
   console.log(user)
   console.log(lobby)
 
@@ -61,15 +60,7 @@ function Host() {
         stompClient.subscribe(`/join/${response.data.lobbyCode}`, onJoiner)
       })
     } catch (error) {
-      console.error(
-        `Something went wrong while trying to create lobby: \n${handleError(
-          error
-        )}`
-      )
-      console.error("Details:", error)
-      alert(
-        "Something went wrong while trying to create lobby! See the console for details."
-      )
+      setErrorLogs(error.response.data)
     }
   }
 
@@ -106,6 +97,12 @@ function Host() {
       justifyContent="center"
       alignItems="center"
     >
+      {errorLogs && 
+      <Alert status="error" maxW={200} >
+        <AlertIcon/>
+        {errorLogs.errorMessage}
+      </Alert>
+      }
       <Collapse in={showCode} animateOpacity>
         <Box bg="transparent" p="4" rounded="md" mt="4" position="relative">
 
