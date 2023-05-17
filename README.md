@@ -9,7 +9,7 @@ This project aims to provide an enjoyable gaming experience while showcasing the
 * [React](https://react.dev/) - Front-end JavaScript library concerning the user interface
 * [Vite](https://vitejs.dev/) - Front-end tool that is used for building fast and optimized web applications
 * [Spring](https://spring.io/projects/spring-framework) - Framework that enables running JVM
-* [Gradle](hhttps://gradle.org/) - Build automation tool
+* [Gradle](https://gradle.org/) - Build automation tool
 * [STOMP](https://stomp-js.github.io/stomp-websocket/) - Used for Websockets
 * [Dicebear API](https://www.dicebear.com/) - For creating Avatars
 
