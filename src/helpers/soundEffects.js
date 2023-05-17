@@ -4,11 +4,17 @@ import bigSplash2 from "../assets/sounds/bigSplash2.mp3"
 import bigSplash3 from "../assets/sounds/bigSplash3.mp3"
 import arcadeGameExplosion from "../assets/sounds/arcadeGameExplosion.mp3"
 import sinkingShipSound from "../assets/sounds/sinkingShipSound.mp3"
+import morseSound from "../assets/sounds/morse-code-131798.mp3"
 
 
 export function smallSplash() {
     const audio = new Audio(waterSound)
     audio.play()
+  }
+
+  export function morse(){
+    const audio = new Audio(morseSound)
+      audio.play()
   }
 
 
