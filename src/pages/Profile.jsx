@@ -4,6 +4,7 @@ import { api, handleError } from "../helpers/api"
 import { Box, Button, Text, Avatar } from "@chakra-ui/react"
 import {GameContext} from "../contexts/GameContext"
 import AnimationContainer from "../components/AnimationContainer"
+import {motion} from "framer-motion";
 const Profile = () => {
   const {user} = useContext(GameContext)
   const navigate = useNavigate()
@@ -16,16 +17,21 @@ const Profile = () => {
     <div className="game">
       <ul className="game user-list">
         <Avatar size="2xl" src={user.avatar} />
-        <li> Account username: {user.name}</li>
-        <li>Account ID: {user.id}</li>
+        <li> Username: {user.name}</li>
+        <li> ID: {user.id}</li>
         {/* <li> Account Status: {user.status}</li> */}
-        <li> Account Wins: {user.totalWins}</li>
+        <li> Total wins: {user.totalWins}</li>
       </ul>
     </div>
   )
   return (
     <AnimationContainer>
-      <Button mt={4} width="10%" onClick={() => goBack()}>
+      <Button w="200px"
+              to="host"
+              size="lg"
+              as={motion.button}
+              whileHover={{ scale: 1.1 }}
+              variant="brand" ml={4} width="10%" onClick={() => goBack()}>
         Back
       </Button>
       <Box></Box>
