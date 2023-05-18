@@ -20,6 +20,8 @@ import Chatroom from "./pages/Chatroom"
 import Endscreen from "./pages/Endscreen"
 import Game from "./pages/Game"
 import AuthRequired from "./components/AuthRequired"
+import Error from "./components/Error"
+import NotFound from "./components/NotFound"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -35,13 +37,14 @@ const router = createBrowserRouter(
           <Route index element={<Lobby />} />
           <Route path="host" element={<Host />} />
           <Route path="join" element={<Join />} />
+          <Route path="profile/:userid" element={<Profile />} />
         </Route>
-        <Route path="profile/:userid" element={<Profile />} />
-        <Route path="setup/:lobbyCode" element={<Setup />} />
+        <Route path="setup/:lobbyCode" element={<Setup />} errorElement={<Error />}/>
         <Route path="game/:lobbyCode" element={<Game />} />
         <Route path="chatroom/:lobbyCode" element={<Chatroom />} />
         <Route path="endscreen/:lobbyCode" element={<Endscreen />} />
       </Route>
+      <Route path="*" element={<NotFound/>}/>
     </Route>
   )
 )

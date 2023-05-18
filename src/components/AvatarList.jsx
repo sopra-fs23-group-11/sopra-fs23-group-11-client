@@ -74,7 +74,6 @@ export default function AvatarList({ onSelect, selectedAvatar }) {
             borderRadius="md"
             onClick={() => onSelect(avatarUrl)}
             bg={selectedAvatar === avatarUrl ? "blue.100" : "transparent"}
-            _hover={{ bg: "gray.100" }}
           >
             <Image src={avatarUrl} alt="Avatar" h="100px" />
           </Box>
@@ -91,6 +90,9 @@ export default function AvatarList({ onSelect, selectedAvatar }) {
             justifySelf="center"
             mt={4}
             isDisabled={isLoading}
+            bgGradient="linear(to-l, #0172AF, #4FD1C5)"
+            variant="brand"
+            _hover="none"
           />
     </Box>
   )

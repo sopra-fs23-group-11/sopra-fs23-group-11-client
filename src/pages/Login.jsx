@@ -97,7 +97,7 @@ export default function Login() {
                 />
                 <InputRightElement width="4.5rem">
                   {password && (
-                    <Button onClick={handleClick} h="1.75rem" size="sm">
+                    <Button onClick={handleClick} h="1.75rem" size="sm" variant="brand">
                       {show ? "Hide" : "Show"}
                     </Button>
                   )}
@@ -109,6 +109,7 @@ export default function Login() {
               type="submit"
               w="100%"
               isDisabled={navigation.state === "submitting"}
+              bgGradient="linear(to-l, #0172AF, #4FD1C5)"
               variant="brand"
             >
               {navigation.state === "submitting" ? "Loggin in..." : "Log in"}

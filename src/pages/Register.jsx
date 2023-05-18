@@ -93,7 +93,7 @@ export default function Register() {
                   onChange={(e)=>setPassword(e.target.value)}
                 />
                 <InputRightElement width="4.5rem">
-                  {password && <Button onClick={handleClick} h="1.75rem" size="sm">
+                  {password && <Button onClick={handleClick} h="1.75rem" size="sm" variant="brand">
                     {show ? "Hide" : "Show"}
                   </Button>}
                 </InputRightElement>
