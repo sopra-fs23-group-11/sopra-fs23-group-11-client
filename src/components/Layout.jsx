@@ -3,31 +3,31 @@ import { Outlet } from "react-router-dom"
 import "../css//WaveAnimation.css"
 import { Box } from "@chakra-ui/react"
 import AnimationContainer from "./AnimationContainer"
+import { waveVariants } from "../animations/variants"
+import AnimatedOutlet from "./AnimatedOutlet"
+import { useLocation } from "react-router-dom"
+import { AnimatePresence } from "framer-motion"
+import Header from "./Header"
 
-const waveVariants = {
-  hidden: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-    transition: {
-      duration: 1.7,
-        delay: 0.5,
-        ease: "easeOut"
-        
-    }
-  },
-}
 export default function Layout() {
+  const location = useLocation()
   return (
-    <Box bgGradient="radial-gradient(ellipse at center, rgba(255,254,234,1) 0%, rgba(255,254,234,1) 35%, #B7E8EB 100%)" height="100vh" >
-        <div className="ocean">
-      <AnimationContainer variants={waveVariants}>
+    <Box
+      bgGradient="radial-gradient(ellipse at center, rgba(255,254,234,1) 0%, rgba(255,254,234,1) 35%, #B7E8EB 100%)"
+      height="100vh"
+    >
+      <div className="ocean">
+        <AnimationContainer variants={waveVariants}>
           <div className="wave"></div>
           <div className="wave"></div>
-        </AnimationContainer> 
-        </div>
-        <Outlet />
+        </AnimationContainer>
+      </div>
+      <Header/>
+      <AnimatePresence >
+        <AnimationContainer key={location.pathname}>
+          <AnimatedOutlet />
+        </AnimationContainer>
+      </AnimatePresence>
     </Box>
   )
 }

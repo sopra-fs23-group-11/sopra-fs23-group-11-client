@@ -21,45 +21,12 @@ import { GameContext } from "../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp"
 import { getDomainWebsocket } from "../helpers/getDomainWebsocket.js"
 
-import { Alert, AlertIcon, Stack } from "@chakra-ui/react"
 
 import { useParams, useNavigate } from "react-router-dom"
-import { motion } from "framer-motion"
 import {InfoIcon} from "@chakra-ui/icons";
+import { boardVariant, shipsVariant, readyVariants } from "../animations/variants.js"
 
-const shipsVariant = {
-  hidden: {
-    opacity: 0,
-    x: "100vw",
-  },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { type: "spring", delay: 0.7, stiffness: 50 },
-  },
-}
 
-const boardVariant = {
-  hidden: {
-    opacity: 0,
-    x: "-100vw",
-  },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { type: "spring", delay: 0.4, stiffness: 50 },
-  },
-}
-
-const readyVariants = {
-  hidden: {
-    y: "-100vh",
-  },
-  visible: {
-    y: 0,
-    transition: { stiffness: 120, type: "spring" },
-  },
-}
 let socket = null
 function Setup() {
   const {
@@ -89,6 +56,8 @@ function Setup() {
     console.log("effect ran...")
     socket = Stomp.client(getDomainWebsocket())
     socket.connect({}, onConnected, errorCallback)
+
+    if(lobby?.lobbyCode !== lobbyCode) throw new Error("The Game session does not exist")
 
     if (player.isReady && enemy.isReady) navigate(`/game/${lobbyCode}`)
   }, [enemy.isReady, player.isReady])

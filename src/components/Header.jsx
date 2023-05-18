@@ -11,45 +11,39 @@ import {
   ModalBody,
   ModalFooter,
   Button,
+  Heading,
 } from "@chakra-ui/react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import AnimationContainer from "./AnimationContainer"
 import { GameContext } from "../contexts/GameContext"
 import { Stomp } from "stompjs/lib/stomp"
 import { getDomainWebsocket } from "../helpers/getDomainWebsocket"
+import { headerVariants } from "../animations/variants"
 
-const headerVariants = {
-  hidden: {
-    y: -300,
-  },
-  visible: {
-    y: -10,
-    transition: { delay: 0.8 },
-  },
-}
 
 function Header() {
   const location = useLocation()
   const navigate = useNavigate()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const {resetState, lobby } = useContext(GameContext)
+  const { resetState, lobby } = useContext(GameContext)
   const [isLeaving, setIsLeaving] = useState(false)
 
   const routeParts = location.pathname.split("/")
   const mainRouteName = routeParts[1]
-  const isLobbyOrProfile = mainRouteName === "lobby" || mainRouteName === "profile"
+  const isLobbyOrProfile =
+    mainRouteName === "lobby" || mainRouteName === "profile"
   const lobbyCode = lobby?.lobbyCode
   const sendExitMsg = () => {
     const socket = Stomp.client(getDomainWebsocket())
     socket.connect({}, () => {
-      socket.send("/app/leave", {}, JSON.stringify({lobbyCode}))
+      socket.send("/app/leave", {}, JSON.stringify({ lobbyCode }))
     })
   }
 
   const toMenu = () => {
     navigate("/lobby")
     onClose()
-    !isLobbyOrProfile ?  sendExitMsg() : ""
+    !isLobbyOrProfile ? sendExitMsg() : ""
     resetState()
   }
 
@@ -70,11 +64,27 @@ function Header() {
           margin="auto"
           minWidth="200px"
         >
-          <Box bgGradient='linear(to-tr, #0172AF, #4FD1C5)' bgClip = "text" onClick={isLobbyOrProfile ? toMenu : onOpen} cursor="pointer">
-            BATTLESHIP
+          <Box
+            bgGradient="linear(to-tr, #0172AF, #4FD1C5)"
+            bgClip="text"
+            display="flex"
+            justifyContent="center"
+          >
+            <Heading
+              fontSize="4xl"
+              onClick={isLobbyOrProfile ? toMenu : onOpen}
+              cursor="pointer"
+            >
+              BATTLESHIP
+            </Heading>
           </Box>
-          <Modal closeOnOverlayClick={false} isOpen={isOpen} size="xs" onClose={onClose}>
-            <ModalOverlay backdropFilter = "blur(10px)"/>
+          <Modal
+            closeOnOverlayClick={false}
+            isOpen={isOpen}
+            size="xs"
+            onClose={onClose}
+          >
+            <ModalOverlay backdropFilter="blur(10px)" />
             <ModalContent>
               <ModalHeader>Confirm Exit</ModalHeader>
               <ModalCloseButton />

@@ -1,6 +1,7 @@
 import { Box, Grid, GridItem } from "@chakra-ui/react"
-import { React, useState } from "react"
+import { React, useContext, useState } from "react"
 import Cell from "./Cell"
+import { GameContext } from "../contexts/GameContext"
 
 function BattleshipBoard({
   board,
@@ -16,6 +17,7 @@ function BattleshipBoard({
   const length = shipToBePlaced?.length
   const [hoveredCells, setHoveredCells] = useState([])
   const [isValid, setIsValid] = useState(true)
+  const {setEnemy} = useContext(GameContext)
 
   const handleCellHover = (rowIndex, colIndex) => {
     const shadowCells = []
@@ -31,6 +33,24 @@ function BattleshipBoard({
     }
     setHoveredCells(shadowCells)
   }
+
+  const handleCellClick = (rowIndex, colIndex) => {
+    if (isSetUp) {
+      handlePlace(rowIndex, colIndex);
+    } else if (isTurn) {
+      const cell = board[rowIndex][colIndex];
+      if (cell.isHit || cell.isShotAt) {
+        handleError("We already shot this place, captain!");
+      } else {
+        handleShoot(rowIndex, colIndex);
+      }
+    } else if (isEnemy) {
+      handleError("Hold your horses, Captain! It's not your turn to shoot!");
+    } else {
+      handleError("Captain, are you trying to kill us?!");
+    }
+  }
+
 
   return (
     <Grid
@@ -73,11 +93,12 @@ function BattleshipBoard({
               <GridItem key={`${rowIndex}-${colIndex}`}>
                 <Cell
                   key={`${String.fromCharCode(65 + rowIndex)}${colIndex}`}
+                  isClicked = {board[rowIndex][colIndex].isOccupied}
                   hasShip={board[rowIndex][colIndex].isOccupied}
                   isHovered={hoveredCells.some(
                     (id) => board[rowIndex][colIndex].id === id
                   )}
-                  handleCellHover={() => handleCellHover(rowIndex, colIndex)}
+                  handleCellHover={isSetUp ? () => handleCellHover(rowIndex, colIndex) : null}
                   isValid={isValid}
                   cellHover={
                     isEnemy &&
@@ -95,24 +116,7 @@ function BattleshipBoard({
                       ? "not-allowed"
                       : ""
                   }
-                  handleClick={
-                    isSetUp
-                      ? () => handlePlace(rowIndex, colIndex) //only for the setup stage
-                      : isTurn // if game already started, check if its player's turn
-                      ? board[rowIndex][colIndex].isHit ||
-                        board[rowIndex][colIndex].isShotAt //check if the cell has already been hit before
-                        ? () =>
-                            handleError("We already shot this place captain!")
-                        : () => handleShoot(rowIndex, colIndex)
-                      : isEnemy
-                      ? () =>
-                          //if its not the player's turn...
-                          handleError(
-                            "Hold your horses,Captain! It's not your turn to shoot!"
-                          )
-                      : () =>
-                          handleError("Captain, are you trying to kill us?!")
-                  }
+                  handleClick={() => handleCellClick(rowIndex, colIndex)}
                   cellColor={
                     board[rowIndex][colIndex].isOccupied //first check if cell is occupied
                       ? board[rowIndex][colIndex].isOccupied.isSunk //check if ship is sunk
