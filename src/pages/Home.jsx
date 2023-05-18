@@ -3,50 +3,35 @@ import { Link } from "react-router-dom"
 import { Button, Box, Flex, Heading } from "@chakra-ui/react"
 import AnimationContainer from "../components/AnimationContainer"
 import { motion } from "framer-motion"
-
-const homeVariants = {
-  hidden: {
-    opacity: 0,
-    y: 300,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { type: "spring", delay: 1.3, duration: 1.6 },
-  },
-}
-
-const buttonVariants = {
-  hidden: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-    transition: {delay: 2.0, duration: 1.6 },
-  },
-}
+import { homeVariants, buttonVariants } from "../animations/variants"
 
 
 function Home() {
   return (
     <AnimationContainer variants={homeVariants}>
-
-    <Flex
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
-      h="80vh"
-    >
-      <Heading>Welcome To Battleship</Heading>
-      <AnimationContainer variants={buttonVariants}>
-        <Button size="lg" variant="brand">
-          <Link to="login">Join The Battle!</Link>
-        </Button>
-      </AnimationContainer>
-    </Flex>
+      <Flex
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        h="80vh"
+      >
+        <Heading
+          fontSize="5xl"
+          bgGradient="linear(to-tr, #0172AF, #4FD1C5)"
+          bgClip="text"
+          mb={10}
+          textAlign="center"
+        >
+          Welcome To Battleship
+        </Heading>
+        <AnimationContainer variants={buttonVariants}>
+          <Button size="lg" variant="brand">
+            <Link to="login">Join The Battle!</Link>
+          </Button>
+        </AnimationContainer>
+      </Flex>
     </AnimationContainer>
   )
 }
-
 
 export default Home

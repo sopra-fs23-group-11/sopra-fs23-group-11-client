@@ -4,6 +4,7 @@ import { api, handleError } from "../helpers/api"
 import { Box, Button, Text, Avatar } from "@chakra-ui/react"
 import {GameContext} from "../contexts/GameContext"
 import AnimationContainer from "../components/AnimationContainer"
+import { lobbyVariants } from "../animations/variants"
 const Profile = () => {
   const {user} = useContext(GameContext)
   const navigate = useNavigate()
@@ -24,7 +25,7 @@ const Profile = () => {
     </div>
   )
   return (
-    <AnimationContainer>
+    <AnimationContainer variants={lobbyVariants}>
       <Button mt={4} width="10%" onClick={() => goBack()}>
         Back
       </Button>

@@ -28,50 +28,8 @@ import AnimationContainer from "../components/AnimationContainer.jsx"
 import EnemyExitModal from "../components/EnemyExitModal.jsx"
 import {api} from "../helpers/api.js";
 import lobby from "./Lobby/Lobby.jsx";
+import { playerVariant,  enemyVariant, switchTurnVariants } from "../animations/variants";
 
-const enemyVariant = {
-  hidden: {
-    opacity: 0,
-    y: "100vh",
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { type: "spring", delay: 0.5 },
-  },
-}
-
-const playerVariant = {
-  hidden: {
-    opacity: 0,
-    y: "-100vh",
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { type: "spring", delay: 0.5 },
-  },
-}
-
-const playerTurnVariants = {
-  hidden: { 
-    x: '100vw' 
-  },
-  visible: {
-    x: 0,
-    transition: { type: 'spring', stiffness: 120 }
-  } 
-}
-
-const enemyTurnVariants = {
-  hidden: { 
-    x: '100vw' 
-  },
-  visible: {
-    x: 0,
-    transition: { type: 'spring', stiffness: 120 }
-  }
-}
 
 let socket = null
 export default function Game() {
@@ -239,7 +197,7 @@ export default function Game() {
         <Flex direction="column" alignItems="center">
           <Text>{player.name}</Text>
           <BattleshipBoard board={player.board} handleError={handleError}/>
-          {player.isMyTurn && <AnimationContainer variants={playerTurnVariants}>Your Turn Captain</AnimationContainer>}
+          {player.isMyTurn && <AnimationContainer variants={switchTurnVariants}>Your Turn Captain</AnimationContainer>}
         </Flex>
       </AnimationContainer>
 
@@ -257,7 +215,7 @@ export default function Game() {
             isEnemy={true}
             handleError={handleError}
           />
-          {!player.isMyTurn && <AnimationContainer variants={enemyTurnVariants}>Enemy Shot Incoming</AnimationContainer>}
+          {!player.isMyTurn && <AnimationContainer variants={switchTurnVariants}>Enemy Shot Incoming</AnimationContainer>}
         </Flex>
       </AnimationContainer>
       {enemyExit && <EnemyExitModal enemyExit={enemyExit}/>}

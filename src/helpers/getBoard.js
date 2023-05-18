@@ -10,7 +10,7 @@ export default function generateBoard() {
           id: `${String.fromCharCode(65 + i)}${j}`,
           isShotAt: false,
           isOccupied: null,
-          isHit: false
+          isHit: false,
         }
       }
     }

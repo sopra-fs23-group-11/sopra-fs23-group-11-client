@@ -9,22 +9,29 @@ const MotionBox = chakra(motion.div, {
 const defaultVariants = {
     hidden: {
         opacity: 0,
-        x: "100vw",
+        x: 100,
       },
       visible: {
         opacity: 1,
         x: 0,
-        transition: { type: "spring", delay: 0.5 },
+        transition: { type: "spring", delay: 0.5, stiffness: 30},
       },
+      exit: {
+        opacity: 0,
+        x: -100,
+        transition: {ease: "easeInOut", stiffness: 30}
+      }
 }
 
 const AnimationContainer = ({ children, variants }) => {
   return (
     <MotionBox
-      variants={variants ? variants : defaultVariants}
+      variants={variants ? variants : ""}
       initial="hidden"
       animate="visible"
       transition={{ type: "spring", delay: 0.5 }}
+      whileHover="hover"
+      exit="exit"
     >
       <>{children}</>
     </MotionBox>

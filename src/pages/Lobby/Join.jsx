@@ -5,6 +5,7 @@ import { api, handleError } from "../../helpers/api.js"
 import { useNavigate } from "react-router"
 import { GameContext } from "../../contexts/GameContext.jsx"
 import AnimationContainer from "../../components/AnimationContainer.jsx"
+import { lobbyVariants } from "../../animations/variants.js"
 
 function Join() {
   const [lobbyCode, setLobbyCode] = useState("")
@@ -47,7 +48,7 @@ function Join() {
     }
 
   return (
-    <AnimationContainer>
+    <AnimationContainer variants={lobbyVariants}>
       <Box
         height="20vh"
         display="flex"
