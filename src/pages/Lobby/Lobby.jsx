@@ -8,18 +8,8 @@ import { api } from "../../helpers/api.js"
 import { motion } from "framer-motion"
 import AnimationContainer from "../../components/AnimationContainer"
 import {InfoIcon} from "@chakra-ui/icons";
+import { lobbyVariants } from "../../animations/variants"
 
-const lobbyVariants = {
-  hidden: {
-    opacity: 0,
-    x: "100vw",
-  },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { type: "spring", delay: 0.5 },
-  },
-}
 
 function Lobby() {
   const userId = JSON.parse(sessionStorage.getItem("userId"))
@@ -104,7 +94,7 @@ function Lobby() {
           </Button>
         </Link>
 
-        <Link to={`/profile/${user.id}`}>
+        <Link to={`profile/${user.id}`}>
           <Button
             w="200px"
             size="lg"

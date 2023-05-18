@@ -1,5 +1,6 @@
 import React from "react"
 import { Box } from "@chakra-ui/react"
+import "../css/CellAnimation.css"
 
 export default function Cell({
   hasShip,
@@ -7,6 +8,7 @@ export default function Cell({
   handleCellHover,
   isValid,
   handleClick,
+  isClicked,
   cellColor,
   cellHover,
   cursor,
@@ -23,15 +25,16 @@ export default function Cell({
       //   id={`${String.fromCharCode(65 + rowIndex)}${colIndex}`}
       h="40px"
       w="40px"
-      bg={cellColor}
+      bg={isHovered? "gray" : cellColor}
       border="1px solid gray"
       onMouseEnter={handleCellHover}
       onMouseLeave={handleCellHover}
       onClick={handleClick}
-      bgColor={isHovered ? (hasShip || !isValid ? "red" : "gray") : ""}
+     
       _hover={cellHover}
       cursor={cursor}
       borderRadius="5px"
+      className={isClicked ? "clicked": ""}
     >
       {children}
     </Box>

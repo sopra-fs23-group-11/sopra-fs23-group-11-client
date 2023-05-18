@@ -12,7 +12,7 @@ import {
   position,
   Collapse,
   Toast,
-  AlertIcon, Flex,
+  AlertIcon, Flex, Heading,
 } from "@chakra-ui/react"
 import { GameContext } from "../../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp.js"
@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom"
 import { getDomainWebsocket } from "../../helpers/getDomainWebsocket.js"
 import { CopyIcon, CheckIcon } from "@chakra-ui/icons"
 import AnimationContainer from "../../components/AnimationContainer.jsx"
+import { lobbyVariants } from "../../animations/variants.js"
 import {motion} from "framer-motion";
 
 function Host() {
@@ -113,14 +114,15 @@ function Host() {
   }
 
   return (
-    <AnimationContainer>
+    <AnimationContainer variants={lobbyVariants}>
       <Box
         height="50vh"
         display="flex"
         flexDirection="column"
-        justifyContent="center"
+        justifyContent="space-evenly"
         alignItems="center"
       >
+        <Heading>Host a Game Session</Heading>
         {errorLogs && (
           <Alert status="error" maxW={200}>
             <AlertIcon />
