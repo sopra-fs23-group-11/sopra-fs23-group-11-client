@@ -59,11 +59,14 @@ function Lobby() {
         <IconButton
           aria-label="Show Rules"
           icon={<InfoIcon />}
-          position="absolute"
-          top="1rem"
-          right="1rem"
+          position="relative"
+          right="-10rem"
           onClick={toggleRules}
           variant="ghost"
+          size="lg"
+          color="red.500"
+          _hover={{color: "red.700"}}
+          _active={{outline:"none"}}
           />
         <Text fontWeight="bold" color="black">
           {`Welcome ${user.name}`}
@@ -116,6 +119,7 @@ function Lobby() {
         >
           Log Out
         </Button>
+
         <Collapse in={showRules}>
           <Text fontSize="sm" color="gray.500" textAlign="left">
             <Text as="b">Rules: </Text><br />
