@@ -84,8 +84,10 @@ function Join() {
               size="lg"
               w="230px"
               mt="10"
+              h="200px"
+
           >
-            Back to Lobby
+            Main Menu
           </Button>
       </Box>
     </AnimationContainer>
