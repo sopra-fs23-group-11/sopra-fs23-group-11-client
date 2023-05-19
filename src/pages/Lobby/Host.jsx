@@ -169,7 +169,7 @@ function Host() {
           <Button
               onClick={goLobby} variant="brand" size="lg" w="200px"
           >
-            Back to Lobby
+            Main Menu
           </Button>
         </Flex>
 
