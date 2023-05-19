@@ -174,15 +174,7 @@ function Setup() {
     <Box display="flex" flexDirection="column" justifyContent="center" h="70vh">
       {isStartSetup ? (
         <Flex justifyContent="center" alignItems="center" position="relative">
-          <IconButton
-              aria-label="Show Rules"
-              icon={<InfoIcon />}
-              position="absolute"
-              top="1rem"
-              right="1rem"
-              onClick={toggleRules}
-              variant="ghost"
-          />
+
           <AnimationContainer variants={boardVariant}>
             <BattleshipBoard
               board={player.board}
@@ -219,6 +211,7 @@ function Setup() {
                   </>
                 )}
               </Flex>
+
             </AnimationContainer>
 
             {player.ships.length === 0 && (
@@ -236,6 +229,19 @@ function Setup() {
               </AnimationContainer>
             )}
           </Flex>
+          <IconButton
+              aria-label="Show Rules"
+              icon={<InfoIcon />}
+              position="relative"
+              //left="100rem"
+              top="-15rem"
+              onClick={toggleRules}
+              variant="ghost"
+              size="lg"
+            color="red.500"
+           _hover={{color: "red.700"}}
+            _active={{outline:"none"}}
+          />
           <Collapse in={showRules}>
             <Text fontSize="sm" color="gray.500" textAlign="left">
               <Text as="b">Set-up: </Text><br />
@@ -247,6 +253,7 @@ function Setup() {
               Good Luck, Captain!<br />
             </Text>
           </Collapse>
+
         </Flex>
       ) : user.isHost ? (
         <Button onClick={startGame} alignSelf="center" size="lg" variant="brand">
