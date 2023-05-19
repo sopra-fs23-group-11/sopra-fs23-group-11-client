@@ -204,10 +204,10 @@ function Setup() {
                 ))}
                 {player.ships.length !== 0 && (
                   <>
-                    <FormLabel fontSize="20px" htmlFor="direction">
+                    <FormLabel fontSize="20px" htmlFor="direction" fontWeight="bold" color="black">
                       {direction}
                     </FormLabel>
-                    <Switch id="direction" mb={10} onChange={handleToggle} />
+                    <Switch id="direction" mb={10} onChange={handleToggle} colorScheme="teal" />
                   </>
                 )}
               </Flex>
