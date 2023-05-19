@@ -195,7 +195,7 @@ export default function GameProvider({ children }) {
         if (endX > 9) {
           toast({
             title: "Invalid Placement",
-            description: "Out of Boundary",
+            description: "Make sure your ship is within the board!",
               position: "bottom",
               isClosable: true,
               duration: 3000,
@@ -223,7 +223,7 @@ export default function GameProvider({ children }) {
         if (rowIndex + length - 1 > 9) {
           toast({
             title: "Invalid Placement",
-            description: "Out of Boundary",
+            description: "Make sure your ship is within the board!",
               position: "bottom",
               isClosable: true,
               duration: 3000,
