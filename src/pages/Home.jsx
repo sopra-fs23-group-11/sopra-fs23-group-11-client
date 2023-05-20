@@ -6,6 +6,7 @@ import { motion } from "framer-motion"
 import { homeVariants, buttonVariants } from "../animations/variants"
 
 
+
 function Home() {
   return (
     <AnimationContainer variants={homeVariants}>
@@ -28,6 +29,7 @@ function Home() {
           <Button size="lg" variant="brand">
             <Link to="login">Join The Battle!</Link>
           </Button>
+          
         </AnimationContainer>
       </Flex>
     </AnimationContainer>

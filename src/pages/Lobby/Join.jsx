@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react"
 import { Button, Heading, Input, Box, Alert, AlertIcon } from "@chakra-ui/react"
 
-import { api, handleError } from "../../helpers/api.js"
+import { api } from "../../helpers/api.js"
 import { useNavigate } from "react-router"
 import { GameContext } from "../../contexts/GameContext.jsx"
 import AnimationContainer from "../../components/AnimationContainer.jsx"
@@ -11,8 +11,9 @@ function Join() {
   const [lobbyCode, setLobbyCode] = useState("")
   const [isValidCode, setIsValidCode] = useState(false)
   const [errorLogs, setErrorLogs] = useState(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
-  const { user, setUser, lobby, setLobby } = useContext(GameContext)
+  const { user, setUser, setLobby } = useContext(GameContext)
   const joinerId = user.id
 
   async function submitCode() {
@@ -29,7 +30,17 @@ function Join() {
       }
     } catch (error) {
       setErrorLogs(error.response.data)
+      setIsSubmitting(false)
     }
+  }
+
+  function runAfterTimeout(callback, timeout) {
+    setIsSubmitting(true)
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(callback());
+      }, timeout)
+    })
   }
 
   useEffect(() => {
@@ -42,34 +53,40 @@ function Join() {
     }
   }, [isValidCode])
 
-
   return (
     <AnimationContainer variants={lobbyVariants}>
       <Box
-        height="20vh"
         display="flex"
-        justifyContent="space around"
+        justifyContent="space evenly"
         alignItems="center"
         flexDirection="column"
       >
         <Heading as="h1" frontsize="4x1" mb={6}>
-          Enter RoomCode
+          Enter a Lobby Code
         </Heading>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <Input
-            value={lobbyCode}
-            name="code"
-            onChange={(e) => setLobbyCode(e.target.value)}
-            htmlSize={4}
-            width="auto"
-            mr={6}
-          />
-          <Button variant="brand" onClick={submitCode} isDisabled={isValidCode}>
-            {!isValidCode ? "submit code" : "will redirect shortly..."}
-          </Button>
-        </div>
+        <Input
+          value={lobbyCode}
+          name="code"
+          onChange={(e) => setLobbyCode(e.target.value)}
+          htmlSize={4}
+          width="auto"
+          mb={5}
+          p={5}
+        />
+
+        <Button
+          variant="brand"
+          onClick={() => runAfterTimeout(submitCode, 2000)}
+          isDisabled={isValidCode || !lobbyCode}
+          isLoading={isSubmitting || isValidCode}
+          loadingText={
+            isValidCode ? "Will redirect shortly" : "submitting code"
+          }
+        >
+          Submit Code
+        </Button>
         {errorLogs && (
-          <Alert status="error" maxW={200}>
+          <Alert status="error" maxW={200} borderRadius="full">
             <AlertIcon />
             {errorLogs.errorMessage}
           </Alert>

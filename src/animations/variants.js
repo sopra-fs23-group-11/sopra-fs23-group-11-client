@@ -26,8 +26,8 @@ export  const buttonVariants = {
     },
     hover: {
       scale: 1.1,
-      textShadow: "0px 0px 8px rgb(255,255,255)",
-      boxShadow: "0px 0px 8px rgb(255,255,255)",
+      textShadow: "0px 0px 8px black",
+      boxShadow: "2px 3px 10px #B7E8EB",
       transition: {
         repeatType: "mirror",
         repeat: 5,
@@ -35,6 +35,16 @@ export  const buttonVariants = {
       }
     }
   }
+
+export const navigationButtonVariant = {
+  hidden: {
+      opacity: 0,
+    },
+    visible: {
+      opacity: 1,
+      transition: { delay: 1.3, duration: 1.6 },
+    },
+}
 
 export const lobbyVariants = {
     hidden: {

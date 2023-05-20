@@ -1,5 +1,5 @@
 import React from "react"
-import { Grid, GridItem, Box } from "@chakra-ui/react"
+import { Box } from "@chakra-ui/react"
 import Destroyer from "../assets/Destroyer.jpg"
 import Submarine from "../assets/Submarine.jpg"
 import Cruiser from "../assets/Cruiser.jpg"

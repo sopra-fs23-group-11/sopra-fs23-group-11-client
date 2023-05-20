@@ -1,21 +1,27 @@
 import React, { useState, useEffect } from "react"
 import { randomAvatarStlye, generateRandomSeed } from "../helpers/diceBear"
 import {
-  Button,
   Box,
   Image,
   Tooltip,
   IconButton,
-  Skeleton,
   SkeletonCircle,
 } from "@chakra-ui/react"
 import { RepeatIcon } from "@chakra-ui/icons"
-import { useNavigation } from "react-router-dom"
 
 export default function AvatarList({ onSelect, selectedAvatar }) {
   const [avatars, setAvatars] = useState([])
   const [count, setCount] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
+
+  const skeletonList = () => {
+    const loadingSkeletons = []
+    for (let i = 0; i < 16; i++) {
+      loadingSkeletons.push(<SkeletonCircle size="20" m={1}/>)
+    }
+    return loadingSkeletons
+  }
+  const [skeleton, setSkeleton]  = useState(skeletonList())
 
   const fetchAvatars = async () => {
     setIsLoading(true)
@@ -35,13 +41,7 @@ export default function AvatarList({ onSelect, selectedAvatar }) {
     setCount((prev) => prev + 1)
   }
 
-  const skeletonList = () => {
-    const loadingSkeletons = []
-    for (let i = 0; i < 16; i++) {
-      loadingSkeletons.push(<Skeleton/>)
-    }
-    return loadingSkeletons
-  }
+
 
   useEffect(() => {
     fetchAvatars()
@@ -60,8 +60,7 @@ export default function AvatarList({ onSelect, selectedAvatar }) {
     >
       {isLoading ? //TODO: Render out skeletonlist correctly
       <>
-        <SkeletonCircle/>
-        <SkeletonCircle/>
+        {skeleton.map(item => item)}
       </> : 
       <>
       {avatars.map((avatarUrl, index) => (

@@ -20,7 +20,8 @@ import { GameContext } from "../contexts/GameContext"
 import { Stomp } from "stompjs/lib/stomp"
 import { getDomainWebsocket } from "../helpers/getDomainWebsocket"
 import { headerVariants } from "../animations/variants"
-
+import Lottie from "lottie-react"
+import Ship from "../animations/Ship.json"
 
 function Header() {
   const location = useLocation()
@@ -65,22 +66,25 @@ function Header() {
           margin="auto"
           minWidth="200px"
         >
+          <Box h="70px" w="70px" position="absolute" left="0">
+            <Lottie animationData={Ship} />
+          </Box>
           <Box
             bgGradient="linear(to-tr, #0172AF, #4FD1C5)"
             bgClip="text"
             display="flex"
             justifyContent="space-between"
           >
-            <Box/>
+            <Box />
             <Heading
               fontSize="4xl"
+              mr={-10}
               onClick={isLobbyOrProfile ? toMenu : onOpen}
               cursor="pointer"
-              mr={-10}
             >
               BATTLESHIP
             </Heading>
-            <Avatar src={user.avatar} showBorder/>
+            <Avatar src={user.avatar} showBorder />
           </Box>
           <Modal
             closeOnOverlayClick={false}

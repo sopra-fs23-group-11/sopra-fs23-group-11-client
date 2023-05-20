@@ -13,6 +13,7 @@ export default function Cell({
   cellHover,
   cursor,
   isEnemy,
+  isSunk,
   children,
 }) {
   return (
@@ -27,7 +28,7 @@ export default function Cell({
       h="30px"
       w="30px"
       bg={isHovered? "gray" : cellColor}
-      border={hasShip && !isEnemy ? "" : "1px solid gray"}
+      border={hasShip && !isEnemy ? "" : hasShip && isEnemy && isSunk ? "" :  "1px solid gray"}
       // border = "1px solid gray"
       onMouseEnter={handleCellHover}
       onMouseLeave={handleCellHover}
