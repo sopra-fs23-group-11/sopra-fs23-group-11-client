@@ -6,6 +6,13 @@ import { extendTheme } from "@chakra-ui/react"
 // const buttonTheme = defineStyleConfig({variants: {brand}})
 
 const customTheme = extendTheme({
+  styles: {
+    global: {
+      body: {
+        color: "#015871"
+      }
+    }
+  },
   components: {
     Button: {
       baseStyle: {

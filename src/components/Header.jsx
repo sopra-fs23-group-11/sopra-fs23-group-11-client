@@ -12,6 +12,7 @@ import {
   ModalFooter,
   Button,
   Heading,
+  Avatar,
 } from "@chakra-ui/react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import AnimationContainer from "./AnimationContainer"
@@ -25,7 +26,7 @@ function Header() {
   const location = useLocation()
   const navigate = useNavigate()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { resetState, lobby } = useContext(GameContext)
+  const { resetState, lobby, user } = useContext(GameContext)
   const [isLeaving, setIsLeaving] = useState(false)
 
   const routeParts = location.pathname.split("/")
@@ -68,15 +69,18 @@ function Header() {
             bgGradient="linear(to-tr, #0172AF, #4FD1C5)"
             bgClip="text"
             display="flex"
-            justifyContent="center"
+            justifyContent="space-between"
           >
+            <Box/>
             <Heading
               fontSize="4xl"
               onClick={isLobbyOrProfile ? toMenu : onOpen}
               cursor="pointer"
+              mr={-10}
             >
               BATTLESHIP
             </Heading>
+            <Avatar src={user.avatar} showBorder/>
           </Box>
           <Modal
             closeOnOverlayClick={false}

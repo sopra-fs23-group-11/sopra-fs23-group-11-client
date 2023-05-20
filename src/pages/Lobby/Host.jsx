@@ -122,7 +122,7 @@ function Host() {
         justifyContent="space-evenly"
         alignItems="center"
       >
-        <Heading>Host a Game Session</Heading>
+        <Heading color="#015871">Host a Game Session</Heading>
         {errorLogs && (
           <Alert status="error" maxW={200}>
             <AlertIcon />
@@ -158,20 +158,12 @@ function Host() {
 
 
 
-        <Flex
-         flexDirection="column"
-        >
           <Button
               onClick={generateLobbyCode} variant="brand" mb = "4"
               size="lg" w="200px">
           Get a Lobby Code
           </Button>
-          <Button
-              onClick={goLobby} variant="brand" size="lg" w="200px"
-          >
-            Main Menu
-          </Button>
-        </Flex>
+
 
 
         {!isJoined && showCode && (

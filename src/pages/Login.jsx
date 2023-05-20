@@ -61,7 +61,7 @@ export default function Login() {
 
   return (
     <Container
-      h="70vh"
+      h="60vh"
       pt="4em"
       display="flex"
       justifyContent="center"

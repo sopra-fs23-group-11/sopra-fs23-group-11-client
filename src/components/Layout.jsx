@@ -10,7 +10,6 @@ import { AnimatePresence } from "framer-motion"
 import Header from "./Header"
 
 export default function Layout() {
-  const location = useLocation()
   return (
     <Box
       bgGradient="radial-gradient(ellipse at center, rgba(255,254,234,1) 0%, rgba(255,254,234,1) 35%, #B7E8EB 100%)"
@@ -22,12 +21,7 @@ export default function Layout() {
           <div className="wave"></div>
         </AnimationContainer>
       </div>
-      <Header/>
-      <AnimatePresence >
-        <AnimationContainer key={location.pathname}>
-          <AnimatedOutlet />
-        </AnimationContainer>
-      </AnimatePresence>
+      <Outlet/>
     </Box>
   )
 }
