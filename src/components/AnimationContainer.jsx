@@ -1,4 +1,4 @@
-import { chakra, shouldForwardProp, Box } from "@chakra-ui/react";
+import { chakra, shouldForwardProp, } from "@chakra-ui/react";
 import { motion, isValidMotionProp } from "framer-motion";
 import React from "react";
 

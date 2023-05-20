@@ -1,18 +1,15 @@
 import React, { useContext, useEffect, useState } from "react"
-import { api, handleError } from "../../helpers/api.js"
+import { api } from "../../helpers/api.js"
 import {
   Button,
-  Stack,
   Alert,
   Text,
   Box,
   Spinner,
-  IconButton,
-  useToast,
-  position,
   Collapse,
-  Toast,
-  AlertIcon, Flex, Heading,
+  AlertIcon,
+  Heading,
+  Tag,
 } from "@chakra-ui/react"
 import { GameContext } from "../../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp.js"
@@ -20,15 +17,16 @@ import { useNavigate } from "react-router-dom"
 import { getDomainWebsocket } from "../../helpers/getDomainWebsocket.js"
 import { CopyIcon, CheckIcon } from "@chakra-ui/icons"
 import AnimationContainer from "../../components/AnimationContainer.jsx"
-import { lobbyVariants } from "../../animations/variants.js"
-import {motion} from "framer-motion";
+import {
+  lobbyVariants,
+  navigationButtonVariant,
+} from "../../animations/variants.js"
 
 function Host() {
   const [code, setCode] = useState(null)
   const { user, setUser, lobby, setLobby } = useContext(GameContext)
   const [isJoined, setIsJoined] = useState(false)
   const [showCode, setShowCode] = useState(false)
-  const [showMessage, setShowMessage] = useState(false)
   const [copied, setCopied] = useState(false)
   const [errorLogs, setErrorLogs] = useState(null)
   const navigate = useNavigate()
@@ -40,7 +38,7 @@ function Host() {
     if (isJoined) {
       setTimeout(() => {
         navigate(`/setup/${code}`)
-      }, 1000)
+      }, 3000)
     }
   }, [isJoined])
 
@@ -63,11 +61,6 @@ function Host() {
       setErrorLogs(error.response.data)
     }
   }
-
-      const goLobby = () => {
-        navigate(`/lobby`)
-        // start new game
-    }
 
   function onJoiner(payload) {
     const payloadData = JSON.parse(payload.body)
@@ -95,7 +88,7 @@ function Host() {
 
       setTimeout(() => {
         setCopied(false)
-      }, 3000)
+      }, 10000)
     }
   }
 
@@ -124,64 +117,71 @@ function Host() {
       >
         <Heading color="#015871">Host a Game Session</Heading>
         {errorLogs && (
-          <Alert status="error" maxW={200}>
+          <Alert status="error" maxW={200} borderRadius="full">
             <AlertIcon />
             {errorLogs.errorMessage}
           </Alert>
         )}
         <Collapse in={showCode} animateOpacity>
-          <Box bg="transparent" p="4" rounded="md" mt="4" position="relative">
+          <Box bg="transparent" rounded="md" position="relative">
             <Box
               w="100%"
               display="flex"
               flexDirection="column"
               alignItems="center"
             >
-              <Text md="2" fontSize="lg" mb="5">
-                {" "}
-                Your lobby code:{" "}
-              </Text>
-              <Box width="100%">
-                <code>{code}</code>
-                <Button
-                  variant="brand"
-                  icon={copied ? <CheckIcon /> : <CopyIcon />}
-                  onClick={copyCode}
-                  ml="20px"
-                >
-                  {copied ? "✓ Copied!" : "📋 Copy code"}
-                </Button>
-              </Box>
+              <Text fontSize="lg">Your lobby code:</Text>
+              <Tag m={4} size="lg" variant="subtle">
+                {code}
+              </Tag>
+              <Button
+                variant="brand"
+                icon={copied ? <CheckIcon /> : <CopyIcon />}
+                onClick={copyCode}
+              >
+                {copied ? "✓ Copied!" : "📋 Copy code"}
+              </Button>
             </Box>
           </Box>
         </Collapse>
 
-
-
-          <Button
-              onClick={generateLobbyCode} variant="brand" mb = "4"
-              size="lg" w="200px">
+        <Button
+          onClick={generateLobbyCode}
+          variant="brand"
+          mb="4"
+          size="lg"
+          w="200px"
+          isDisabled={isJoined}
+        >
           Get a Lobby Code
-          </Button>
-
-
+        </Button>
 
         {!isJoined && showCode && (
-          <Box pt="1em" marginRight="auto" marginLeft="auto">
-            {/* <Button mt="2" bg="blue.500"> */}
+          <AnimationContainer variants={navigationButtonVariant}>
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="space-around"
+            >
+              {/* <Button mt="2" bg="blue.500"> */}
 
-            <Text>Waiting for Player to join</Text>
-            <Spinner
-              thickness="4px"
-              speed="0.95s"
-              emptyColor="gray.200"
-              color="blue.500"
-              size="lg"
-            />
-          </Box>
+              <Text m={3}>Waiting for Player to join</Text>
+              <Spinner
+                thickness="4px"
+                speed="0.95s"
+                emptyColor="gray.200"
+                size="lg"
+              />
+            </Box>
+          </AnimationContainer>
         )}
 
-        {isJoined && <Text>Player Joined, will redirect shortly</Text>}
+        {isJoined && (
+          <AnimationContainer variants={navigationButtonVariant}>
+            <Text>Player Joined, will redirect shortly</Text>
+          </AnimationContainer>
+        )}
       </Box>
     </AnimationContainer>
   )

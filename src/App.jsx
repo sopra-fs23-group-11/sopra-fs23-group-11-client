@@ -40,7 +40,7 @@ const router = createBrowserRouter(
           <Route path="profile/:userid" element={<Profile />} />
         </Route>
         <Route path="setup/:lobbyCode" element={<Setup />} errorElement={<Error />}/>
-        <Route path="game/:lobbyCode" element={<Game />} />
+        <Route path="game/:lobbyCode" element={<Game />} errorElement={<Error />}/>
         <Route path="chatroom/:lobbyCode" element={<Chatroom />} />
         <Route path="endscreen/:lobbyCode" element={<Endscreen />} />
       </Route>

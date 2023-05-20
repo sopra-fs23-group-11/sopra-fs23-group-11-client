@@ -1,8 +1,7 @@
-import { Box, Circle, Grid, GridItem } from "@chakra-ui/react"
+import { Circle, Grid, GridItem } from "@chakra-ui/react"
 import { React, useContext, useState } from "react"
 import Cell from "./Cell"
 import { GameContext } from "../contexts/GameContext"
-import { PhoneIcon } from "@chakra-ui/icons"
 
 function BattleshipBoard({
   board,
@@ -56,7 +55,7 @@ function BattleshipBoard({
     <Grid
       templateColumns="repeat(11, 30px)"
       templateRows="repeat(11, 30px)"
-      gap={0}
+      gap={0.4}
       margin="20px"
       marginRight="30px"
     >
@@ -129,6 +128,7 @@ function BattleshipBoard({
                       : "transparent" // if not occ
                   }
                   isEnemy={isEnemy}
+                  isSunk={board[rowIndex][colIndex].isOccupied?.isSunk}
                 >
                   <Circle
                     size="20px"

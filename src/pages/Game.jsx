@@ -13,7 +13,6 @@ import {
   Input,
   InputRightElement,
   Card,
-  CardBody,
 } from "@chakra-ui/react"
 import { ChatIcon } from "@chakra-ui/icons"
 import { GameContext } from "../contexts/GameContext.jsx"
@@ -49,6 +48,12 @@ export default function Game() {
   const toast = useToast()
 
   useEffect(() => {
+    if(!player.name) {
+      throw ({
+        message: "The Game session does not exist", 
+        desc: "The player does not exist. You may have tried to access an external lobby or accidentally refreshed the site"
+      })
+    }
     socket = Stomp.client(getDomainWebsocket())
     socket.connect({}, onConnected)
   }, [])

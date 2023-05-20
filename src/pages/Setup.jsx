@@ -19,7 +19,7 @@ import {
   IconButton,
   Collapse,
   Card,
-  Avatar
+  Avatar,
 } from "@chakra-ui/react"
 import { GameContext } from "../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp"
@@ -32,6 +32,7 @@ import {
   shipsVariant,
   readyVariants,
   lobbyVariants,
+  buttonVariants,
 } from "../animations/variants.js"
 
 let socket = null
@@ -63,7 +64,10 @@ function Setup() {
     socket.connect({}, onConnected, errorCallback)
 
     if (lobby?.lobbyCode !== lobbyCode)
-      throw new Error("The Game session does not exist")
+    throw ({
+      message: "The Game session does not exist", 
+      desc: "The lobby does not exist. You may have tried to access an external lobby or accidentally refreshed the site"
+    })
 
     if (player.isReady && enemy.isReady) navigate(`/game/${lobbyCode}`)
   }, [enemy.isReady, player.isReady])
@@ -116,7 +120,7 @@ function Setup() {
       playerId: player.id,
       playerName: player.name,
       playerBoard: JSON.stringify(player.board),
-      playerAvatar: user.avatar
+      playerAvatar: user.avatar,
     }
     setWaitingSpinner(true)
     socket.send(`/app/ready`, {}, JSON.stringify(readyMessage))
@@ -162,7 +166,7 @@ function Setup() {
       ...enemy,
       isReady: true,
       board: JSON.parse(payloadData.playerBoard),
-      avatar: payloadData.playerAvatar
+      avatar: payloadData.playerAvatar,
     }))
   }
 
@@ -188,29 +192,37 @@ function Setup() {
   }
 
   return (
-    <Box display="flex" flexDirection="column" justifyContent="center" h="70vh" alignItems="center">
+    <Box
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      h="70vh"
+      alignItems="center"
+    >
       {isStartSetup ? (
-        <Flex justifyContent="center" alignItems="center" position="relative">
-          <Card padding="4px 5px" direction="flex" w={200} alignItems="center" justifyContent="center" borderRadius="full" variant="filled">
-              <Avatar src={user.avatar}/>
-              <Text>{player.name}</Text>
-          </Card>
-          <IconButton
-            aria-label="Show Rules"
-            icon={<InfoIcon />}
-            position="absolute"
-            top="1rem"
-            right="1rem"
-            onClick={toggleRules}
-            variant="ghost"
-          />
+        <Flex justifyContent="center" alignItems="center">
           <AnimationContainer variants={boardVariant}>
-            <BattleshipBoard
-              board={player.board}
-              handlePlace={placeShip}
-              isSetUp={true}
-              direction={direction}
-            />
+            <Flex direction="column" alignItems="center">
+              <Card
+                padding="4px 5px"
+                direction="flex"
+                w={200}
+                alignItems="center"
+                justifyContent="center"
+                borderRadius="full"
+                variant="filled"
+                bgGradient="linear(to-l, #4FD1C5, #B7E8EB)"
+              >
+                <Avatar src={user.avatar} />
+                <Text>{player.name}</Text>
+              </Card>
+              <BattleshipBoard
+                board={player.board}
+                handlePlace={placeShip}
+                isSetUp={true}
+                direction={direction}
+              />
+            </Flex>
           </AnimationContainer>
           <Flex direction="column" minW="300px" justifyContent="center">
             <AnimationContainer variants={shipsVariant}>
@@ -229,19 +241,32 @@ function Setup() {
                     handleSelect={selectShip}
                     playerId={player.id}
                     shipId={ship.id}
-                    direction = {direction}
+                    direction={direction}
                   />
                 ))}
                 {player.ships.length !== 0 && (
                   <>
-                    <FormLabel fontSize="20px" htmlFor="direction" fontWeight="bold" color="black">
+                    <FormLabel
+                      fontSize="20px"
+                      htmlFor="direction"
+                      fontWeight="bold"
+                      color="black"
+                    >
                       {direction}
                     </FormLabel>
-                    <Switch id="direction" mb={10} onChange={handleToggle} sx={{ 'span.chakra-switch__track:not([data-checked])': { background: 'teal' } }} />
+                    <Switch
+                      id="direction"
+                      mb={10}
+                      onChange={handleToggle}
+                      sx={{
+                        "span.chakra-switch__track:not([data-checked])": {
+                          background: "teal",
+                        },
+                      }}
+                    />
                   </>
                 )}
               </Flex>
-
             </AnimationContainer>
 
             {player.ships.length === 0 && (
@@ -260,17 +285,17 @@ function Setup() {
             )}
           </Flex>
           <IconButton
-              aria-label="Show Rules"
-              icon={<InfoIcon />}
-              position="relative"
-              //left="100rem"
-              top="-15rem"
-              onClick={toggleRules}
-              variant="ghost"
-              size="lg"
+            aria-label="Show Rules"
+            icon={<InfoIcon />}
+            position="relative"
+            //left="100rem"
+            top="-15rem"
+            onClick={toggleRules}
+            variant="ghost"
+            size="lg"
             color="red.500"
-           _hover={{color: "red.700"}}
-            _active={{outline:"none"}}
+            _hover={{ color: "red.700" }}
+            _active={{ outline: "none" }}
           />
           <Collapse in={showRules}>
             <Text fontSize="sm" color="gray.500" textAlign="left">
@@ -291,10 +316,9 @@ function Setup() {
               <br />
             </Text>
           </Collapse>
-
         </Flex>
       ) : user.isHost ? (
-        <AnimationContainer variants={lobbyVariants}>
+        <AnimationContainer variants={buttonVariants}>
           <Button
             onClick={startGame}
             alignSelf="center"
