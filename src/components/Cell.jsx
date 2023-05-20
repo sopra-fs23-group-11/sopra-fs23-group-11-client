@@ -12,6 +12,7 @@ export default function Cell({
   cellColor,
   cellHover,
   cursor,
+  isEnemy,
   children,
 }) {
   return (
@@ -23,17 +24,18 @@ export default function Cell({
       justifyContent="center"
       color="red.500"
       //   id={`${String.fromCharCode(65 + rowIndex)}${colIndex}`}
-      h="40px"
-      w="40px"
+      h="30px"
+      w="30px"
       bg={isHovered? "gray" : cellColor}
-      border="1px solid gray"
+      border={hasShip && !isEnemy ? "" : "1px solid gray"}
+      // border = "1px solid gray"
       onMouseEnter={handleCellHover}
       onMouseLeave={handleCellHover}
       onClick={handleClick}
-     
+      
       _hover={cellHover}
       cursor={cursor}
-      borderRadius="5px"
+      borderRadius={hasShip && !isEnemy ? "3px": "5px"}
       className={isClicked ? "clicked": ""}
     >
       {children}

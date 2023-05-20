@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from "react"
-import {morse} from "../helpers/soundEffects"
+import { morse } from "../helpers/soundEffects"
 import {
   Divider,
   Flex,
@@ -11,9 +11,11 @@ import {
   Button,
   InputGroup,
   Input,
-  InputRightElement
+  InputRightElement,
+  Card,
+  CardBody,
 } from "@chakra-ui/react"
-import { ChatIcon } from "@chakra-ui/icons";
+import { ChatIcon } from "@chakra-ui/icons"
 import { GameContext } from "../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp.js"
 import { useParams, useNavigate } from "react-router-dom"
@@ -26,25 +28,25 @@ import {
 import { getDomainWebsocket } from "../helpers/getDomainWebsocket.js"
 import AnimationContainer from "../components/AnimationContainer.jsx"
 import EnemyExitModal from "../components/EnemyExitModal.jsx"
-import {api} from "../helpers/api.js";
-import lobby from "./Lobby/Lobby.jsx";
-import { playerVariant,  enemyVariant, switchTurnVariants } from "../animations/variants";
-
+import EndGameModal from "../components/EndGameModal"
+import {
+  playerVariant,
+  enemyVariant,
+  switchTurnVariants,
+} from "../animations/variants"
 
 let socket = null
 export default function Game() {
-  const { player, setPlayer, handleShoot, enemy, handleSunk } =
+  const { player, user, setPlayer, handleShoot, enemy, setEnemy, handleSunk } =
     useContext(GameContext)
   const [enemyExit, setEnemyExit] = useState(false)
-  const [inputValue, setInputValue] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isFinished, setIsFinished] = useState(false)
+  const [inputValue, setInputValue] = useState("")
+  const [messages, setMessages] = useState([])
+  const [isChatOpen, setIsChatOpen] = useState(false)
 
   const { lobbyCode } = useParams()
-  const navigate = useNavigate()
   const toast = useToast()
-
-
 
   useEffect(() => {
     socket = Stomp.client(getDomainWebsocket())
@@ -52,15 +54,14 @@ export default function Game() {
   }, [])
 
   const onConnected = () => {
-    if(socket && socket.connected)socket.disconnect
+    if (socket && socket.connected) socket.disconnect
     socket.subscribe(`/game/${lobbyCode}/${player.id}`, onShotReceived)
     socket.subscribe(`/game/${lobbyCode}/sunk`, onSunkenShip)
     socket.subscribe(`/game/${lobbyCode}/finish`, onFinished)
     socket.subscribe(`/game/${lobbyCode}/leave`, onLeave)
-    socket.subscribe(`/chatroom/${lobbyCode}`, onMessage);
-
+    socket.subscribe(`/game/${lobbyCode}/${player.id}/newgame`, onNewGame)
+    socket.subscribe(`/chatroom/${lobbyCode}`, onMessage)
   }
-
 
   const onShotReceived = (payload) => {
     console.log("shot received")
@@ -94,40 +95,44 @@ export default function Game() {
   }
   const onFinished = (payload) => {
     const payloadData = JSON.parse(payload.body)
-    if(payloadData.winnerId === player.id){
-      setPlayer(player => ({...player, hasWon: true}))
+    if (payloadData.winnerId === player.id) {
+      setPlayer((player) => ({ ...player, hasWon: true }))
     }
-    navigate(`/endscreen/${lobbyCode}`)
+    setIsFinished(true)
+    //navigate(`/endscreen/${lobbyCode}`)
+  }
+
+  const onNewGame = (payload) => {
+    setEnemy({...enemy, newGame: true})
   }
 
   const onMessage = (payload) => {
-    let payloadData = JSON.parse(payload.body);
+    let payloadData = JSON.parse(payload.body)
     console.log("message payload:" + payload.body)
-    setMessages((prevMessages) => [...prevMessages, payloadData.content]);
+    setMessages((prevMessages) => [...prevMessages, payloadData.content])
     console.log(payloadData.content)
     morse()
-  };
+  }
 
   const sendMessage = (newMessage) => {
-    newMessage = player.name + ": " + newMessage;
+    newMessage = player.name + ": " + newMessage
     const message = {
       lobbyCode: lobbyCode,
       content: newMessage,
-    };
-      socket.send(`/chatroom/${lobbyCode}`, {}, JSON.stringify(message));
-  };
-
+    }
+    socket.send(`/chatroom/${lobbyCode}`, {}, JSON.stringify(message))
+  }
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      handleSendMessage();
+      handleSendMessage()
     }
-  };
+  }
 
   const handleSendMessage = () => {
-    sendMessage(inputValue);
-    setInputValue("");
-  };
+    sendMessage(inputValue)
+    setInputValue("")
+  }
 
   const onSunkenShip = (payload) => {
     sinkShipSound()
@@ -173,54 +178,52 @@ export default function Game() {
     toast({
       title: "Invalid Shot",
       description: text,
-        position: "bottom",
-        isClosable: true,
-        duration: 4000,
-        status: "error",
+      position: "bottom",
+      isClosable: true,
+      duration: 4000,
+      status: "error",
     })
   }
 
   const handleAlerts = (text, status) => {
     toast({
       title: text,
-        position: "bottom",
-        isClosable: true,
-        duration: 4000,
-        status: status,
+      position: "bottom",
+      isClosable: true,
+      duration: 4000,
+      status: status,
     })
   }
-
 
   return (
     <Flex justifyContent="space-around" width="80%" m="auto">
       <AnimationContainer variants={playerVariant}>
         <Flex direction="column" alignItems="center">
-          <Text>{player.name}</Text>
-          <BattleshipBoard board={player.board} handleError={handleError}/>
-          {player.isMyTurn && <AnimationContainer variants={switchTurnVariants}>Your Turn Captain</AnimationContainer>}
+          <Card
+            padding="4px 5px"
+            direction="flex"
+            w={200}
+            alignItems="center"
+            justifyContent="center"
+            borderRadius="full"
+            variant="filled"
+            bgGradient="linear(to-l, #4FD1C5, #B7E8EB)"
+          >
+            <Avatar src={user.avatar} />
+            <Text>{player.name}</Text>
+          </Card>
+          <BattleshipBoard board={player.board} handleError={handleError} />
+          {player.isMyTurn && (
+            <AnimationContainer variants={switchTurnVariants}>
+              Your Turn Captain
+            </AnimationContainer>
+          )}
         </Flex>
       </AnimationContainer>
 
-      <Center>
+      <Center display="flex" flexDirection="column">
         <Divider orientation="vertical" borderColor="red" border="2px solid" />
-      </Center>
-
-      <AnimationContainer variants={enemyVariant}>
-        <Flex direction="column" alignItems="center">
-          <Text>{enemy.name}</Text>
-          <BattleshipBoard
-            board={enemy.board}
-            handleShoot={shootMissle}
-            isTurn={player.isMyTurn}
-            isEnemy={true}
-            handleError={handleError}
-          />
-          {!player.isMyTurn && <AnimationContainer variants={switchTurnVariants}>Enemy Shot Incoming</AnimationContainer>}
-        </Flex>
-      </AnimationContainer>
-      {enemyExit && <EnemyExitModal enemyExit={enemyExit}/>}
-
-      <Button
+        <Button
           onClick={() => setIsChatOpen(!isChatOpen)}
           bgColor="teal.500"
           color="white"
@@ -228,52 +231,88 @@ export default function Game() {
           p={4}
           fontWeight="medium"
           _hover={{ bgColor: "teal.400" }}
-      >
-        Toggle Radio
-      </Button>
-      {isChatOpen && (
-          <Box
-              position="fixed"
-              bottom="0"
-              right="0"
-              bgColor="white"
-              boxShadow="0px -5px 10px rgba(0, 0, 0, 0.2)"
-              borderRadius="lg"
-              maxHeight="600px"
-              overflowY="auto"
-              p={4}
+          mt={2}
+        >
+          Toggle Radio
+        </Button>
+      </Center>
+
+      <AnimationContainer variants={enemyVariant}>
+        <Flex direction="column" alignItems="center">
+          <Card
+            padding="4px 5px"
+            direction="flex"
+            w={200}
+            alignItems="center"
+            justifyContent="center"
+            borderRadius="full"
+            variant="filled"
+            bgGradient="linear(to-l, #4FD1C5, #B7E8EB)"
           >
-            <Box mb={4}>
-              {messages.map((message, index) => (
-                  <Box key={index} mb={2}>
-                    {message}
-                  </Box>
-              ))}
-            </Box>
-            <InputGroup>
-              <Input
-                  type="text"
-                  placeholder="Type your message here..."
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  onKeyDown={handleKeyPress}
-              />
-              <InputRightElement>
-                <Button
-                    onClick={handleSendMessage}
-                    bgColor="teal.500"
-                    color="white"
-                    borderRadius="lg"
-                    p={4}
-                    fontWeight="medium"
-                    _hover={{ bgColor: "teal.400" }}
-                >
-                  Send
-                </Button>
-              </InputRightElement>
-            </InputGroup>
+            <Avatar src={enemy.avatar} />
+            <Text>{enemy.name}</Text>
+          </Card>
+          <BattleshipBoard
+            board={enemy.board}
+            handleShoot={shootMissle}
+            isTurn={player.isMyTurn}
+            isEnemy={true}
+            handleError={handleError}
+          />
+          {!player.isMyTurn && (
+            <AnimationContainer variants={switchTurnVariants}>
+              Enemy Shot Incoming
+            </AnimationContainer>
+          )}
+        </Flex>
+      </AnimationContainer>
+      {enemyExit && <EnemyExitModal enemyExit={enemyExit} />}
+
+      {isChatOpen && (
+        <Box
+          position="fixed"
+          bottom="0"
+          right="0"
+          bgColor="white"
+          boxShadow="0px -5px 10px rgba(0, 0, 0, 0.2)"
+          borderRadius="lg"
+          maxHeight="600px"
+          overflowY="auto"
+          p={4}
+        >
+          <Box mb={4}>
+            {messages.map((message, index) => (
+              <Box key={index} mb={2}>
+                {message}
+              </Box>
+            ))}
           </Box>
+          <InputGroup>
+            <Input
+              type="text"
+              placeholder="Type your message here..."
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={handleKeyPress}
+            />
+            <InputRightElement>
+              <Button
+                onClick={handleSendMessage}
+                bgColor="teal.500"
+                color="white"
+                borderRadius="lg"
+                p={4}
+                fontWeight="medium"
+                _hover={{ bgColor: "teal.400" }}
+              >
+                Send
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+        </Box>
       )}
+
+      {isFinished && <EndGameModal isFinished={isFinished} socket={socket}/>}
     </Flex>
   )
 }

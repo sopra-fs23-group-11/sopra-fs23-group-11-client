@@ -9,9 +9,9 @@ export const homeVariants = {
       transition: { type: "spring", delay: 1.3, duration: 1.6 },
     },
     exit: {
-      y: -200,
+      y: -300,
       opacity: 0,
-      transition: {duration: 0.4}
+      transition: {duration: 0.8, delay: 0.3}
       
     }
   }
@@ -103,6 +103,11 @@ export  const boardVariant = {
       x: 0,
       transition: { type: "spring", delay: 0.4, stiffness: 30 },
     },
+    exit: {
+      opacity: 0,
+      x: -100, 
+      transition: {ease: "easeInOut"}
+    }
   }
   
 export  const readyVariants = {
@@ -113,6 +118,9 @@ export  const readyVariants = {
       y: 0,
       transition: { stiffness: 120, type: "spring" },
     },
+    exit: {
+      y: -100
+    }
   }
 
 
@@ -124,8 +132,12 @@ export  const enemyVariant = {
     visible: {
       opacity: 1,
       x: 0,
-      transition: { type: "spring", delay: 0.5 },
+      transition: { type: "spring", delay: 0.5, stiffness: 40 },
     },
+    exit: {
+      opacity: 0,
+      x: 100,
+    }
   }
   
 export  const playerVariant = {
@@ -136,8 +148,12 @@ export  const playerVariant = {
     visible: {
       opacity: 1,
       x: 0,
-      transition: { type: "spring", delay: 0.5 },
+      transition: { type: "spring", delay: 0.5, stiffness: 40 },
     },
+    exit: {
+      opacity: 0,
+      x: 100,
+    }
   }
   
 export  const switchTurnVariants = {

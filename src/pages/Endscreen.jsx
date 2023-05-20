@@ -73,7 +73,7 @@ function EndScreen() {
               onClick={goLobby}
               colorScheme="blue"
             >
-              New Game!
+              Main Menu
             </Button>
             <Button
               Align="center"
@@ -82,7 +82,7 @@ function EndScreen() {
               onClick={goSetup}
               colorScheme="blue"
             >
-              Revenge
+              New Game
             </Button>
           </Flex>
         </Box>
@@ -125,7 +125,7 @@ function EndScreen() {
               onClick={goLobby}
               colorScheme="blue"
             >
-              New Game!
+              Main Menu
             </Button>
             <Button
               Align="center"

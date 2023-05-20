@@ -1,7 +1,8 @@
-import { Box, Grid, GridItem } from "@chakra-ui/react"
+import { Box, Circle, Grid, GridItem } from "@chakra-ui/react"
 import { React, useContext, useState } from "react"
 import Cell from "./Cell"
 import { GameContext } from "../contexts/GameContext"
+import { PhoneIcon } from "@chakra-ui/icons"
 
 function BattleshipBoard({
   board,
@@ -17,7 +18,7 @@ function BattleshipBoard({
   const length = shipToBePlaced?.length
   const [hoveredCells, setHoveredCells] = useState([])
   const [isValid, setIsValid] = useState(true)
-  const {setEnemy} = useContext(GameContext)
+  const { setEnemy } = useContext(GameContext)
 
   const handleCellHover = (rowIndex, colIndex) => {
     const shadowCells = []
@@ -36,29 +37,28 @@ function BattleshipBoard({
 
   const handleCellClick = (rowIndex, colIndex) => {
     if (isSetUp) {
-      handlePlace(rowIndex, colIndex);
+      handlePlace(rowIndex, colIndex)
     } else if (isTurn) {
-      const cell = board[rowIndex][colIndex];
+      const cell = board[rowIndex][colIndex]
       if (cell.isHit || cell.isShotAt) {
-        handleError("We already shot this place, captain!");
+        handleError("We already shot this place, captain!")
       } else {
-        handleShoot(rowIndex, colIndex);
+        handleShoot(rowIndex, colIndex)
       }
     } else if (isEnemy) {
-      handleError("Hold your horses, Captain! It's not your turn to shoot!");
+      handleError("Hold your horses, Captain! It's not your turn to shoot!")
     } else {
-      handleError("Captain, are you trying to kill us?!");
+      handleError("Captain, are you trying to kill us?!")
     }
   }
 
-
   return (
     <Grid
-      templateColumns="repeat(11, 40px)"
-      templateRows="repeat(11, 40px)"
-      gap={0.5}
+      templateColumns="repeat(11, 30px)"
+      templateRows="repeat(11, 30px)"
+      gap={0}
       margin="20px"
-      marginRight="40px"
+      marginRight="30px"
     >
       <GridItem />
 
@@ -67,8 +67,8 @@ function BattleshipBoard({
           key={`row-label-${index}`}
           justifyContent="center"
           alignItems="center"
-          h="40px"
-          w="40px"
+          h="30px"
+          w="30px"
           textAlign="center"
           display="flex"
         >
@@ -82,8 +82,8 @@ function BattleshipBoard({
               key={`col-label-${rowIndex}`}
               justifyContent="center"
               alignItems="center"
-              h="40px"
-              w="40px"
+              h="30px"
+              w="30px"
               textAlign="center"
               display="flex"
             >
@@ -93,19 +93,21 @@ function BattleshipBoard({
               <GridItem key={`${rowIndex}-${colIndex}`}>
                 <Cell
                   key={`${String.fromCharCode(65 + rowIndex)}${colIndex}`}
-                  isClicked = {board[rowIndex][colIndex].isOccupied}
+                  isClicked={board[rowIndex][colIndex].isOccupied}
                   hasShip={board[rowIndex][colIndex].isOccupied}
                   isHovered={hoveredCells.some(
                     (id) => board[rowIndex][colIndex].id === id
                   )}
-                  handleCellHover={isSetUp ? () => handleCellHover(rowIndex, colIndex) : null}
+                  handleCellHover={
+                    isSetUp ? () => handleCellHover(rowIndex, colIndex) : null
+                  }
                   isValid={isValid}
                   cellHover={
                     isEnemy &&
                     !(
                       board[rowIndex][colIndex].isHit ||
                       board[rowIndex][colIndex].isShotAt
-                    ) && { bg: "gray.300" }
+                    ) && { bg: "gray.300", scale: 1.2 }
                   }
                   cursor={
                     isSetUp
@@ -120,75 +122,25 @@ function BattleshipBoard({
                   cellColor={
                     board[rowIndex][colIndex].isOccupied //first check if cell is occupied
                       ? board[rowIndex][colIndex].isOccupied.isSunk //check if ship is sunk
-                        ? "gray.700"
-                        : isEnemy // then check if its in enemyBoard
-                        ? board[rowIndex][colIndex].isHit
-                          ? "red.500" //red when enemy ship has been hit
-                          : "transparent" //"hide" the enemy ship otherwise
-                        : "cyan.700" //for player render their ships blue
-                      : "transparent" // else if there is nothing occupying the cell
-                  }
-                >
-                  {!isEnemy // this is shown on the player's board
-                    ? board[rowIndex][colIndex].isHit
-                      ? "X"
-                      : board[rowIndex][colIndex].isShotAt
-                      ? "O"
-                      : ""
-                    : isEnemy && board[rowIndex][colIndex].isShotAt && "O"}
-                </Cell>
-                {/* <Box
-                  display ="flex"
-                  textAlign="center"
-                  fontSize="xx-large"
-                  alignItems="center"
-                  justifyContent="center"
-                  color="red.500"
-                  id={`${String.fromCharCode(65 + rowIndex)}${colIndex}`}
-                  h="40px"
-                  w="40px"
-                  border="1px solid gray"
-                  _hover={isEnemy && 
-                        !(board[rowIndex][colIndex].isHit || board[rowIndex][colIndex].isShotAt) && 
-                        { bg: "gray.300" }}
-                  cursor={isSetUp ? "pointer" : isTurn ? "crosshair" : isEnemy ? "not-allowed" : ""}
-
-
-                 bg={
-                    board[rowIndex][colIndex].isOccupied //first check if cell is occupied
-                    ? board[rowIndex][colIndex].isOccupied.isSunk //check if ship is sunk
-                      ? "gray.700"
-                      : isEnemy // then check if its in enemyBoard
-                        ? board[rowIndex][colIndex].isHit
-                          ? "red.500" //red when enemy ship has been hit
-                          : "transparent" //"hide" the enemy ship otherwise
-                        : "cyan.700" //for player render their ships blue
-                      : "transparent" // else if there is nothing occupying the cell
-                  }
-
-                  onClick={
-                    isSetUp 
-                      ? () => handlePlace(rowIndex, colIndex) //only for the setup stage
-                      : isTurn // if game already started, check if its player's turn
-                      ? (board[rowIndex][colIndex].isHit || board[rowIndex][colIndex].isShotAt) //check if the cell has already been hit before
-                        ? () => handleError("We already shot this place captain!")
-                        : () => handleShoot(rowIndex, colIndex)
+                        ? "red.500"
                         : isEnemy
-                         ? () => //if its not the player's turn...
-                          handleError(
-                            "Hold your horses,Captain! It's not your turn to shoot!"
-                          )
-                      : () => handleError("Captain, are you trying to kill us?!")
+                        ? "transparent" // render enemy occupied ships "hidden"
+                        : "cyan.700" // render player ships blue
+                      : "transparent" // if not occ
                   }
+                  isEnemy={isEnemy}
                 >
-                  {!isEnemy // this is shown on the player's board
-                    ? board[rowIndex][colIndex].isHit
-                      ? "X"
-                      : board[rowIndex][colIndex].isShotAt
-                      ? "O"
-                      : ""
-                    : isEnemy && board[rowIndex][colIndex].isShotAt && "O"}
-                </Box> */}
+                  <Circle
+                    size="20px"
+                    bg={
+                      board[rowIndex][colIndex].isHit
+                        ? "red.500"
+                        : board[rowIndex][colIndex].isShotAt
+                        ? "gray.500"
+                        : ""
+                    }
+                  ></Circle>
+                </Cell>
               </GridItem>
             ))}
           </>

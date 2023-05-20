@@ -17,7 +17,12 @@ function AuthRequired() {
       />
     )
   }
-  return <AnimatedOutlet />
+  return (
+    <>
+      <Header /> 
+      <Outlet />
+    </>
+  )
 }
 
 export default AuthRequired

@@ -10,9 +10,7 @@ const Profile = () => {
   const {user} = useContext(GameContext)
   const navigate = useNavigate()
 
-  const goBack = () => {
-    navigate(`/lobby`)
-  }
+
 
   let content = (
     <div className="game">
@@ -27,14 +25,7 @@ const Profile = () => {
   )
   return (
     <AnimationContainer variants={lobbyVariants}>
-        <Button w="200px"
-                to="host"
-                size="lg"
-                as={motion.button}
-                whileHover={{ scale: 1.1 }}
-                variant="brand" ml={4} width="10%" onClick={() => goBack()}>
-            Back
-        </Button>
+
       <Box></Box>
       <Box textAlign="center">
         <Text fontWeight="bold" textAlign="center" fontSize="3xl">

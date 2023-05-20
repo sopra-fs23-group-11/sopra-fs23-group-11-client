@@ -15,17 +15,24 @@ import {
   GridItem,
   Switch,
   FormLabel,
-  useToast, IconButton, Collapse,
+  useToast,
+  IconButton,
+  Collapse,
+  Card,
+  Avatar
 } from "@chakra-ui/react"
 import { GameContext } from "../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp"
 import { getDomainWebsocket } from "../helpers/getDomainWebsocket.js"
 
-
 import { useParams, useNavigate } from "react-router-dom"
-import {InfoIcon} from "@chakra-ui/icons";
-import { boardVariant, shipsVariant, readyVariants } from "../animations/variants.js"
-
+import { InfoIcon } from "@chakra-ui/icons"
+import {
+  boardVariant,
+  shipsVariant,
+  readyVariants,
+  lobbyVariants,
+} from "../animations/variants.js"
 
 let socket = null
 function Setup() {
@@ -36,12 +43,10 @@ function Setup() {
     lobby,
     direction,
     setDirection,
-    errorLogs,
     handleSelect,
     handlePlace,
     setEnemy,
     enemy,
-    resetState,
   } = useContext(GameContext)
 
   const [isStartSetup, setIsStartSetup] = useState(false)
@@ -57,11 +62,11 @@ function Setup() {
     socket = Stomp.client(getDomainWebsocket())
     socket.connect({}, onConnected, errorCallback)
 
-    if(lobby?.lobbyCode !== lobbyCode) throw new Error("The Game session does not exist")
+    if (lobby?.lobbyCode !== lobbyCode)
+      throw new Error("The Game session does not exist")
 
     if (player.isReady && enemy.isReady) navigate(`/game/${lobbyCode}`)
   }, [enemy.isReady, player.isReady])
-
 
   const errorCallback = (m) => {
     console.log("mmm", m)
@@ -72,11 +77,21 @@ function Setup() {
     socket.subscribe(`/startgame/${lobbyCode}`, onStartGame)
     console.log("websocket connected!")
     socket.subscribe(
-      `/ready/${user.id === lobby?.hostId ? lobby?.joinerName : lobby?.hostName}`,
+      `/ready/${
+        user.id === lobby?.hostId ? lobby?.joinerName : lobby?.hostName
+      }`,
       onReady
     )
-    console.log("user.id", user.id, "lobby.hostId", lobby.hostId,
-        "joinerName", lobby.joinerName, "hostName", lobby.hostName)
+    console.log(
+      "user.id",
+      user.id,
+      "lobby.hostId",
+      lobby.hostId,
+      "joinerName",
+      lobby.joinerName,
+      "hostName",
+      lobby.hostName
+    )
     console.log(user.id)
     socket.subscribe(`/game/${lobbyCode}/leave`, onLeave)
   }
@@ -85,7 +100,7 @@ function Setup() {
     try {
       await api.post(`/startgame`, JSON.stringify({ lobbyCode, hostId }))
     } catch (error) {
-      console.log("server error",error.message)
+      console.log("server error", error.message)
       console.log(hostId)
       console.log(lobbyCode)
       console.log(user.id)
@@ -101,6 +116,7 @@ function Setup() {
       playerId: player.id,
       playerName: player.name,
       playerBoard: JSON.stringify(player.board),
+      playerAvatar: user.avatar
     }
     setWaitingSpinner(true)
     socket.send(`/app/ready`, {}, JSON.stringify(readyMessage))
@@ -146,6 +162,7 @@ function Setup() {
       ...enemy,
       isReady: true,
       board: JSON.parse(payloadData.playerBoard),
+      avatar: payloadData.playerAvatar
     }))
   }
 
@@ -171,10 +188,22 @@ function Setup() {
   }
 
   return (
-    <Box display="flex" flexDirection="column" justifyContent="center" h="70vh">
+    <Box display="flex" flexDirection="column" justifyContent="center" h="70vh" alignItems="center">
       {isStartSetup ? (
         <Flex justifyContent="center" alignItems="center" position="relative">
-
+          <Card padding="4px 5px" direction="flex" w={200} alignItems="center" justifyContent="center" borderRadius="full" variant="filled">
+              <Avatar src={user.avatar}/>
+              <Text>{player.name}</Text>
+          </Card>
+          <IconButton
+            aria-label="Show Rules"
+            icon={<InfoIcon />}
+            position="absolute"
+            top="1rem"
+            right="1rem"
+            onClick={toggleRules}
+            variant="ghost"
+          />
           <AnimationContainer variants={boardVariant}>
             <BattleshipBoard
               board={player.board}
@@ -190,7 +219,7 @@ function Setup() {
                   Place your ships
                 </h2>
               )}
-              <Flex direction="column" minH="400px">
+              <Flex direction="column" minH="300px">
                 {player.ships.map((ship) => (
                   <Ship
                     key={ship.id}
@@ -200,6 +229,7 @@ function Setup() {
                     handleSelect={selectShip}
                     playerId={player.id}
                     shipId={ship.id}
+                    direction = {direction}
                   />
                 ))}
                 {player.ships.length !== 0 && (
@@ -207,7 +237,7 @@ function Setup() {
                     <FormLabel fontSize="20px" htmlFor="direction" fontWeight="bold" color="black">
                       {direction}
                     </FormLabel>
-                    <Switch id="direction" mb={10} onChange={handleToggle} colorScheme="teal" />
+                    <Switch id="direction" mb={10} onChange={handleToggle} sx={{ 'span.chakra-switch__track:not([data-checked])': { background: 'teal' } }} />
                   </>
                 )}
               </Flex>
@@ -244,41 +274,58 @@ function Setup() {
           />
           <Collapse in={showRules}>
             <Text fontSize="sm" color="gray.500" textAlign="left">
-              <Text as="b">Set-up: </Text><br />
-              Select the ship you want to place and hover over the field to see its arrangement. <br />
-              Click on the field to place the ship, but keep in mind that once a ship is placed, you cannot undo it!<br/>
-              Your ships can touch each other, but they cannot overlap.<br/>
-              Use the button to switch between horizontal and vertical placement of the ships.<br/>
-              Make sure to place all your ships before starting the game.  <br/>
-              Good Luck, Captain!<br />
+              <Text as="b">Set-up: </Text>
+              <br />
+              Select the ship you want to place and hover over the field to see
+              its arrangement. <br />
+              Click on the field to place the ship, but keep in mind that once a
+              ship is placed, you cannot undo it!
+              <br />
+              Your ships can touch each other, but they cannot overlap.
+              <br />
+              Use the button to switch between horizontal and vertical placement
+              of the ships.
+              <br />
+              Make sure to place all your ships before starting the game. <br />
+              Good Luck, Captain!
+              <br />
             </Text>
           </Collapse>
 
         </Flex>
       ) : user.isHost ? (
-        <Button onClick={startGame} alignSelf="center" size="lg" variant="brand">
-          Start Setup
-        </Button>
-      ) : (
-        <Flex
-          justifyContent="center"
-          alignItems="center"
-          h="70vh"
-          direction={"column"}
-        >
-          <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="blue.500"
+        <AnimationContainer variants={lobbyVariants}>
+          <Button
+            onClick={startGame}
+            alignSelf="center"
             size="lg"
-          />
-          <Text textAlign={"center"}>
-            Please Wait, Host is putting on his socks...
-          </Text>
-        </Flex>
+            variant="brand"
+          >
+            Start Setup
+          </Button>
+        </AnimationContainer>
+      ) : (
+        <AnimationContainer variants={lobbyVariants}>
+          <Flex
+            justifyContent="center"
+            alignItems="center"
+            h="70vh"
+            direction={"column"}
+          >
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              color="blue.500"
+              size="lg"
+            />
+            <Text textAlign={"center"}>
+              Please Wait, Host is putting on his socks...
+            </Text>
+          </Flex>
+        </AnimationContainer>
       )}
-      {enemyExit && <EnemyExitModal enemyExit={enemyExit}/>}
+      {enemyExit && <EnemyExitModal enemyExit={enemyExit} />}
     </Box>
   )
 }

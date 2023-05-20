@@ -9,6 +9,7 @@ import { motion } from "framer-motion"
 import AnimationContainer from "../../components/AnimationContainer"
 import {InfoIcon} from "@chakra-ui/icons";
 import { lobbyVariants } from "../../animations/variants"
+import EndGameModal from "../../components/EndGameModal"
 
 
 function Lobby() {
@@ -48,6 +49,7 @@ function Lobby() {
 
   return (
     <AnimationContainer variants={lobbyVariants}>
+      {showRules && <EndGameModal/>}
       <Flex
         flexDirection="column"
         height="70vh"
@@ -68,7 +70,7 @@ function Lobby() {
           _hover={{color: "red.700"}}
           _active={{outline:"none"}}
           />
-        <Text fontWeight="bold" color="black">
+        <Text fontWeight="bold">
           {`Welcome ${user.name}`}
         </Text>
 

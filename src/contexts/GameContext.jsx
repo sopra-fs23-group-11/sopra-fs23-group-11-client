@@ -11,7 +11,6 @@ export default function GameProvider({ children }) {
   const [direction, setDirection] = useState("Horizontal")
   const [lobby, setLobby] = useState(null)
   const [errorLogs, setErrorLogs] = useState([])
-  let error_logs = []
   const toast = useToast()
 
   const [user, setUser] = useState({
@@ -32,6 +31,7 @@ export default function GameProvider({ children }) {
     isReady: false,
     isMyTurn: false,
     hasWon: false,
+    newGame: false
   })
 
   const [enemy, setEnemy] = useState({
@@ -39,9 +39,11 @@ export default function GameProvider({ children }) {
     name: "",
     board: generateBoard(),
     isReady: false,
+    avatar: "",
+    newGame: false
   })
 
-  const resetState = () => {
+  const resetState = (toSetup) => {
     setPlayer({
       id: null,
       name: "",
@@ -52,6 +54,7 @@ export default function GameProvider({ children }) {
       isReady: false,
       isMyTurn: false,
       hasWon: false,
+      newGame: false
     })
 
     setEnemy({
@@ -59,32 +62,35 @@ export default function GameProvider({ children }) {
       name: "",
       board: generateBoard(),
       isReady: false,
+      newGame: false
     })
 
-    setLobby(null)
+    if(!toSetup)setLobby(null)
   }
 
-    const setState = () => {
-    setPlayer({
-      id: null,
-      name: "",
-      board: generateBoard(),
-      ships: shipsData,
-      missesReceived: [],
-      hitsReceived: [],
-      isReady: false,
-      isMyTurn: false,
-      hasWon: false,
-    })
+  //   const setState = () => {
+  //   setPlayer({
+  //     id: null,
+  //     name: "",
+  //     board: generateBoard(),
+  //     ships: shipsData,
+  //     missesReceived: [],
+  //     hitsReceived: [],
+  //     isReady: false,
+  //     isMyTurn: false,
+  //     hasWon: false,
+  //     newGame: false,
+  //   })
 
-    setEnemy({
-      id: null,
-      name: "",
-      board: generateBoard(),
-      isReady: false,
-    })
+  //   setEnemy({
+  //     id: null,
+  //     name: "",
+  //     board: generateBoard(),
+  //     isReady: false,
+  //     newGame: false
+  //   })
 
-  }
+  // }
 
   const handleShoot = (rowIndex, colIndex) => {
     setEnemy((enemy) => ({
@@ -366,7 +372,7 @@ export default function GameProvider({ children }) {
         setEnemy,
         handleSunk,
         resetState,
-        setState
+        // setState
       }}
     >
       {children}
