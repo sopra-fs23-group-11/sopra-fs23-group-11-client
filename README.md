@@ -41,7 +41,58 @@ See this section about [deployment](https://vitejs.dev/guide/static-deploy.html)
 about deployment using Vite.
 
 ## Illustrations
-tbd
+<h3 align="center">
+  <br>
+  <a href="https://github.com/sopra-fs23-group-11"><img src="src/ReadMePics/login.jpeg" alt="Battleship" width="400"></a>
+  <br>
+  As a player, you can register or log in with an avatar.
+  <br>
+</h3>
+<h3 align="center">
+  <br>
+  <a href="https://github.com/sopra-fs23-group-11"><img src="src/ReadMePics/Main.jpeg" alt="Battleship" width="400"></a>
+  <br>
+  This is the main menu for users to navigate through.
+  <br>
+</h3>
+<h3 align="center">
+  <br>
+  <a href="https://github.com/sopra-fs23-group-11"><img src="src/ReadMePics/lobbycode.jpeg" alt="Battleship" width="400"></a>
+  <br>
+  Host copies the lobby code and sends to the joiner.
+  <br>
+</h3>
+<h3 align="center">
+  <br>
+  <a href="https://github.com/sopra-fs23-group-11"><img src="src/ReadMePics/setup.jpeg" alt="Battleship" width="400"></a>
+  <br>
+  In the set-up page, the player needs to place ships onto the board.
+  <br>
+</h3>
+<h3 align="center">
+  <br>
+  <a href="https://github.com/sopra-fs23-group-11"><img src="src/ReadMePics/Gameshooting2.jpeg" alt="Battleship" width="400"></a>
+  <br>
+  The two players take turns to shoot missiles, hit/miss/sunk show different icons.
+  <br>
+</h3>
+<h3 align="center">
+  <br>
+  <a href="https://github.com/sopra-fs23-group-11"><img src="src/ReadMePics/winnerpage.jpeg" alt="Battleship" width="400"></a>
+  <br>
+  Winner page.
+  <br>
+</h3>
+<h3 align="center">
+  <br>
+  <a href="https://github.com/sopra-fs23-group-11"><img src="src/ReadMePics/Loserpage.jpeg" alt="Battleship" width="400"></a>
+  <br>
+  Loser page.
+  <br>
+</h3>
+
+
+
 
 ## Roadmap
 tbd
