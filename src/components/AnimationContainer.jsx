@@ -6,22 +6,7 @@ const MotionBox = chakra(motion.div, {
   shouldForwardProp: (prop) => isValidMotionProp(prop) || shouldForwardProp(prop),
 });
 
-const defaultVariants = {
-    hidden: {
-        opacity: 0,
-        x: 100,
-      },
-      visible: {
-        opacity: 1,
-        x: 0,
-        transition: { type: "spring", delay: 0.5, stiffness: 30},
-      },
-      exit: {
-        opacity: 0,
-        x: -100,
-        transition: {ease: "easeInOut", stiffness: 30}
-      }
-}
+
 
 const AnimationContainer = ({ children, variants }) => {
   return (

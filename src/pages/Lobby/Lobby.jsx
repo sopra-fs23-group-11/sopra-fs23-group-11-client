@@ -12,9 +12,10 @@ import { lobbyVariants, navigationButtonVariant } from "../../animations/variant
 
 function Lobby() {
   const userId = JSON.parse(sessionStorage.getItem("userId"))
-  const { user, setUser } = useContext(GameContext)
+  const { user, setUser, player } = useContext(GameContext)
   const [showRules, setShowRules] = useState(false)
   const navigate = useNavigate()
+  console.log(player)
 
   useEffect(() => {
     async function host() {

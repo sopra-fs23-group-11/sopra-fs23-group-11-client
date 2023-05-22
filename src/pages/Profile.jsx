@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { api, handleError } from "../helpers/api"
-import { Box, Button, Text, Avatar } from "@chakra-ui/react"
+import { Box, Button, Text, Avatar, Heading } from "@chakra-ui/react"
 import {GameContext} from "../contexts/GameContext"
 import AnimationContainer from "../components/AnimationContainer"
 import { lobbyVariants } from "../animations/variants"
@@ -28,9 +28,9 @@ const Profile = () => {
 
       <Box></Box>
       <Box textAlign="center">
-        <Text fontWeight="bold" textAlign="center" fontSize="3xl">
+        <Heading mb={3}>
           Welcome to your Profile
-        </Text>
+        </Heading>
         <Text fontSize="xl">This is your Information:</Text>
         <Box>{content}</Box>
       </Box>

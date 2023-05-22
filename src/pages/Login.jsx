@@ -22,6 +22,8 @@ import {
 } from "@chakra-ui/react"
 import { api } from "../helpers/api"
 import User from "../models/User"
+import AnimationContainer from "../components/AnimationContainer"
+import { lobbyVariants } from "../animations/variants"
 
 /**the action is called once the user clicks on "sign up".
  * As stated in the react router documentation its use case is for form validation
@@ -60,66 +62,73 @@ export default function Login() {
   const handleClick = () => setShow(!show)
 
   return (
-    <Container
-      h="60vh"
-      pt="4em"
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-    >
-      <Flex direction="column">
-        <Box maxW="480px">
-          {locaction.state?.message && (
-            <Text color="red.500">{locaction.state.message}</Text>
-          )}
-          {errors?.errorMessage && (
-            <Text color="red.500">{errors.errorMessage}</Text>
-          )}
-          <Form method="post" action="/login">
-            <FormControl mb="40px" isRequired>
-              <FormLabel fontSize="lg">Username</FormLabel>
-              <Input
-                type="text"
-                name="username"
-                placeholder="Enter your username"
-              />
-            </FormControl>
-
-            <FormControl mb="40px" isRequired>
-              <FormLabel fontSize="lg">Password</FormLabel>
-              <InputGroup>
+    <AnimationContainer variants={lobbyVariants}>
+      <Container
+        h="60vh"
+        pt="4em"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Flex direction="column">
+          <Box maxW="480px">
+            {locaction.state?.message && (
+              <Text color="red.500">{locaction.state.message}</Text>
+            )}
+            {errors?.errorMessage && (
+              <Text color="red.500">{errors.errorMessage}</Text>
+            )}
+            <Form method="post" action="/login">
+              <FormControl mb="40px" isRequired>
+                <FormLabel fontSize="lg">Username</FormLabel>
                 <Input
-                  name="password"
-                  placeholder="Enter password..."
-                  type={show ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  type="text"
+                  name="username"
+                  placeholder="Enter your username"
                 />
-                <InputRightElement width="4.5rem">
-                  {password && (
-                    <Button onClick={handleClick} h="1.75rem" size="sm" variant="brand">
-                      {show ? "Hide" : "Show"}
-                    </Button>
-                  )}
-                </InputRightElement>
-              </InputGroup>
-            </FormControl>
+              </FormControl>
 
-            <Button
-              type="submit"
-              w="100%"
-              isDisabled={navigation.state === "submitting"}
-              bgGradient="linear(to-l, #0172AF, #4FD1C5)"
-              variant="brand"
-            >
-              {navigation.state === "submitting" ? "Loggin in..." : "Log in"}
-            </Button>
-          </Form>
-        </Box>
-        <Box color="teal.400" textDecoration="underline" mt="1em">
-          <Link to="../register">No account? Sign up here</Link>
-        </Box>
-      </Flex>
-    </Container>
+              <FormControl mb="40px" isRequired>
+                <FormLabel fontSize="lg">Password</FormLabel>
+                <InputGroup>
+                  <Input
+                    name="password"
+                    placeholder="Enter password..."
+                    type={show ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <InputRightElement width="4.5rem">
+                    {password && (
+                      <Button
+                        onClick={handleClick}
+                        h="1.75rem"
+                        size="sm"
+                        variant="brand"
+                      >
+                        {show ? "Hide" : "Show"}
+                      </Button>
+                    )}
+                  </InputRightElement>
+                </InputGroup>
+              </FormControl>
+
+              <Button
+                type="submit"
+                w="100%"
+                isDisabled={navigation.state === "submitting"}
+                bgGradient="linear(to-l, #0172AF, #4FD1C5)"
+                variant="brand"
+              >
+                {navigation.state === "submitting" ? "Loggin in..." : "Log in"}
+              </Button>
+            </Form>
+          </Box>
+          <Box color="teal.400" textDecoration="underline" mt="1em">
+            <Link to="../register">No account? Sign up here</Link>
+          </Box>
+        </Flex>
+      </Container>
+    </AnimationContainer>
   )
 }

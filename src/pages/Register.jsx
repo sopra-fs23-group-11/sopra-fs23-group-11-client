@@ -15,7 +15,8 @@ import {
 import { Form, redirect, useActionData, Link, useNavigation } from "react-router-dom"
 import { api } from "../helpers/api"
 import User from "../models/User"
-import Login from "./Login.jsx";
+import AnimationContainer from "../components/AnimationContainer"
+import { lobbyVariants } from "../animations/variants"
 
 export async function action({ request }) {
   const data = await request.formData()
@@ -55,9 +56,9 @@ export default function Register() {
 
   const isSignupDisabled = !selectedAvatar
   return (
-    <>
+    <AnimationContainer variants={lobbyVariants}>
       <Flex
-        minHeight = "100%"
+        pt={10}
         alignItems = "center"
         justifyContent="center"
         flexDirection="column"
@@ -106,7 +107,7 @@ export default function Register() {
             </FormControl>
 
             <Box color="teal.400" textDecoration="underline">
-            <Link to="../login"> Already have an account? Log in here.</Link>
+            <Link to="../login"> Have an account? Log in here.</Link>
             </Box>
 
           </Box>
@@ -120,6 +121,6 @@ export default function Register() {
         </Flex>
       </Form>
         </Flex>
-    </>
+    </AnimationContainer>
   )
 }

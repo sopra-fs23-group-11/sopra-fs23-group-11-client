@@ -62,6 +62,7 @@ function Setup() {
     console.log("effect ran...")
     socket = Stomp.client(getDomainWebsocket())
     socket.connect({}, onConnected, errorCallback)
+    console.log("player : ", player, "enemy: ", enemy)
 
     if (lobby?.lobbyCode !== lobbyCode)
     throw ({
@@ -69,7 +70,11 @@ function Setup() {
       desc: "The lobby does not exist. You may have tried to access an external lobby or accidentally refreshed the site"
     })
 
-    if (player.isReady && enemy.isReady) navigate(`/game/${lobbyCode}`)
+    if (player.isReady && enemy.isReady){
+      console.log("players are ready, will redirect shortly...")
+       navigate(`/game/${lobbyCode}`)
+
+      }
   }, [enemy.isReady, player.isReady])
 
   const errorCallback = (m) => {
@@ -136,23 +141,27 @@ function Setup() {
         id: payloadData.player1Id,
         name: payloadData.player1Name,
         isMyTurn: true,
+        newGame: false,
       }))
 
       setEnemy((enemy) => ({
         ...enemy,
         id: payloadData.player2Id,
         name: payloadData.player2Name,
+        newGame: false,
       }))
     } else {
       setPlayer((player) => ({
         ...player,
         id: payloadData.player2Id,
         name: payloadData.player2Name,
+        newGame: false,
       }))
       setEnemy((enemy) => ({
         ...enemy,
         id: payloadData.player1Id,
         name: payloadData.player1Name,
+        newGame: false,
       }))
     }
 
@@ -196,8 +205,9 @@ function Setup() {
       display="flex"
       flexDirection="column"
       justifyContent="center"
-      h="70vh"
       alignItems="center"
+      mb={50}
+      h={isStartSetup ? "60vh" : "70vh"}
     >
       {isStartSetup ? (
         <Flex justifyContent="center" alignItems="center">
@@ -324,6 +334,8 @@ function Setup() {
             alignSelf="center"
             size="lg"
             variant="brand"
+            isLoading={isStartSetup}
+            
           >
             Start Setup
           </Button>
