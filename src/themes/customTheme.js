@@ -1,4 +1,10 @@
 import { extendTheme } from "@chakra-ui/react"
+import "typeface-pacifico";
+import "typeface-lobster";
+import "typeface-nunito"
+import "typeface-lato";
+import "typeface-montserrat";
+import "typeface-open-sans"
 // const brand = defineStyle({
 //     bgGradient: "linear(to-l, #0172AF, #74FEBD)"
 // })
@@ -6,6 +12,10 @@ import { extendTheme } from "@chakra-ui/react"
 // const buttonTheme = defineStyleConfig({variants: {brand}})
 
 const customTheme = extendTheme({
+  fonts: {
+    heading: "Lobster, sans-serif",
+    body: "Lato, sans-serif"
+  },
   styles: {
     global: {
       body: {
@@ -18,7 +28,7 @@ const customTheme = extendTheme({
       baseStyle: {
         color: "white",
         borderRadius: "xl",
-        textTransform: "uppercase"
+        // textTransform: "uppercase"
       },
       variants: {
         brand: {

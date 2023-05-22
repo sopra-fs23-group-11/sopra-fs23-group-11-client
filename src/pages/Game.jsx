@@ -13,6 +13,8 @@ import {
   Input,
   InputRightElement,
   Card,
+  Badge,
+  Tooltip,
 } from "@chakra-ui/react"
 import { ChatIcon } from "@chakra-ui/icons"
 import { GameContext } from "../contexts/GameContext.jsx"
@@ -33,6 +35,8 @@ import {
   enemyVariant,
   switchTurnVariants,
 } from "../animations/variants"
+import generateBoard from "../helpers/getBoard"
+import shipsData from "../models/ShipsData"
 
 let socket = null
 export default function Game() {
@@ -43,16 +47,18 @@ export default function Game() {
   const [inputValue, setInputValue] = useState("")
   const [messages, setMessages] = useState([])
   const [isChatOpen, setIsChatOpen] = useState(false)
+  const [isRematch, setIsRematch] = useState(false)
 
   const { lobbyCode } = useParams()
   const toast = useToast()
 
   useEffect(() => {
-    if(!player.name) {
-      throw ({
-        message: "The Game session does not exist", 
-        desc: "The player does not exist. You may have tried to access an external lobby or accidentally refreshed the site"
-      })
+    console.log("player : ", player, "enemy: ", enemy)
+    if (!player.name) {
+      throw {
+        message: "The Game session does not exist",
+        desc: "The player does not exist. You may have tried to access an external lobby or accidentally refreshed the site",
+      }
     }
     socket = Stomp.client(getDomainWebsocket())
     socket.connect({}, onConnected)
@@ -107,8 +113,42 @@ export default function Game() {
     //navigate(`/endscreen/${lobbyCode}`)
   }
 
-  const onNewGame = (payload) => {
-    setEnemy({...enemy, newGame: true})
+  const newGame = () => {
+    const enemyId = enemy.id
+    socket.send("/app/newgame", {}, JSON.stringify({ lobbyCode, enemyId }))
+    setPlayer({
+      id: player.id,
+      name: "",
+      board: generateBoard(),
+      ships: shipsData,
+      missesReceived: [],
+      hitsReceived: [],
+      isReady: false,
+      isMyTurn: false,
+      hasWon: false,
+      newGame: true,
+    })
+    setIsRematch(true)
+  }
+
+  const onNewGame = () => {
+    setEnemy({
+      id: enemy.id,
+      name: "",
+      board: generateBoard(),
+      isReady: false,
+      newGame: true,
+    })
+    if (!isRematch) {
+      toast({
+        title: "Message from opponent",
+        description: "Player requested a rematch",
+        position: "bottom",
+        isClosable: true,
+        duration: 4000,
+        status: "info",
+      })
+    }
   }
 
   const onMessage = (payload) => {
@@ -204,25 +244,28 @@ export default function Game() {
     <Flex justifyContent="space-around" width="80%" m="auto">
       <AnimationContainer variants={playerVariant}>
         <Flex direction="column" alignItems="center">
-          <Card
-            padding="4px 5px"
-            direction="flex"
-            w={200}
-            alignItems="center"
-            justifyContent="center"
-            borderRadius="full"
-            variant="filled"
-            bgGradient="linear(to-l, #4FD1C5, #B7E8EB)"
+          <AnimationContainer
+            variants={player.isMyTurn ? switchTurnVariants : ""}
           >
-            <Avatar src={user.avatar} />
-            <Text>{player.name}</Text>
-          </Card>
+            <Tooltip label={player.isMyTurn ? "Weapons hot Captain" : ""}>
+              <Card
+                padding="4px 5px"
+                direction="flex"
+                w={200}
+                alignItems="center"
+                justifyContent="center"
+                borderRadius="full"
+                variant="filled"
+                bgGradient={
+                  player.isMyTurn ? "linear(to-l, #4FD1C5, #B7E8EB)" : ""
+                }
+              >
+                <Avatar src={user.avatar} />
+                <Text>{player.name}</Text>
+              </Card>
+            </Tooltip>
+          </AnimationContainer>
           <BattleshipBoard board={player.board} handleError={handleError} />
-          {player.isMyTurn && (
-            <AnimationContainer variants={switchTurnVariants}>
-              Your Turn Captain
-            </AnimationContainer>
-          )}
         </Flex>
       </AnimationContainer>
 
@@ -244,19 +287,27 @@ export default function Game() {
 
       <AnimationContainer variants={enemyVariant}>
         <Flex direction="column" alignItems="center">
-          <Card
-            padding="4px 5px"
-            direction="flex"
-            w={200}
-            alignItems="center"
-            justifyContent="center"
-            borderRadius="full"
-            variant="filled"
-            bgGradient="linear(to-l, #4FD1C5, #B7E8EB)"
+          <AnimationContainer
+            variants={player.isMyTurn ? "" : switchTurnVariants}
           >
-            <Avatar src={enemy.avatar} />
-            <Text>{enemy.name}</Text>
-          </Card>
+            <Tooltip label={player.isMyTurn ? "" : "Enemy shot incoming!"}>
+              <Card
+                padding="4px 5px"
+                direction="flex"
+                w={200}
+                alignItems="center"
+                justifyContent="center"
+                borderRadius="full"
+                variant="filled"
+                bgGradient={
+                  !player.isMyTurn ? "linear(to-l, #4FD1C5, #B7E8EB)" : ""
+                }
+              >
+                <Avatar src={enemy.avatar} />
+                <Text>{enemy.name}</Text>
+              </Card>
+            </Tooltip>
+          </AnimationContainer>
           <BattleshipBoard
             board={enemy.board}
             handleShoot={shootMissle}
@@ -264,11 +315,6 @@ export default function Game() {
             isEnemy={true}
             handleError={handleError}
           />
-          {!player.isMyTurn && (
-            <AnimationContainer variants={switchTurnVariants}>
-              Enemy Shot Incoming
-            </AnimationContainer>
-          )}
         </Flex>
       </AnimationContainer>
       {enemyExit && <EnemyExitModal enemyExit={enemyExit} />}
@@ -317,7 +363,13 @@ export default function Game() {
         </Box>
       )}
 
-      {isFinished && <EndGameModal isFinished={isFinished} socket={socket}/>}
+      {isFinished && (
+        <EndGameModal
+          isFinished={isFinished}
+          handleNewGame={newGame}
+          isRematch={isRematch}
+        />
+      )}
     </Flex>
   )
 }
