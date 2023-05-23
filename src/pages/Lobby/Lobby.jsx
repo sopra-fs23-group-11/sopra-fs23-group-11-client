@@ -1,4 +1,12 @@
-import { Text, Button, Flex, Box, IconButton, Collapse } from "@chakra-ui/react"
+import {
+  Text,
+  Button,
+  Flex,
+  Box,
+  IconButton,
+  Collapse,
+  Icon,
+} from "@chakra-ui/react"
 
 import React, { useContext, useEffect, useState } from "react"
 
@@ -8,7 +16,11 @@ import { api } from "../../helpers/api.js"
 import { motion } from "framer-motion"
 import AnimationContainer from "../../components/AnimationContainer"
 import { InfoIcon } from "@chakra-ui/icons"
-import { lobbyVariants, navigationButtonVariant } from "../../animations/variants"
+import {
+  lobbyVariants,
+  navigationButtonVariant,
+} from "../../animations/variants"
+import Rules from "../../components/Rules"
 
 function Lobby() {
   const userId = JSON.parse(sessionStorage.getItem("userId"))
@@ -48,26 +60,26 @@ function Lobby() {
 
   return (
     <AnimationContainer variants={lobbyVariants}>
+      <AnimationContainer variants={navigationButtonVariant}>
+          <Flex justifyContent="end" width="93%">
+            <Icon
+              aria-label="Show Rules"
+              position="relative"
+              onClick={toggleRules}
+              _hover={{ transform: "scale(1.1)" }}
+              cursor="pointer"
+              boxSize={8}
+            />
+          </Flex>
+        </AnimationContainer>
       <Flex
         flexDirection="column"
-        height="70vh"
+        height="60vh"
         gap="20px"
         justifyContent="center"
         alignItems="center"
         position="relative"
       >
-        <IconButton
-          aria-label="Show Rules"
-          icon={<InfoIcon />}
-          position="relative"
-          right="-10rem"
-          onClick={toggleRules}
-          variant="ghost"
-          size="lg"
-          color="red.500"
-          _hover={{ color: "red.700" }}
-          _active={{ outline: "none" }}
-        />
         <AnimationContainer variants={navigationButtonVariant}>
           <Text fontWeight="bold">{`Welcome ${user.name}`}</Text>
         </AnimationContainer>
@@ -119,8 +131,9 @@ function Lobby() {
         >
           Log Out
         </Button>
-
-        <Collapse in={showRules}>
+        
+        <Rules showRules={showRules} toggleRules={toggleRules} currentPage="lobby"/>
+        {/* <Collapse in={showRules}>
           <Text fontSize="sm" color="gray.500" textAlign="left">
             <Text as="b">Rules: </Text>
             <br />
@@ -136,7 +149,7 @@ function Lobby() {
             <br />
             Have fun, Captain!
           </Text>
-        </Collapse>
+        </Collapse> */}
       </Flex>
     </AnimationContainer>
   )

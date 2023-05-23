@@ -37,7 +37,7 @@ export default function EnemyExitModal({ enemyExit }) {
       onClose={onClose}
     >
       <ModalOverlay backdropFilter="blur(10px)" />
-      <ModalContent>
+      <ModalContent bg="rgba(255,254,234,1)">
         <ModalHeader>Enemy left the Game</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={6}>

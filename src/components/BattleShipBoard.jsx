@@ -2,6 +2,7 @@ import { Circle, Grid, GridItem } from "@chakra-ui/react"
 import { React, useContext, useState } from "react"
 import Cell from "./Cell"
 import { GameContext } from "../contexts/GameContext"
+import { motion } from "framer-motion"
 
 function BattleshipBoard({
   board,
@@ -132,13 +133,22 @@ function BattleshipBoard({
                 >
                   <Circle
                     size="20px"
-                    bg={
-                      board[rowIndex][colIndex].isHit
-                        ? "red.500"
+                    as={motion.div}
+                    animate={{
+                      backgroundColor: board[rowIndex][colIndex].isHit
+                        ? "#E53E3E"
                         : board[rowIndex][colIndex].isShotAt
-                        ? "gray.500"
-                        : ""
-                    }
+                        ? "#718096"
+                        : "",
+                    }}
+                    transition="0.5s"
+                    // bg={
+                    //   board[rowIndex][colIndex].isHit
+                    //     ? "red.500"
+                    //     : board[rowIndex][colIndex].isShotAt
+                    //     ? "gray.500"
+                    //     : ""
+                    // }
                   ></Circle>
                 </Cell>
               </GridItem>

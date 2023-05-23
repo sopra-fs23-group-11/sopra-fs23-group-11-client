@@ -21,6 +21,7 @@ import {
   lobbyVariants,
   navigationButtonVariant,
 } from "../../animations/variants.js"
+// import RefreshRedirect from "../../components/RefreshRedirect.jsx"
 
 function Host() {
   const [code, setCode] = useState(null)
@@ -35,10 +36,17 @@ function Host() {
   console.log(lobby)
 
   useEffect(() => {
+
+    if (user.id === null)
+    throw ({
+      message: "The User does not exist", 
+      desc: " You may have accidentally refreshed the site"
+    })
+
     if (isJoined) {
       setTimeout(() => {
         navigate(`/setup/${code}`)
-      }, 3000)
+      }, 2000)
     }
   }, [isJoined])
 
@@ -108,6 +116,7 @@ function Host() {
 
   return (
     <AnimationContainer variants={lobbyVariants}>
+      {/* <RefreshRedirect redirectTo="/lobby" /> */}
       <Box
         height="50vh"
         display="flex"
@@ -151,12 +160,14 @@ function Host() {
           mb="4"
           size="lg"
           w="200px"
-          isDisabled={isJoined}
+          isDisabled={isJoined || showCode}
+          isLoading={isJoined || showCode}
+          loadingText={isJoined ? "Player joined!" : showCode ?  "Waiting for a Player": ""}
         >
           Get a Lobby Code
         </Button>
 
-        {!isJoined && showCode && (
+        {/* {!isJoined && showCode && (
           <AnimationContainer variants={navigationButtonVariant}>
             <Box
               display="flex"
@@ -164,7 +175,7 @@ function Host() {
               alignItems="center"
               justifyContent="space-around"
             >
-              {/* <Button mt="2" bg="blue.500"> */}
+
 
               <Text m={3}>Waiting for Player to join</Text>
               <Spinner
@@ -175,13 +186,13 @@ function Host() {
               />
             </Box>
           </AnimationContainer>
-        )}
+        )} */}
 
-        {isJoined && (
+        {/* {isJoined && (
           <AnimationContainer variants={navigationButtonVariant}>
             <Text>Player Joined, will redirect shortly</Text>
           </AnimationContainer>
-        )}
+        )} */}
       </Box>
     </AnimationContainer>
   )

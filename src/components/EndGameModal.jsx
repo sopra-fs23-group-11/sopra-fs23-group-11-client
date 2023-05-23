@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import {
   Modal,
   ModalOverlay,
@@ -26,6 +26,7 @@ export default function EndGameModal({ isFinished, handleNewGame, isRematch }) {
   const { user, player, setPlayer, resetState, lobby, enemy, setEnemy } =
     useContext(GameContext)
   const navigate = useNavigate()
+  const [rematchMessage, setRematchMessage] = useState("Waiting for Player to accept Rematch Request")
   const lobbyCode = lobby.lobbyCode
 
   useEffect(() => {
@@ -49,7 +50,11 @@ export default function EndGameModal({ isFinished, handleNewGame, isRematch }) {
     if (isFinished) {
       onOpen()
     }
-  }, [isFinished])
+
+    setTimeout(() => {
+      setRematchMessage("Player did not respond. Will redirect shortly...")
+    }, 10000)
+  }, [])
 
   const goLobby = () => {
     resetState()
@@ -57,6 +62,7 @@ export default function EndGameModal({ isFinished, handleNewGame, isRematch }) {
     navigate(`/lobby`)
     // start new game
   }
+
 
   return (
     <Modal
@@ -67,8 +73,8 @@ export default function EndGameModal({ isFinished, handleNewGame, isRematch }) {
       closeOnOverlayClick={false}
     >
       {player.hasWon && <ReactConfetti />}
-      <ModalOverlay bg="blackAlpha.300" />
-      <ModalContent>
+      <ModalOverlay backdropFilter="blur(10px)" />
+      <ModalContent bg="rgba(255,254,234,1)">
         <ModalHeader textAlign="center">
           {player.hasWon
             ? "Congratulations Captain!"
@@ -80,7 +86,7 @@ export default function EndGameModal({ isFinished, handleNewGame, isRematch }) {
           <Flex alignItems="center" justifyContent="center" direction="column">
             {isRematch ? (
               <>
-                <Text>Waiting for Player to accept Rematch Request</Text>
+                <Text>{rematchMessage}</Text>
                 <Spinner />
               </>
             ) : (

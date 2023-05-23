@@ -26,7 +26,7 @@ export default function Ships(props) {
             props.type === "Carrier" ? `url(${Battleship})`:null
         }
         backgroundSize = "100%"
-        height = "40px"
+        minH = "40px"
         backgroundRepeat = "no-repeat"
         backgroundPosition = "center"
         borderBottomWidth = "4px"
