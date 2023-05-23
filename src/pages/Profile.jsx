@@ -10,6 +10,14 @@ const Profile = () => {
   const {user} = useContext(GameContext)
   const navigate = useNavigate()
 
+  useEffect(() => {
+    if (user.id === null)
+    throw ({
+      message: "The User does not exist", 
+      desc: " You may have accidentally refreshed the site"
+    })
+  }, [])
+
 
 
   let content = (

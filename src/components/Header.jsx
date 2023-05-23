@@ -1,15 +1,15 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import {
   Flex,
   Box,
   useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  AlertDialogCloseButton,
   Button,
   Heading,
   Avatar,
@@ -29,6 +29,7 @@ function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { resetState, lobby, user } = useContext(GameContext)
   const [isLeaving, setIsLeaving] = useState(false)
+  const cancelRef = useRef()
 
   const routeParts = location.pathname.split("/")
   const mainRouteName = routeParts[1]
@@ -86,28 +87,34 @@ function Header() {
             </Heading>
             <Avatar src={user.avatar} showBorder />
           </Box>
-          <Modal
-            closeOnOverlayClick={false}
-            isOpen={isOpen}
-            size="xs"
-            onClose={onClose}
-          >
-            <ModalOverlay backdropFilter="blur(10px)" />
-            <ModalContent>
-              <ModalHeader>Confirm Exit</ModalHeader>
-              <ModalCloseButton />
-              <ModalBody pb={6}>
-                Captain, are you sure you want to leave the Game session?
-              </ModalBody>
 
-              <ModalFooter>
-                <Button colorScheme="blue" mr={3} onClick={toMenu}>
-                  Return to Menu
-                </Button>
-                <Button onClick={onClose}>Stay</Button>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
+          <AlertDialog
+            isOpen={isOpen}
+            leastDestructiveRef={cancelRef}
+            onClose={onClose}
+            size="xs"
+          >
+            <AlertDialogOverlay>
+              <AlertDialogContent bg="rgba(255,254,234,1)">
+                <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                  Confirm Exit
+                </AlertDialogHeader>
+
+                <AlertDialogBody>
+                  Captain, are you sure you want to leave the Game session?
+                </AlertDialogBody>
+
+                <AlertDialogFooter>
+                  <Button ref={cancelRef} onClick={onClose} variant="brand">
+                    Stay
+                  </Button>
+                  <Button colorScheme="red" onClick={toMenu} ml={3}>
+                    Exit
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialogOverlay>
+          </AlertDialog>
         </Box>
       </Box>
     </AnimationContainer>

@@ -47,7 +47,7 @@ export default function Cell({
         borderRadius={hasShip && !isEnemy ? "3px" : "5px"}
         className={isClicked ? "clicked" : ""}
       >
-        <AnimationContainer variants={shotVariants}>{children}</AnimationContainer>
+        {children}
       </Box>
     </AnimationContainer>
   )

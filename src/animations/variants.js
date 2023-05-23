@@ -161,13 +161,21 @@ export const playerVariant = {
 }
 
 export const switchTurnVariants = {
-  visible: {
-    scale: [1, 1.1, 1],
 
+  hidden: {
+    opacity: 0,
+    y: -270,
     transition: {
-      repeat: "Infinity",
-      repeatType: "reverse",
-      repeatDelay: 0.5
+      duration: 1,
+      ease: [0.6, 0.05, -0.01, 0.9],
+    },
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 1,
+      ease: [0.6, 0.05, -0.01, 0.9],
     },
   },
 }
@@ -190,21 +198,12 @@ export const shipSunkVariants = {
 
 export const shotVariants = {
   hidden: {
-    opacity: 0,
-    scale: 0.5,
+    backgroundColor: "transparent"
   },
   visible: {
-    opacity: 1,
-    scale: 1,
+    backgroundColor: "",
     transition: {
-      duration: 0.3,
-      ease: [0, 0.71, 0.2, 1.01],
-      // scale: {
-      //   type: "spring",
-      //   damping: 5,
-      //   stiffness: 100,
-      //   restDelta: 0.001,
-      // },
-    },
+      duration: 1
+    }
   },
 }

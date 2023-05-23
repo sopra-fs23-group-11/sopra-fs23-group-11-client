@@ -20,6 +20,7 @@ import {
   Collapse,
   Card,
   Avatar,
+  Icon
 } from "@chakra-ui/react"
 import { GameContext } from "../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp"
@@ -33,7 +34,9 @@ import {
   readyVariants,
   lobbyVariants,
   buttonVariants,
+  navigationButtonVariant,
 } from "../animations/variants.js"
+import Rules from "../components/Rules.jsx"
 
 let socket = null
 function Setup() {
@@ -56,6 +59,7 @@ function Setup() {
   const [showRules, setShowRules] = useState(false)
   const { lobbyCode } = useParams()
   const navigate = useNavigate()
+  const toast = useToast()
   const hostId = lobby?.hostId
 
   useEffect(() => {
@@ -72,7 +76,10 @@ function Setup() {
 
     if (player.isReady && enemy.isReady){
       console.log("players are ready, will redirect shortly...")
-       navigate(`/game/${lobbyCode}`)
+      setTimeout(() => {
+        navigate(`/game/${lobbyCode}`)
+      }, 3000)
+       
 
       }
   }, [enemy.isReady, player.isReady])
@@ -177,6 +184,12 @@ function Setup() {
       board: JSON.parse(payloadData.playerBoard),
       avatar: payloadData.playerAvatar,
     }))
+    toast({
+      title: "Opponent is Ready",
+      description: "Captain the Enemy is in sight!",
+      status: "info",
+      duration: 3000
+    })
   }
 
   const onLeave = () => {
@@ -234,7 +247,7 @@ function Setup() {
               />
             </Flex>
           </AnimationContainer>
-          <Flex direction="column" minW="300px" justifyContent="center">
+          <Flex direction="column" minW="300px" justifyContent="center" h="100%">
             <AnimationContainer variants={shipsVariant}>
               {player.ships.length !== 0 && (
                 <h2 style={{ fontSize: "20px", marginBottom: "20px" }}>
@@ -288,26 +301,26 @@ function Setup() {
                   loadingText="Good Luck Captain 🫡"
                   alignSelf="center"
                   variant="brand"
+                  size="lg"
                 >
                   Ready
                 </Button>
               </AnimationContainer>
             )}
           </Flex>
-          <IconButton
-            aria-label="Show Rules"
-            icon={<InfoIcon />}
-            position="relative"
-            //left="100rem"
-            top="-15rem"
-            onClick={toggleRules}
-            variant="ghost"
-            size="lg"
-            color="red.500"
-            _hover={{ color: "red.700" }}
-            _active={{ outline: "none" }}
-          />
-          <Collapse in={showRules}>
+          <AnimationContainer variants={navigationButtonVariant}>
+            <Icon
+              aria-label="Show Rules"
+              onClick={toggleRules}
+              _hover={{ transform: "scale(1.1)" }}
+              cursor="pointer"
+              boxSize={8}
+              alignSelf="flex-start"
+              mt="-400px"
+            />
+        </AnimationContainer>
+          <Rules showRules={showRules} toggleRules={toggleRules} currentPage="setup"/>
+          {/* <Collapse in={showRules}>
             <Text fontSize="sm" color="gray.500" textAlign="left">
               <Text as="b">Set-up: </Text>
               <br />
@@ -325,10 +338,10 @@ function Setup() {
               Good Luck, Captain!
               <br />
             </Text>
-          </Collapse>
+          </Collapse> */}
         </Flex>
       ) : user.isHost ? (
-        <AnimationContainer variants={buttonVariants}>
+        <AnimationContainer variants={navigationButtonVariant}>
           <Button
             onClick={startGame}
             alignSelf="center"
@@ -356,7 +369,7 @@ function Setup() {
               size="lg"
             />
             <Text textAlign={"center"}>
-              Please Wait, Host is putting on his socks...
+              Please wait for the Host to start the Round...
             </Text>
           </Flex>
         </AnimationContainer>

@@ -35,9 +35,9 @@ const router = createBrowserRouter(
       <Route element={<AuthRequired />}>
         <Route path="lobby" element={<LobbyLayout />}>
           <Route index element={<Lobby />} />
-          <Route path="host" element={<Host />} />
-          <Route path="join" element={<Join />} />
-          <Route path="profile/:userid" element={<Profile />} />
+          <Route path="host" element={<Host />} errorElement={<Error />}/>
+          <Route path="join" element={<Join />} errorElement={<Error />}/>
+          <Route path="profile/:userid" element={<Profile />} errorElement={<Error />}/>
         </Route>
         <Route path="setup/:lobbyCode" element={<Setup />} errorElement={<Error />}/>
         <Route path="game/:lobbyCode" element={<Game />} errorElement={<Error />}/>

@@ -44,12 +44,16 @@ function Join() {
   }
 
   useEffect(() => {
-    // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
+    if (user.id === null)
+    throw ({
+      message: "The User does not exist", 
+      desc: " You may have accidentally refreshed the site"
+    })
     if (isValidCode) {
       console.log("effect ran...")
       setTimeout(() => {
         navigate(`/setup/${lobbyCode}`)
-      }, 1000)
+      }, 2000)
     }
   }, [isValidCode])
 
@@ -80,7 +84,7 @@ function Join() {
           isDisabled={isValidCode || !lobbyCode}
           isLoading={isSubmitting || isValidCode}
           loadingText={
-            isValidCode ? "Will redirect shortly" : "submitting code"
+            isValidCode ? "Will redirect shortly" : "Submitting code"
           }
         >
           Submit Code

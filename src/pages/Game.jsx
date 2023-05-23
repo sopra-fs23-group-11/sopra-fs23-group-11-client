@@ -14,6 +14,7 @@ import {
   InputRightElement,
   Card,
   Badge,
+  Icon,
   Tooltip,
 } from "@chakra-ui/react"
 import { ChatIcon } from "@chakra-ui/icons"
@@ -30,13 +31,16 @@ import { getDomainWebsocket } from "../helpers/getDomainWebsocket.js"
 import AnimationContainer from "../components/AnimationContainer.jsx"
 import EnemyExitModal from "../components/EnemyExitModal.jsx"
 import EndGameModal from "../components/EndGameModal"
+import Rules from "../components/Rules"
 import {
   playerVariant,
   enemyVariant,
   switchTurnVariants,
+  navigationButtonVariant
 } from "../animations/variants"
 import generateBoard from "../helpers/getBoard"
 import shipsData from "../models/ShipsData"
+import { motion } from "framer-motion"
 
 let socket = null
 export default function Game() {
@@ -48,6 +52,8 @@ export default function Game() {
   const [messages, setMessages] = useState([])
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [isRematch, setIsRematch] = useState(false)
+  const [showRules, setShowRules] = useState(false)
+  const navigate = useNavigate()
 
   const { lobbyCode } = useParams()
   const toast = useToast()
@@ -129,6 +135,10 @@ export default function Game() {
       newGame: true,
     })
     setIsRematch(true)
+
+    setTimeout(()=> {
+      navigate("/lobby")
+    }, 13000)
   }
 
   const onNewGame = () => {
@@ -240,22 +250,33 @@ export default function Game() {
     })
   }
 
+  const toggleRules = () => {
+    setShowRules(!showRules)
+  }
+
   return (
+    <>
+    
     <Flex justifyContent="space-around" width="80%" m="auto">
+      <Rules showRules={showRules} toggleRules={toggleRules} currentPage="game"/>
       <AnimationContainer variants={playerVariant}>
         <Flex direction="column" alignItems="center">
-          <AnimationContainer
+          {/* <AnimationContainer
             variants={player.isMyTurn ? switchTurnVariants : ""}
-          >
+          > */}
             <Tooltip label={player.isMyTurn ? "Weapons hot Captain" : ""}>
               <Card
                 padding="4px 5px"
                 direction="flex"
                 w={200}
+                as={motion.div}
+                animate={{opacity: player.isMyTurn ? "1" : "0.35"}}
+                transition="0.5s"
                 alignItems="center"
                 justifyContent="center"
                 borderRadius="full"
                 variant="filled"
+                opacity={0.4}
                 bgGradient={
                   player.isMyTurn ? "linear(to-l, #4FD1C5, #B7E8EB)" : ""
                 }
@@ -264,7 +285,7 @@ export default function Game() {
                 <Text>{player.name}</Text>
               </Card>
             </Tooltip>
-          </AnimationContainer>
+          {/* </AnimationContainer> */}
           <BattleshipBoard board={player.board} handleError={handleError} />
         </Flex>
       </AnimationContainer>
@@ -274,27 +295,32 @@ export default function Game() {
         <Button
           onClick={() => setIsChatOpen(!isChatOpen)}
           bgColor="teal.500"
+          variant="brand"
           color="white"
           borderRadius="lg"
           p={4}
           fontWeight="medium"
-          _hover={{ bgColor: "teal.400" }}
+          // _hover={{ bgColor: "teal.400" }}
           mt={2}
         >
           Toggle Radio
         </Button>
+        
       </Center>
 
       <AnimationContainer variants={enemyVariant}>
         <Flex direction="column" alignItems="center">
-          <AnimationContainer
+          {/* <AnimationContainer
             variants={player.isMyTurn ? "" : switchTurnVariants}
-          >
+          > */}
             <Tooltip label={player.isMyTurn ? "" : "Enemy shot incoming!"}>
               <Card
                 padding="4px 5px"
                 direction="flex"
                 w={200}
+                as={motion.div}
+                animate={{opacity: !player.isMyTurn ? "1" : "0.35"}}
+                transition="0.5s"
                 alignItems="center"
                 justifyContent="center"
                 borderRadius="full"
@@ -307,7 +333,7 @@ export default function Game() {
                 <Text>{enemy.name}</Text>
               </Card>
             </Tooltip>
-          </AnimationContainer>
+          {/* </AnimationContainer> */}
           <BattleshipBoard
             board={enemy.board}
             handleShoot={shootMissle}
@@ -318,6 +344,7 @@ export default function Game() {
         </Flex>
       </AnimationContainer>
       {enemyExit && <EnemyExitModal enemyExit={enemyExit} />}
+
 
       {isChatOpen && (
         <Box
@@ -350,6 +377,7 @@ export default function Game() {
               <Button
                 onClick={handleSendMessage}
                 bgColor="teal.500"
+                variant="brand"
                 color="white"
                 borderRadius="lg"
                 p={4}
@@ -371,5 +399,19 @@ export default function Game() {
         />
       )}
     </Flex>
+    <AnimationContainer variants={navigationButtonVariant}>
+          <Flex justifyContent="center" width="100%">
+            <Icon
+              aria-label="Show Rules"
+              position="relative"
+              onClick={toggleRules}
+              _hover={{ transform: "scale(1.1)" }}
+              cursor="pointer"
+              boxSize={8}
+              mt={5}
+            />
+          </Flex>
+        </AnimationContainer>
+    </>
   )
 }
