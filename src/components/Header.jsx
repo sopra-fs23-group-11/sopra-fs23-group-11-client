@@ -95,7 +95,7 @@ function Header() {
             size="xs"
           >
             <AlertDialogOverlay>
-              <AlertDialogContent bg="rgba(255,254,234,1)">
+              <AlertDialogContent bgGradient="linear(to-br, #B7E8EB, rgba(255,254,234,1))">
                 <AlertDialogHeader fontSize="lg" fontWeight="bold">
                   Confirm Exit
                 </AlertDialogHeader>

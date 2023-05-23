@@ -45,6 +45,16 @@ export const navigationButtonVariant = {
   },
 }
 
+export const avatarCardVariant = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: { delay: 2, duration: 1.6 },
+  },
+}
+
 export const lobbyVariants = {
   hidden: {
     opacity: 0,

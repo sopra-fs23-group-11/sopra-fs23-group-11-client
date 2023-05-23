@@ -166,33 +166,6 @@ function Host() {
         >
           Get a Lobby Code
         </Button>
-
-        {/* {!isJoined && showCode && (
-          <AnimationContainer variants={navigationButtonVariant}>
-            <Box
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              justifyContent="space-around"
-            >
-
-
-              <Text m={3}>Waiting for Player to join</Text>
-              <Spinner
-                thickness="4px"
-                speed="0.95s"
-                emptyColor="gray.200"
-                size="lg"
-              />
-            </Box>
-          </AnimationContainer>
-        )} */}
-
-        {/* {isJoined && (
-          <AnimationContainer variants={navigationButtonVariant}>
-            <Text>Player Joined, will redirect shortly</Text>
-          </AnimationContainer>
-        )} */}
       </Box>
     </AnimationContainer>
   )

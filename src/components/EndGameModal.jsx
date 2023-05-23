@@ -26,7 +26,9 @@ export default function EndGameModal({ isFinished, handleNewGame, isRematch }) {
   const { user, player, setPlayer, resetState, lobby, enemy, setEnemy } =
     useContext(GameContext)
   const navigate = useNavigate()
-  const [rematchMessage, setRematchMessage] = useState("Waiting for Player to accept Rematch Request")
+  const [rematchMessage, setRematchMessage] = useState(
+    "Waiting for Player to accept Rematch Request"
+  )
   const lobbyCode = lobby.lobbyCode
 
   useEffect(() => {
@@ -50,11 +52,12 @@ export default function EndGameModal({ isFinished, handleNewGame, isRematch }) {
     if (isFinished) {
       onOpen()
     }
-
-    setTimeout(() => {
-      setRematchMessage("Player did not respond. Will redirect shortly...")
-    }, 10000)
-  }, [])
+    if (isRematch) {
+      setTimeout(() => {
+        setRematchMessage("Player did not respond. Will redirect shortly...")
+      }, 10000)
+    }
+  }, [isRematch])
 
   const goLobby = () => {
     resetState()
@@ -62,7 +65,6 @@ export default function EndGameModal({ isFinished, handleNewGame, isRematch }) {
     navigate(`/lobby`)
     // start new game
   }
-
 
   return (
     <Modal
@@ -72,9 +74,9 @@ export default function EndGameModal({ isFinished, handleNewGame, isRematch }) {
       size="xl"
       closeOnOverlayClick={false}
     >
-      {player.hasWon && <ReactConfetti />}
       <ModalOverlay backdropFilter="blur(10px)" />
-      <ModalContent bg="rgba(255,254,234,1)">
+      <ModalContent bgGradient="linear(to-br, #B7E8EB, rgba(255,254,234,1))">
+        {player.hasWon && <ReactConfetti />}
         <ModalHeader textAlign="center">
           {player.hasWon
             ? "Congratulations Captain!"
@@ -118,7 +120,11 @@ export default function EndGameModal({ isFinished, handleNewGame, isRematch }) {
           </Flex>
         </ModalBody>
         <ModalFooter display="flex" justifyContent="space-evenly">
-          <Button variant="brand" onClick={handleNewGame} isDisabled={isRematch}>
+          <Button
+            variant="brand"
+            onClick={handleNewGame}
+            isDisabled={isRematch}
+          >
             {player.hasWon ? "New Game" : "Revenge"}
           </Button>
           <Button variant="brand" onClick={goLobby}>

@@ -20,7 +20,7 @@ import {
   Collapse,
   Card,
   Avatar,
-  Icon
+  Icon,
 } from "@chakra-ui/react"
 import { GameContext } from "../contexts/GameContext.jsx"
 import { Stomp } from "stompjs/lib/stomp"
@@ -35,6 +35,7 @@ import {
   lobbyVariants,
   buttonVariants,
   navigationButtonVariant,
+  avatarCardVariant,
 } from "../animations/variants.js"
 import Rules from "../components/Rules.jsx"
 
@@ -69,19 +70,17 @@ function Setup() {
     console.log("player : ", player, "enemy: ", enemy)
 
     if (lobby?.lobbyCode !== lobbyCode)
-    throw ({
-      message: "The Game session does not exist", 
-      desc: "The lobby does not exist. You may have tried to access an external lobby or accidentally refreshed the site"
-    })
+      throw {
+        message: "The Game session does not exist",
+        desc: "The lobby does not exist. You may have tried to access an external lobby or accidentally refreshed the site",
+      }
 
-    if (player.isReady && enemy.isReady){
+    if (player.isReady && enemy.isReady) {
       console.log("players are ready, will redirect shortly...")
       setTimeout(() => {
         navigate(`/game/${lobbyCode}`)
       }, 3000)
-       
-
-      }
+    }
   }, [enemy.isReady, player.isReady])
 
   const errorCallback = (m) => {
@@ -188,7 +187,7 @@ function Setup() {
       title: "Opponent is Ready",
       description: "Captain the Enemy is in sight!",
       status: "info",
-      duration: 3000
+      duration: 3000,
     })
   }
 
@@ -226,19 +225,21 @@ function Setup() {
         <Flex justifyContent="center" alignItems="center">
           <AnimationContainer variants={boardVariant}>
             <Flex direction="column" alignItems="center">
-              <Card
-                padding="4px 5px"
-                direction="flex"
-                w={200}
-                alignItems="center"
-                justifyContent="center"
-                borderRadius="full"
-                variant="filled"
-                bgGradient="linear(to-l, #4FD1C5, #B7E8EB)"
-              >
-                <Avatar src={user.avatar} />
-                <Text>{player.name}</Text>
-              </Card>
+              <AnimationContainer variants={avatarCardVariant}>
+                <Card
+                  padding="4px 5px"
+                  direction="flex"
+                  w={200}
+                  alignItems="center"
+                  justifyContent="center"
+                  borderRadius="full"
+                  variant="filled"
+                  bgGradient="linear(to-l, #4FD1C5, #B7E8EB)"
+                >
+                  <Avatar src={user.avatar} />
+                  <Text>{player.name}</Text>
+                </Card>
+              </AnimationContainer>
               <BattleshipBoard
                 board={player.board}
                 handlePlace={placeShip}
@@ -247,7 +248,12 @@ function Setup() {
               />
             </Flex>
           </AnimationContainer>
-          <Flex direction="column" minW="300px" justifyContent="center" h="100%">
+          <Flex
+            direction="column"
+            minW="300px"
+            justifyContent="center"
+            h="100%"
+          >
             <AnimationContainer variants={shipsVariant}>
               {player.ships.length !== 0 && (
                 <h2 style={{ fontSize: "20px", marginBottom: "20px" }}>
@@ -318,27 +324,12 @@ function Setup() {
               alignSelf="flex-start"
               mt="-400px"
             />
-        </AnimationContainer>
-          <Rules showRules={showRules} toggleRules={toggleRules} currentPage="setup"/>
-          {/* <Collapse in={showRules}>
-            <Text fontSize="sm" color="gray.500" textAlign="left">
-              <Text as="b">Set-up: </Text>
-              <br />
-              Select the ship you want to place and hover over the field to see
-              its arrangement. <br />
-              Click on the field to place the ship, but keep in mind that once a
-              ship is placed, you cannot undo it!
-              <br />
-              Your ships can touch each other, but they cannot overlap.
-              <br />
-              Use the button to switch between horizontal and vertical placement
-              of the ships.
-              <br />
-              Make sure to place all your ships before starting the game. <br />
-              Good Luck, Captain!
-              <br />
-            </Text>
-          </Collapse> */}
+          </AnimationContainer>
+          <Rules
+            showRules={showRules}
+            toggleRules={toggleRules}
+            currentPage="setup"
+          />
         </Flex>
       ) : user.isHost ? (
         <AnimationContainer variants={navigationButtonVariant}>
@@ -348,7 +339,6 @@ function Setup() {
             size="lg"
             variant="brand"
             isLoading={isStartSetup}
-            
           >
             Start Setup
           </Button>

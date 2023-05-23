@@ -107,7 +107,7 @@ function BattleshipBoard({
                     !(
                       board[rowIndex][colIndex].isHit ||
                       board[rowIndex][colIndex].isShotAt
-                    ) && { bg: "gray.300", scale: 1.2 }
+                    ) && { bg: "gray.300", transform: "scale(1.1)" }
                   }
                   cursor={
                     isSetUp
@@ -139,16 +139,9 @@ function BattleshipBoard({
                         ? "#E53E3E"
                         : board[rowIndex][colIndex].isShotAt
                         ? "#718096"
-                        : "",
+                        : "transparent",
                     }}
                     transition="0.5s"
-                    // bg={
-                    //   board[rowIndex][colIndex].isHit
-                    //     ? "red.500"
-                    //     : board[rowIndex][colIndex].isShotAt
-                    //     ? "gray.500"
-                    //     : ""
-                    // }
                   ></Circle>
                 </Cell>
               </GridItem>

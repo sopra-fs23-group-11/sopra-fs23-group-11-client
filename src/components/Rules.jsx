@@ -41,7 +41,7 @@ export default function Rules({ showRules, toggleRules, currentPage }) {
     <>
       <Drawer placement="right" onClose={closeRules} isOpen={isOpen}>
         <DrawerOverlay />
-        <DrawerContent bg="rgba(255,254,234,1)">
+        <DrawerContent bg="rgba(255,254,234,1)" bgGradient="linear(to-br, #B7E8EB, rgba(255,254,234,1))">
           <DrawerCloseButton />
           <DrawerHeader borderBottomWidth="1px">Ahoy Captain!</DrawerHeader>
           <DrawerBody>
