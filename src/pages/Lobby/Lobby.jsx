@@ -133,23 +133,6 @@ function Lobby() {
         </Button>
         
         <Rules showRules={showRules} toggleRules={toggleRules} currentPage="lobby"/>
-        {/* <Collapse in={showRules}>
-          <Text fontSize="sm" color="gray.500" textAlign="left">
-            <Text as="b">Rules: </Text>
-            <br />
-            At the start of the game, each player has to place 5 ships of
-            different length either horizontal or vertical.
-            <br />
-            After that, the players take turns shooting at the opponent's field.
-            <br />
-            If a ship is hit, the square turns red. If it's a miss, a circle
-            appears. In both cases it's the opponent's turn.
-            <br />
-            The first player who sinks all the opponent's ships wins.
-            <br />
-            Have fun, Captain!
-          </Text>
-        </Collapse> */}
       </Flex>
     </AnimationContainer>
   )
