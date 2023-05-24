@@ -66,7 +66,7 @@ function Setup() {
   useEffect(() => {
     console.log("effect ran...")
     socket = Stomp.client(getDomainWebsocket())
-    socket.connect({}, onConnected, errorCallback)
+    if(!socket.connected)socket.connect({}, onConnected, errorCallback)
     console.log("player : ", player, "enemy: ", enemy)
 
     if (lobby?.lobbyCode !== lobbyCode)
@@ -75,6 +75,10 @@ function Setup() {
         desc: "The lobby does not exist. You may have tried to access an external lobby or accidentally refreshed the site",
       }
 
+    
+  }, [])
+
+  useEffect(() => {
     if (player.isReady && enemy.isReady) {
       console.log("players are ready, will redirect shortly...")
       setTimeout(() => {

@@ -29,6 +29,7 @@ export default function EndGameModal({ isFinished, handleNewGame, isRematch }) {
   const [rematchMessage, setRematchMessage] = useState(
     "Waiting for Player to accept Rematch Request"
   )
+  const [displaySpinner, setDisplaySpinner] = useState(true)
   const lobbyCode = lobby.lobbyCode
   console.log(isRematch)
 
@@ -57,6 +58,7 @@ export default function EndGameModal({ isFinished, handleNewGame, isRematch }) {
     if (isRematch) {
       const navigateTimeout = setTimeout(() => {
         setRematchMessage("Player did not respond. Will redirect shortly...")
+        setDisplaySpinner(false)
         setTimeout(() => goLobby(), 3000)
       }, 10000)
       return () => clearTimeout(navigateTimeout)
@@ -94,7 +96,7 @@ export default function EndGameModal({ isFinished, handleNewGame, isRematch }) {
             {isRematch ? (
               <>
                 <Text>{rematchMessage}</Text>
-                <Spinner />
+                { displaySpinner && <Spinner />}
               </>
             ) : (
               <>
