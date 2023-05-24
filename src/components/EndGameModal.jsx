@@ -23,13 +23,14 @@ import ReactConfetti from "react-confetti"
 
 export default function EndGameModal({ isFinished, handleNewGame, isRematch }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { user, player, setPlayer, resetState, lobby, enemy, setEnemy } =
+  const { user, player, setPlayer, resetState, lobby, enemy, setEnemy, setUser } =
     useContext(GameContext)
   const navigate = useNavigate()
   const [rematchMessage, setRematchMessage] = useState(
     "Waiting for Player to accept Rematch Request"
   )
   const lobbyCode = lobby.lobbyCode
+  console.log(isRematch)
 
   useEffect(() => {
     let shouldNavigate = false
@@ -38,6 +39,7 @@ export default function EndGameModal({ isFinished, handleNewGame, isRematch }) {
       console.log(player, enemy)
       shouldNavigate = true
     }
+    if(player.hasWon)setUser({...user, totalWins: user.totalWins + 1})
 
     if (shouldNavigate) {
       const navigateTimeout = setTimeout(() => {
@@ -53,10 +55,13 @@ export default function EndGameModal({ isFinished, handleNewGame, isRematch }) {
       onOpen()
     }
     if (isRematch) {
-      setTimeout(() => {
+      const navigateTimeout = setTimeout(() => {
         setRematchMessage("Player did not respond. Will redirect shortly...")
+        setTimeout(() => goLobby(), 3000)
       }, 10000)
+      return () => clearTimeout(navigateTimeout)
     }
+
   }, [isRematch])
 
   const goLobby = () => {
@@ -113,7 +118,7 @@ export default function EndGameModal({ isFinished, handleNewGame, isRematch }) {
                 </Card>
                 <Text>
                   total wins:{" "}
-                  {player.hasWon ? user.totalWins + 1 : user.totalWins}
+                  {player.hasWon ? user.totalWins : user.totalWins}
                 </Text>
               </>
             )}

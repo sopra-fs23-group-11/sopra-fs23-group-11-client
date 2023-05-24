@@ -13,7 +13,7 @@ function Join() {
   const [errorLogs, setErrorLogs] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
-  const { user, setUser, setLobby } = useContext(GameContext)
+  const { user, setUser, setLobby, setIsDisabled } = useContext(GameContext)
   const joinerId = user.id
 
   async function submitCode() {
@@ -35,6 +35,7 @@ function Join() {
   }
 
   function runAfterTimeout(callback, timeout) {
+    setIsDisabled(true)
     setIsSubmitting(true)
     return new Promise(resolve => {
       setTimeout(() => {
@@ -53,6 +54,7 @@ function Join() {
       console.log("effect ran...")
       setTimeout(() => {
         navigate(`/setup/${lobbyCode}`)
+        setIsDisabled(false)
       }, 2000)
     }
   }, [isValidCode])
@@ -86,6 +88,7 @@ function Join() {
           loadingText={
             isValidCode ? "Will redirect shortly" : "Submitting code"
           }
+          mb={4}
         >
           Submit Code
         </Button>

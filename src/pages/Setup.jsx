@@ -88,6 +88,7 @@ function Setup() {
   }
 
   const onConnected = () => {
+    if (socket && socket.connected) socket.disconnect
     console.log("Stomp client connected !", lobbyCode)
     socket.subscribe(`/startgame/${lobbyCode}`, onStartGame)
     console.log("websocket connected!")

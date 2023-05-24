@@ -25,7 +25,7 @@ import {
 
 function Host() {
   const [code, setCode] = useState(null)
-  const { user, setUser, lobby, setLobby } = useContext(GameContext)
+  const { user, setUser, lobby, setLobby, setIsDisabled } = useContext(GameContext)
   const [isJoined, setIsJoined] = useState(false)
   const [showCode, setShowCode] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -46,6 +46,7 @@ function Host() {
     if (isJoined) {
       setTimeout(() => {
         navigate(`/setup/${code}`)
+        setIsDisabled(false)
       }, 2000)
     }
   }, [isJoined])
@@ -59,6 +60,7 @@ function Host() {
       setShowCode(true)
       setUser((prev) => ({ ...prev, isHost: true }))
       setLobby(response.data)
+      setIsDisabled(true)
 
       const stompClient = Stomp.client(getDomainWebsocket())
       stompClient.connect({}, () => {
@@ -79,6 +81,7 @@ function Host() {
       joinerId: payloadData.joinerId,
       joinerName: payloadData.joinerName,
     }))
+
   }
 
   const copyCode = () => {
