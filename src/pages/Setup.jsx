@@ -4,6 +4,7 @@ import Ship from "../components/Ship.jsx"
 import { api } from "../helpers/api.js"
 import AnimationContainer from "../components/AnimationContainer.jsx"
 import EnemyExitModal from "../components/EnemyExitModal.jsx"
+import RefreshHandler from "../components/RefreshHandler.jsx"
 
 import {
   Flex,
@@ -69,11 +70,11 @@ function Setup() {
     if(!socket.connected)socket.connect({}, onConnected, errorCallback)
     console.log("player : ", player, "enemy: ", enemy)
 
-    if (lobby?.lobbyCode !== lobbyCode)
-      throw {
-        message: "The Game session does not exist",
-        desc: "The lobby does not exist. You may have tried to access an external lobby or accidentally refreshed the site",
-      }
+    if (lobby?.lobbyCode !== lobbyCode){
+      const state = {message: "You may have accidentally refreshed the Page"}
+      navigate("/lobby", {state})
+    }
+      
 
     
   }, [])
@@ -226,6 +227,7 @@ function Setup() {
       mb={50}
       h={isStartSetup ? "60vh" : "70vh"}
     >
+      <RefreshHandler socket={socket} lobbyCode={lobbyCode}/>
       {isStartSetup ? (
         <Flex justifyContent="center" alignItems="center">
           <AnimationContainer variants={boardVariant}>

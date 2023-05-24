@@ -32,6 +32,7 @@ import AnimationContainer from "../components/AnimationContainer.jsx"
 import EnemyExitModal from "../components/EnemyExitModal.jsx"
 import EndGameModal from "../components/EndGameModal"
 import Rules from "../components/Rules"
+import RefreshHandler from "../components/RefreshHandler"
 import {
   playerVariant,
   enemyVariant,
@@ -58,17 +59,19 @@ export default function Game() {
 
   const { lobbyCode } = useParams()
   const toast = useToast()
+  const navigate = useNavigate()
 
   useEffect(() => {
     console.log("player : ", player, "enemy: ", enemy)
-    if (!player.name) {
-      throw {
-        message: "The Game session does not exist",
-        desc: "The player does not exist. You may have tried to access an external lobby or accidentally refreshed the site",
-      }
-    }
     socket = Stomp.client(getDomainWebsocket())
     socket.connect({}, onConnected)
+    if (!player.name) {
+      {
+        const state = {message: "You may have accidentally refreshed the Page"}
+        navigate("/lobby", {state})
+        socket.send("/app/leave", {}, JSON.stringify({ lobbyCode }))
+      }
+    }
   }, [])
 
   const onConnected = () => {
@@ -256,6 +259,7 @@ export default function Game() {
 
   return (
     <>
+    <RefreshHandler socket={socket} lobbyCode={lobbyCode}/>
       <Flex justifyContent="space-around" width="80%" m="auto">
         <Rules
           showRules={showRules}
