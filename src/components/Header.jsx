@@ -67,9 +67,9 @@ function Header() {
           margin="auto"
           minWidth="200px"
         >
-          <Box h="70px" w="70px" position="absolute" left="0">
+          {/* <Box h="70px" w="70px" position="absolute" left="0">
             <Lottie animationData={Ship} />
-          </Box>
+          </Box> */}
           <Box
             bgGradient="linear(to-tr, #0172AF, #4FD1C5)"
             bgClip="text"

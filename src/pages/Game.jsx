@@ -54,7 +54,7 @@ export default function Game() {
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [isRematch, setIsRematch] = useState(false)
   const [showRules, setShowRules] = useState(false)
-  const navigate = useNavigate()
+  console.log(isRematch)
 
   const { lobbyCode } = useParams()
   const toast = useToast()
@@ -121,6 +121,7 @@ export default function Game() {
   }
 
   const newGame = () => {
+    setIsRematch(true)
     const enemyId = enemy.id
     socket.send("/app/newgame", {}, JSON.stringify({ lobbyCode, enemyId }))
     setPlayer({
@@ -135,7 +136,6 @@ export default function Game() {
       hasWon: false,
       newGame: true,
     })
-    setIsRematch(true)
 
     // setTimeout(() => {
     //   navigate("/lobby")
@@ -150,16 +150,15 @@ export default function Game() {
       isReady: false,
       newGame: true,
     })
-    if (!isRematch) {
-      toast({
-        title: "Message from opponent",
-        description: "Player requested a rematch",
-        position: "bottom",
-        isClosable: true,
-        duration: 4000,
-        status: "info",
-      })
-    }
+    console.log("why are you not working", isRematch)
+    !isRematch ? toast({
+      title: "Message from opponent",
+      description: "Player requested a rematch",
+      position: "bottom",
+      isClosable: true,
+      duration: 4000,
+      status: "info",
+    }) : ""
   }
 
   const onMessage = (payload) => {

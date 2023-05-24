@@ -11,6 +11,7 @@ export default function GameProvider({ children }) {
   const [direction, setDirection] = useState("Horizontal")
   const [lobby, setLobby] = useState(null)
   const [errorLogs, setErrorLogs] = useState([])
+  const [isDisabled, setIsDisabled] = useState(false)
   const toast = useToast()
 
   const [user, setUser] = useState({
@@ -67,30 +68,6 @@ export default function GameProvider({ children }) {
 
     if(!toSetup)setLobby(null)
   }
-
-  //   const setState = () => {
-  //   setPlayer({
-  //     id: null,
-  //     name: "",
-  //     board: generateBoard(),
-  //     ships: shipsData,
-  //     missesReceived: [],
-  //     hitsReceived: [],
-  //     isReady: false,
-  //     isMyTurn: false,
-  //     hasWon: false,
-  //     newGame: false,
-  //   })
-
-  //   setEnemy({
-  //     id: null,
-  //     name: "",
-  //     board: generateBoard(),
-  //     isReady: false,
-  //     newGame: false
-  //   })
-
-  // }
 
   const handleShoot = (rowIndex, colIndex) => {
     setEnemy((enemy) => ({
@@ -372,7 +349,8 @@ export default function GameProvider({ children }) {
         setEnemy,
         handleSunk,
         resetState,
-        // setState
+        isDisabled,
+        setIsDisabled
       }}
     >
       {children}
