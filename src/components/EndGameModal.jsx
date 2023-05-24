@@ -21,7 +21,7 @@ import ship_winner from "../assets/ship_winner.jpg"
 import { useNavigate } from "react-router-dom"
 import ReactConfetti from "react-confetti"
 
-export default function EndGameModal({ isFinished, handleNewGame, isRematch }) {
+export default function EndGameModal({ isFinished, handleNewGame, isRematch, requestReceived }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { user, player, setPlayer, resetState, lobby, enemy, setEnemy, setUser } =
     useContext(GameContext)
@@ -30,6 +30,7 @@ export default function EndGameModal({ isFinished, handleNewGame, isRematch }) {
     "Waiting for Player to accept Rematch Request"
   )
   const [displaySpinner, setDisplaySpinner] = useState(true)
+  const [disableNewGame, setDisableNewGame] = useState(false)
   const lobbyCode = lobby.lobbyCode
   console.log(isRematch)
 
@@ -64,7 +65,13 @@ export default function EndGameModal({ isFinished, handleNewGame, isRematch }) {
       return () => clearTimeout(navigateTimeout)
     }
 
-  }, [isRematch])
+    if(requestReceived) {
+      setTimeout(()=> {
+        setDisableNewGame(true)
+      }, 13000)
+    }
+
+  }, [isRematch, requestReceived])
 
   const goLobby = () => {
     resetState()
@@ -131,6 +138,7 @@ export default function EndGameModal({ isFinished, handleNewGame, isRematch }) {
             variant="brand"
             onClick={handleNewGame}
             isDisabled={isRematch}
+            display={disableNewGame ?  "none" : ""}
           >
             {player.hasWon ? "New Game" : "Revenge"}
           </Button>
