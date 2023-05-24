@@ -24,10 +24,11 @@ import Rules from "../../components/Rules"
 
 function Lobby() {
   const userId = JSON.parse(sessionStorage.getItem("userId"))
-  const { user, setUser, player } = useContext(GameContext)
+  const { user, setUser, player, setIsDisabled } = useContext(GameContext)
   const [showRules, setShowRules] = useState(false)
   const navigate = useNavigate()
   console.log(player)
+  setIsDisabled(false)
 
   useEffect(() => {
     async function host() {
