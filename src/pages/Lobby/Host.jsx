@@ -37,11 +37,14 @@ function Host() {
 
   useEffect(() => {
 
-    if (user.id === null)
-    throw ({
-      message: "The User does not exist", 
-      desc: " You may have accidentally refreshed the site"
-    })
+    if (user.id === null){
+      const state = {message: "You may have accidentally refreshed the Page"}
+      navigate("/lobby", {state})
+    }
+    // throw ({
+    //   message: "The User does not exist", 
+    //   desc: " You may have accidentally refreshed the site"
+    // })
 
     if (isJoined) {
       setTimeout(() => {

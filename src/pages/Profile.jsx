@@ -11,11 +11,11 @@ const Profile = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (user.id === null)
-    throw ({
-      message: "The User does not exist", 
-      desc: " You may have accidentally refreshed the site"
-    })
+    if (user.id === null){
+      const state = {message: "You may have accidentally refreshed the Page"}
+      navigate("/lobby", {state})
+    }
+    
   }, [])
 
 

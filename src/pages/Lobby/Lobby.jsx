@@ -10,7 +10,7 @@ import {
 
 import React, { useContext, useEffect, useState } from "react"
 
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { GameContext } from "../../contexts/GameContext"
 import { api } from "../../helpers/api.js"
 import { motion } from "framer-motion"
@@ -27,8 +27,10 @@ function Lobby() {
   const { user, setUser, player, setIsDisabled } = useContext(GameContext)
   const [showRules, setShowRules] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
   console.log(player)
   setIsDisabled(false)
+  console.log(location.state?.message)
 
   useEffect(() => {
     async function host() {
@@ -62,17 +64,17 @@ function Lobby() {
   return (
     <AnimationContainer variants={lobbyVariants}>
       <AnimationContainer variants={navigationButtonVariant}>
-          <Flex justifyContent="end" width="93%">
-            <Icon
-              aria-label="Show Rules"
-              position="relative"
-              onClick={toggleRules}
-              _hover={{ transform: "scale(1.1)" }}
-              cursor="pointer"
-              boxSize={8}
-            />
-          </Flex>
-        </AnimationContainer>
+        <Flex justifyContent="end" width="93%">
+          <Icon
+            aria-label="Show Rules"
+            position="relative"
+            onClick={toggleRules}
+            _hover={{ transform: "scale(1.1)" }}
+            cursor="pointer"
+            boxSize={8}
+          />
+        </Flex>
+      </AnimationContainer>
       <Flex
         flexDirection="column"
         height="60vh"
@@ -82,7 +84,11 @@ function Lobby() {
         position="relative"
       >
         <AnimationContainer variants={navigationButtonVariant}>
-          <Text fontWeight="bold">{`Welcome ${user.name}`}</Text>
+          <Text
+            fontWeight="bold"
+            textAlign="center"
+          >{`Welcome ${user.name}`}</Text>
+          {location.state?.message && <Text>{location.state.message}</Text>}
         </AnimationContainer>
 
         <Link to="host">
@@ -132,8 +138,12 @@ function Lobby() {
         >
           Log Out
         </Button>
-        
-        <Rules showRules={showRules} toggleRules={toggleRules} currentPage="lobby"/>
+
+        <Rules
+          showRules={showRules}
+          toggleRules={toggleRules}
+          currentPage="lobby"
+        />
       </Flex>
     </AnimationContainer>
   )

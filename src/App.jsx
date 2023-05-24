@@ -25,7 +25,7 @@ import NotFound from "./components/NotFound"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<Layout />}>
+    <Route path="/" element={<Layout />} errorElement={<Error/>}>
       <Route index element={<Home />} />
       <Route path="register" element={<Register />} action={registerAction} />
       <Route path="login" element={<Login />} action={loginAction} />
