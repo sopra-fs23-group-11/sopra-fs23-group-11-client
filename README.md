@@ -15,13 +15,16 @@ This project aims to provide an enjoyable gaming experience while showcasing the
 
 ## High-Level Components
  
+### Setup
+The [Setup](https://github.com/sopra-fs23-group-11/sopra-fs23-group-11-client/blob/main/src/pages/Setup.jsx) is an essential part of the battleship game as it handles the preparation phase where players place their ships on the game board before the game starts. The component establishes a WebSocket connection using the Stomp.js library to enable real-time communication between players.
+
 ### Game
 The [Game](https://github.com/sopra-fs23-group-11/sopra-fs23-group-11-client/blob/main/src/pages/Game.jsx) represents the main gameplay screen where the actual game is played between two players. It contains the logic and user interface for managing the game state, handling player actions, communicating with the server using websockets, rendering the game boards, displaying messages between players, and managing the overall flow of the game.
  
- ### GameContext
+### GameContext
 The [GameContext](https://github.com/sopra-fs23-group-11/sopra-fs23-group-11-client/blob/main/src/contexts/GameContext.jsx) file is an important component of our BattleShip game. It serves as a context provider for the game's state and functionality. It encapsulates the state related to the game, including the player's and enemy's boards, ships, turns, readiness, and game results. It also provides various functions to handle actions such as placing ships, shooting missiles, handling sunk ships, resetting the game state, and more.
  
- ### BattleShipBoard
+### BattleShipBoard
 The [BattleshipBoard](https://github.com/sopra-fs23-group-11/sopra-fs23-group-11-client/blob/main/src/components/BattleShipBoard.jsx) represents the game board where the players place their ships, track their own shots, and view the opponent's shots. It handles the rendering of the grid, cells, and ships on the board, as well as the interaction and logic related to placing ships, shooting at cells, and displaying the game state.
 
 ## Launch
