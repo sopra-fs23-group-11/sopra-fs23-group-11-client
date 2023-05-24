@@ -107,7 +107,7 @@ function BattleshipBoard({
                     !(
                       board[rowIndex][colIndex].isHit ||
                       board[rowIndex][colIndex].isShotAt
-                    ) && { bg: "gray.300", transform: "scale(1.1)" }
+                    ) && { bg: "gray.300",}
                   }
                   cursor={
                     isSetUp

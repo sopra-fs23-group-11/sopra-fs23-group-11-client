@@ -131,7 +131,7 @@ export const readyVariants = {
   },
   visible: {
     y: 0,
-    transition: { stiffness: 120, type: "spring" },
+    transition: { stiffness: 70, type: "spring" },
   },
   exit: {
     y: -100,

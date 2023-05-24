@@ -54,6 +54,7 @@ export default function Game() {
   const [messages, setMessages] = useState([])
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [isRematch, setIsRematch] = useState(false)
+  const [requestReceived, setRequestReceived] = useState(false)
   const [showRules, setShowRules] = useState(false)
   console.log(isRematch)
 
@@ -146,6 +147,7 @@ export default function Game() {
   }
 
   const onNewGame = () => {
+    setRequestReceived(true)
     setEnemy({
       id: enemy.id,
       name: "",
@@ -403,6 +405,7 @@ export default function Game() {
             isFinished={isFinished}
             handleNewGame={newGame}
             isRematch={isRematch}
+            requestReceived={requestReceived}
           />
         )}
       </Flex>
