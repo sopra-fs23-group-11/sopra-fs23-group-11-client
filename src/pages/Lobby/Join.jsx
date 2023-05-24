@@ -31,6 +31,7 @@ function Join() {
     } catch (error) {
       setErrorLogs(error.response.data)
       setIsSubmitting(false)
+      setIsDisabled(false)
     }
   }
 
