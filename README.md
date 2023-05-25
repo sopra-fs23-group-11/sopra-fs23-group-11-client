@@ -113,6 +113,7 @@ about deployment using Vite.
 
 
 ## Roadmap
+- Add secure connection (https instead of http)
 - Make ships drag and drop at setup
 - Different game modes
 - Different shot types (salvo, grenade, atomic bomb)
@@ -133,7 +134,8 @@ We would like to thank our TA [Isabella](https://github.com/bellachesney) and th
 #### Credits
 ##### Images
 [Sinking Ship](https://www.freepik.com/free-vector/broken-junk-ship-sinking-sea_24157524.htm#query=sinking%20ship&position=5&from_view=keyword&track=ais) Image by brgfx <br />
-[Winning Ship](https://pngtree.com/freepng/ship_3683653.html?sol=downref&id=bef) Image by Islam Elzayat
+[Winning Ship](https://pngtree.com/freepng/ship_3683653.html?sol=downref&id=bef) Image by islam elzayat <br />
+[Setup Ships](https://www.freepik.com/free-vector/military-boats-collection_9585890.htm#query=navy%20battleship&position=2&from_view=keyword&track=ais) Images by macrovector
 ##### Sounds
 [Cannonball Sound](https://www.fesliyanstudios.com/royalty-free-sound-effects-download/water-splashing-20) as "placing ship" sound. <br />
 [Bubbles](https://elements.envato.com/de/bubbles-9HUSJBM?_ga=2.76043477.175351568.1685008728-1436866847.1683553923&utm_campaign=elements_mixkit_cs_sfx_tag&utm_medium=referral&utm_source=mixkit) as "placing ship" sound.<br />
