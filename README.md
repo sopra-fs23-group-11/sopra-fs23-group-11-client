@@ -19,10 +19,12 @@ Welcome to the Battleship Game project! This is a digital implementation of the 
 
 This project aims to provide an enjoyable gaming experience while showcasing the use of modern web technologies. Whether you're a fan of the original board game or simply looking for a fun and engaging online game, Battleship Game offers an immersive experience that will keep you hooked.
 
+[Play here.](http://sopra-fs23-group-11-client.oa.r.appspot.com/)
+
 ## Technologies Used
 * <img src="https://upload.wikimedia.org/wikipedia/commons/4/47/React.svg" width="16" height="16" /> [React](https://react.dev/) - Front-end JavaScript library concerning the user interface
 * <img src="https://upload.wikimedia.org/wikipedia/commons/f/f1/Vitejs-logo.svg" width="16" height="16" /> [Vite](https://vitejs.dev/) - Front-end tool that is used for building fast and optimized web applications
-* <img src="https://github.com/sopra-fs23-group-11/sopra-fs23-group-11-client/blob/main/src/ReadMePics/reactRouter.JPG" width="16" height="16" /> [React Router](https://reactrouter.com/en/main) - Library for implementing routing in React applications.
+* <img src="https://github.com/sopra-fs23-group-11/sopra-fs23-group-11-client/blob/main/src/ReadMePics/reactRouter.JPG" width="16" height="16" /> [React Router](https://reactrouter.com/en/main) - Library for implementing routing in React applications
 * <img src="https://github.com/sopra-fs23-group-11/sopra-fs23-group-11-client/blob/main/src/ReadMePics/ChakraUI.JPG" width="16" height="16" /> [Chakra UI](https://chakra-ui.com/) - Open-source React component library
 * <img src="https://github.com/sopra-fs23-group-11/sopra-fs23-group-11-client/blob/main/src/ReadMePics/FramerMotionIcon.JPG" width="16" height="16" /> [Framer Motion](https://www.framer.com/?utm_source=google&utm_medium=adwords&utm_campaign=TW-WW-All-GS-UA-Traffic-20190326-Brand.Bmm_WW-All-GS-KEY-x-1399-Brand.Bmm-Framer&gad=1&gclid=Cj0KCQjwjryjBhD0ARIsAMLvnF_uZHGpdD7MYHUUQ34hhEkd8ach3c2c8CYLYqVokFWwPmjae8hsQZEaAv1WEALw_wcB) - Animation library for React
 * <img src="https://user-images.githubusercontent.com/91155454/170843632-39007803-3026-4e48-bb78-93836a3ea771.png" width="16" height="16" /> [STOMP](https://stomp-js.github.io/stomp-websocket/) - Used for Websockets
@@ -31,7 +33,7 @@ This project aims to provide an enjoyable gaming experience while showcasing the
 ## Main Components
  
 ### Setup
-The [Setup](https://github.com/sopra-fs23-group-11/sopra-fs23-group-11-client/blob/main/src/pages/Setup.jsx) is an essential part of the battleship game as it handles the preparation phase where players place their ships on the game board before the game starts. The component establishes a WebSocket connection using the Stomp.js library to enable real-time communication between players.
+The [Setup](https://github.com/sopra-fs23-group-11/sopra-fs23-group-11-client/blob/main/src/pages/Setup.jsx) is an essential part of the battleship game as it handles the preparation phase where players place their ships on the game board before the game starts. The component establishes a WebSocket connection using the Stomp.js library to enable real-time communication between players. After this stage you will be directed to the game.
 
 ### Game
 The [Game](https://github.com/sopra-fs23-group-11/sopra-fs23-group-11-client/blob/main/src/pages/Game.jsx) represents the main gameplay screen where the actual game is played between two players. It contains the logic and user interface for managing the game state, handling player actions, communicating with the server using websockets, rendering the game boards, displaying messages between players, and managing the overall flow of the game.
@@ -45,11 +47,13 @@ The [BattleshipBoard](https://github.com/sopra-fs23-group-11/sopra-fs23-group-11
 ## Launch
 
 ### Getting Started
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 Clone the client-repository onto your local machine with the help of [Git](https://git-scm.com/downloads).
 
 ```git clone https://github.com/sopra-fs23-group-11/sopra-fs23-group-11-client.git```
+
+You can find the corresponding server repository [here](https://github.com/sopra-fs23-group-11/sopra-fs23-group-11-server).
 
 ### Prerequisites and Installation
 For your local development environment, you will need Node.js. You can download it [here](https://nodejs.org).<br /> After downloading Node.js we have to install all other dependencies by using the following command. Please run the command before starting the application for the first time.
@@ -62,8 +66,12 @@ If you want to see your development, run the following command:
 
 Now [http://localhost:3000](http://localhost:3000) gets opened in a new browser tap, and you see your application. Do not forget to start the server for full functionality.
 
+### Build
+Finally, `npm run build` builds the app for production to the `build` folder.<br>
+It correctly bundles React in production mode and optimizes the build for the best performance: the build is minified, and the filenames include hashes
+
 ## Deployment
-The main branch is automatically mirrored onto [Google Cloud App Engine](https://console.cloud.google.com/appengine?project=sopra-fs23-group-11-client&serviceId=default) via GitHub workflow. 
+The main branch is automatically mirrored onto Google Cloud App Engine via GitHub workflow, each time you push onto the main branch.
 See this section about [deployment](https://vitejs.dev/guide/static-deploy.html) for more information
 about deployment using Vite.
 
@@ -130,7 +138,8 @@ We would like to thank our TA [Isabella](https://github.com/bellachesney) and th
 [Cannonball Sound](https://www.fesliyanstudios.com/royalty-free-sound-effects-download/water-splashing-20) as "placing ship" sound. <br />
 [Bubbles](https://elements.envato.com/de/bubbles-9HUSJBM?_ga=2.76043477.175351568.1685008728-1436866847.1683553923&utm_campaign=elements_mixkit_cs_sfx_tag&utm_medium=referral&utm_source=mixkit) as "placing ship" sound.<br />
 [Arcade Explosion](https://mixkit.co/free-sound-effects/explosion) as "hit" sound. <br />
-[Water drop](https://www.videvo.net/sound-effect/bubble-pop-classic-pl-pe570910/237477) as "miss" sound.
+[Water drop](https://www.videvo.net/sound-effect/bubble-pop-classic-pl-pe570910/237477) as "miss" sound.<br />
+[Morse Sound](https://pixabay.com/sound-effects/morse-code-131798/) as "radio" sound.
 
 ## License
 This project is licensed under the Apache License 2.0 - see the [LICENSE](https://github.com/sopra-fs23-group-11/sopra-fs23-group-11-client/blob/main/LICENSE) file for details.
