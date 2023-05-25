@@ -21,6 +21,10 @@ This project aims to provide an enjoyable gaming experience while showcasing the
 
 [Play here.](http://sopra-fs23-group-11-client.oa.r.appspot.com/)
 
+![](https://placehold.it/200x25/ff0000/000000?text=Disclaimer!)</br>
+
+Be sure to use the "http" instead of "https" when using the App.
+
 ## Technologies Used
 * <img src="https://upload.wikimedia.org/wikipedia/commons/4/47/React.svg" width="16" height="16" /> [React](https://react.dev/) - Front-end JavaScript library concerning the user interface
 * <img src="https://upload.wikimedia.org/wikipedia/commons/f/f1/Vitejs-logo.svg" width="16" height="16" /> [Vite](https://vitejs.dev/) - Front-end tool that is used for building fast and optimized web applications
