@@ -90,7 +90,7 @@ about deployment using Vite.
 ## Illustrations
 <h3 align="center">
   <br>
-  <a href="https://github.com/sopra-fs23-group-11"><img src="src/ReadMePics/startup.gif" alt="Battleship" width="500"></a>
+  <a href="https://github.com/sopra-fs23-group-11"><img src="src/ReadMePics/sign-up.gif" alt="Battleship" width="500"></a>
   <br>
   LANDING - As a player, you can register or log in with an avatar.
   <br>
@@ -99,23 +99,30 @@ about deployment using Vite.
 
 <h3 align="center">
   <br>
-  <a href="https://github.com/sopra-fs23-group-11"><img src="src/ReadMePics/setup.gif" alt="Battleship" width="500"></a>
+  <a href="https://github.com/sopra-fs23-group-11"><img src="src/ReadMePics/set-up.gif" alt="Battleship" width="500"></a>
   <br>
   SET-UP - In the set-up stage, the player needs to place ships onto the board.
   <br>
 </h3>
 <h3 align="center">
   <br>
-  <a href="https://github.com/sopra-fs23-group-11"><img src="src/ReadMePics/game.gif" alt="Battleship" width="500"></a>
+  <a href="https://github.com/sopra-fs23-group-11"><img src="src/ReadMePics/Gaming.gif" alt="Battleship" width="500"></a>
   <br>
   GAME - The two players take turns shooting missiles, hit/miss/sunk show different icons.
   <br>
 </h3>
 <h3 align="center">
   <br>
-  <a href="https://github.com/sopra-fs23-group-11"><img src="src/ReadMePics/endscreen.gif" alt="Battleship" width="500"></a>
+  <a href="https://github.com/sopra-fs23-group-11"><img src="src/ReadMePics/End-screen.gif" alt="Battleship" width="500"></a>
   <br>
   END-SCREEN - Once the game finishes, a winner or loser page displays.
+  <br>
+</h3>
+<h3 align="center">
+  <br>
+  <a href="https://github.com/sopra-fs23-group-11"><img src="src/ReadMePics/Profile.gif" alt="Battleship" width="500"></a>
+  <br>
+  PROFILE - This is where players check user information, including avatar, username, total-wins, etc.
   <br>
 </h3>
 
