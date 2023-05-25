@@ -127,9 +127,9 @@ We would like to thank our TA [Isabella](https://github.com/bellachesney) and th
 [Sinking Ship](https://www.freepik.com/free-vector/broken-junk-ship-sinking-sea_24157524.htm#query=sinking%20ship&position=5&from_view=keyword&track=ais) Image by brgfx <br />
 [Winning Ship](https://pngtree.com/freepng/ship_3683653.html?sol=downref&id=bef) Image by Islam Elzayat
 ##### Sounds
-[Cannonball Sound](https://www.fesliyanstudios.com/royalty-free-sound-effects-download/water-splashing-20) as "placing ship" sound.
-[Bubbles](https://elements.envato.com/de/bubbles-9HUSJBM?_ga=2.76043477.175351568.1685008728-1436866847.1683553923&utm_campaign=elements_mixkit_cs_sfx_tag&utm_medium=referral&utm_source=mixkit) as "placing ship" sound.
-[Arcade Explosion](https://mixkit.co/free-sound-effects/explosion) as "hit" sound.
+[Cannonball Sound](https://www.fesliyanstudios.com/royalty-free-sound-effects-download/water-splashing-20) as "placing ship" sound. <br />
+[Bubbles](https://elements.envato.com/de/bubbles-9HUSJBM?_ga=2.76043477.175351568.1685008728-1436866847.1683553923&utm_campaign=elements_mixkit_cs_sfx_tag&utm_medium=referral&utm_source=mixkit) as "placing ship" sound.<br />
+[Arcade Explosion](https://mixkit.co/free-sound-effects/explosion) as "hit" sound. <br />
 [Water drop](https://www.videvo.net/sound-effect/bubble-pop-classic-pl-pe570910/237477) as "miss" sound.
 
 ## License
