@@ -16,7 +16,6 @@ import Join from "./pages/Lobby/Join"
 import Profile from "./pages/Profile"
 import LobbyLayout from "./pages/Lobby/LobbyLayout"
 import Setup from "./pages/Setup.jsx"
-import Chatroom from "./pages/Chatroom"
 import Endscreen from "./pages/Endscreen"
 import Game from "./pages/Game"
 import AuthRequired from "./components/AuthRequired"
@@ -41,7 +40,6 @@ const router = createBrowserRouter(
         </Route>
         <Route path="setup/:lobbyCode" element={<Setup />}/>
         <Route path="game/:lobbyCode" element={<Game />}/>
-        <Route path="chatroom/:lobbyCode" element={<Chatroom />} />
         <Route path="endscreen/:lobbyCode" element={<Endscreen />} />
       </Route>
       <Route path="*" element={<NotFound/>}/>

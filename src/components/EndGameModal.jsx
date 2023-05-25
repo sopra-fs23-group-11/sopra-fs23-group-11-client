@@ -41,7 +41,7 @@ export default function EndGameModal({ isFinished, handleNewGame, isRematch, req
       console.log(player, enemy)
       shouldNavigate = true
     }
-    if(player.hasWon)setUser({...user, totalWins: user.totalWins + 1})
+    // if(player.hasWon)setUser({...user, totalWins: user.totalWins + 1})
 
     if (shouldNavigate) {
       const navigateTimeout = setTimeout(() => {
@@ -125,10 +125,6 @@ export default function EndGameModal({ isFinished, handleNewGame, isRematch, req
                   <Avatar src={user.avatar} />
                   <Text>{player.name}</Text>
                 </Card>
-                <Text>
-                  total wins:{" "}
-                  {player.hasWon ? user.totalWins : user.totalWins}
-                </Text>
               </>
             )}
           </Flex>

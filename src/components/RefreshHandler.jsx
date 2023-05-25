@@ -12,14 +12,14 @@ export default function RefreshHandler({ lobbyCode }) {
     }
     
     window.addEventListener("beforeunload", handleRefresh)
-    const socket = Stomp.client(getDomainWebsocket())
+    // const socket = Stomp.client(getDomainWebsocket())
     
-    return () => {
-      window.removeEventListener("beforeunload", handleRefresh)
-      socket.connect({}, () => {
-        socket.send("/app/leave", {}, JSON.stringify({ lobbyCode }))
-      })
-    }
+    // return () => {
+    //   window.removeEventListener("beforeunload", handleRefresh)
+    //   socket.connect({}, () => {
+    //     socket.send("/app/leave", {}, JSON.stringify({ lobbyCode }))
+    //   })
+    // }
   }, [])
 
   return <></> // Empty fragment as the component doesn't render anything
