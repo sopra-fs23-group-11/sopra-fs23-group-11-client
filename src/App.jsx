@@ -39,7 +39,6 @@ const router = createBrowserRouter(
         </Route>
         <Route path="setup/:lobbyCode" element={<Setup />}/>
         <Route path="game/:lobbyCode" element={<Game />}/>
-        <Route path="endscreen/:lobbyCode" element={<Endscreen />} />
       </Route>
       <Route path="*" element={<NotFound/>}/>
     </Route>
