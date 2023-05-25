@@ -75,6 +75,11 @@ function Setup() {
       navigate("/lobby", {state})
     }
       
+    return () => {
+      if(socket.connected){
+        socket.disconnect()
+      }
+    }
 
     
   }, [])

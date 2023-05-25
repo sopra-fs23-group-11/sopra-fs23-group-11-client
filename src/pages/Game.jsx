@@ -13,7 +13,6 @@ import {
   Input,
   InputRightElement,
   Card,
-  Badge,
   Icon,
   Tooltip,
 } from "@chakra-ui/react"
@@ -72,6 +71,12 @@ export default function Game() {
         const state = {message: "You may have accidentally refreshed the Page"}
         navigate("/lobby", {state})
         socket.send("/app/leave", {}, JSON.stringify({lobbyCode}))
+      }
+    }
+
+    return () => {
+      if(socket.connected){
+        socket.disconnect()
       }
     }
   },[])
