@@ -68,11 +68,15 @@ If you want to see your development, run the following command:
 
 ```npm run dev```
 
-Now [http://localhost:3000](http://localhost:3000) gets opened in a new browser tap, and you see your application. Do not forget to start the server for full functionality.
+Now [http://localhost:5173](http://localhost:5173) gets opened in a new browser tap, and you see your application. Do not forget to start the server for full functionality.
 
 ### Build
-Finally, `npm run build` builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance: the build is minified, and the filenames include hashes
+You may run `npm run build` command to build the app. 
+By default, the build output will be placed at `dist` folder. 
+
+### Testing the App Locally
+Once you've built the app, you may test it locally by running `npm run preview` command. 
+This will boot up a local static web server that serves the files form `dist` at [http://localhost:4173](http://localhost:4173). It's an easy way to check if the production build looks OK in you local environment.
 
 ## Deployment
 The main branch is automatically mirrored onto Google Cloud App Engine via GitHub workflow, each time you push onto the main branch.
