@@ -122,7 +122,10 @@ export default function Rules({ showRules, toggleRules, currentPage }) {
                   3. Once a ship has been sunk, the player gets a notification and
                   the ship position is shown in red.
                   <br />
-                  4.The first player who sinks all the opponent's ships wins.
+                  4. The first player who sinks all the opponent's ships wins.
+                  <br />
+                  5. When the game finishes, the player can choose to "Revenge"/"New Game" in the same lobby,
+                  or they can go back to the "Main Menu".
                   <br />
                   <br />
                   Have fun, Captain!
