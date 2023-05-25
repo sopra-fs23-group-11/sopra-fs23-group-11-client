@@ -118,7 +118,7 @@ export default function Rules({ showRules, toggleRules, currentPage }) {
                   <br />
                   The first player who sinks all the opponent's ships wins.
                   <br />
-                  Make sure to turn up the volume for better game experience!
+                  Make sure turn up the volume for better game experience!
                   <br />
                   Have fun, Captain!
                 </AccordionPanel>
