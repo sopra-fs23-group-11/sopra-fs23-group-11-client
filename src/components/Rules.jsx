@@ -57,9 +57,13 @@ export default function Rules({ showRules, toggleRules, currentPage }) {
                 </h2>
                 <AccordionPanel pb={4}>
                   <br />
-                  Welcome to our Battleship Game! This is a digital implementation of the classic strategy game 
+                  Welcome to our Battleship Game!
+                  <br />
+                  <br />
+                  This is a digital implementation of the classic strategy game
                   owned by Hasbro where players engage in a battle of wits and strategy on the high seas.
                     <br />
+                  <br />
                   The game challenges players to strategically position their fleet of 
                   ships on a grid and tactically guess the locations of their opponent's ships.
                   <br />
