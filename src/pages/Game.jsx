@@ -384,7 +384,7 @@ export default function Game() {
             bgColor="rgba(255, 255, 255, 0.5)"
             boxShadow="0px -5px 10px rgba(0, 0, 0, 0.2)"
             borderRadius="lg"
-            maxHeight="600px"
+            maxHeight="75%"
             overflowY="auto"
             width="30%"
             p={4}
