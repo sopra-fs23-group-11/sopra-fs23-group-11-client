@@ -70,7 +70,7 @@ export default function Game() {
       {
         const state = {message: "You may have accidentally refreshed the Page"}
         navigate("/lobby", {state})
-        socket.send("/app/leave", {}, JSON.stringify({lobbyCode}))
+        //socket.send("/app/leave", {}, JSON.stringify({lobbyCode}))
       }
     }
 
@@ -297,7 +297,7 @@ export default function Game() {
         <AnimationContainer variants={playerVariant}>
           <Flex direction="column" alignItems="center">
             <AnimationContainer variants={avatarCardVariant}>
-              <Tooltip label={player.isMyTurn ? "Weapons hot Captain" : ""}>
+              {/* <Tooltip label={player.isMyTurn ? "Weapons hot Captain" : ""} key={1}> */}
                 <Card
                   padding="4px 5px"
                   direction="flex"
@@ -317,7 +317,7 @@ export default function Game() {
                   <Avatar src={user.avatar} />
                   <Text>{player.name}</Text>
                 </Card>
-              </Tooltip>
+              {/* </Tooltip> */}
             </AnimationContainer>
 
             <BattleshipBoard board={player.board} handleError={handleError} />
@@ -349,7 +349,7 @@ export default function Game() {
         <AnimationContainer variants={enemyVariant}>
           <Flex direction="column" alignItems="center">
             <AnimationContainer variants={avatarCardVariant}>
-              <Tooltip label={player.isMyTurn ? "" : "Enemy shot incoming!"}>
+              {/* <Tooltip label={!player.isMyTurn ?"Enemy shot incoming!"  : ""} key={2}> */}
                 <Card
                   padding="4px 5px"
                   direction="flex"
@@ -368,7 +368,7 @@ export default function Game() {
                   <Avatar src={enemy.avatar} />
                   <Text>{enemy.name}</Text>
                 </Card>
-              </Tooltip>
+              {/* </Tooltip> */}
             </AnimationContainer>
             <BattleshipBoard
               board={enemy.board}
