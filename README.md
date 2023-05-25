@@ -108,14 +108,14 @@ about deployment using Vite.
   <br>
   <a href="https://github.com/sopra-fs23-group-11"><img src="src/ReadMePics/game.gif" alt="Battleship" width="500"></a>
   <br>
-  Game - The two players take turns shooting missiles, hit/miss/sunk show different icons.
+  GAME - The two players take turns shooting missiles, hit/miss/sunk show different icons.
   <br>
 </h3>
 <h3 align="center">
   <br>
   <a href="https://github.com/sopra-fs23-group-11"><img src="src/ReadMePics/endscreen.gif" alt="Battleship" width="500"></a>
   <br>
-  End-screen - Once the game finishes, a winner or loser page displays.
+  END-SCREEN - Once the game finishes, a winner or loser page displays.
   <br>
 </h3>
 
