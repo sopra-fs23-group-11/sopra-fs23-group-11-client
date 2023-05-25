@@ -15,6 +15,20 @@ export const homeVariants = {
   },
 }
 
+export const soundTextVariants = {
+  hidden: {
+    y: -100,
+    opacity: 0
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: 2.7,
+    }
+  }
+}
+
 export const buttonVariants = {
   hidden: {
     opacity: 0,

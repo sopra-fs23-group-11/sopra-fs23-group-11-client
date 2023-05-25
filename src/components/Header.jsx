@@ -82,6 +82,7 @@ function Header() {
               mr={-10}
               onClick={isLobbyOrProfile ? toMenu : onOpen}
               cursor="pointer"
+              _hover={{borderTop: "3px solid #015871"}}
             >
               BATTLESHIP
             </Heading>
