@@ -21,6 +21,10 @@ This project aims to provide an enjoyable gaming experience while showcasing the
 
 [Play here.](http://sopra-fs23-group-11-client.oa.r.appspot.com/)
 
+![](https://placehold.it/200x25/ff0000/000000?text=Disclaimer!)</br>
+
+Be sure to use the "http" instead of "https" when using the App.
+
 ## Technologies Used
 * <img src="https://upload.wikimedia.org/wikipedia/commons/4/47/React.svg" width="16" height="16" /> [React](https://react.dev/) - Front-end JavaScript library concerning the user interface
 * <img src="https://upload.wikimedia.org/wikipedia/commons/f/f1/Vitejs-logo.svg" width="16" height="16" /> [Vite](https://vitejs.dev/) - Front-end tool that is used for building fast and optimized web applications
@@ -64,11 +68,15 @@ If you want to see your development, run the following command:
 
 ```npm run dev```
 
-Now [http://localhost:3000](http://localhost:3000) gets opened in a new browser tap, and you see your application. Do not forget to start the server for full functionality.
+Now [http://localhost:5173](http://localhost:5173) gets opened in a new browser tap, and you see your application. Do not forget to start the server for full functionality.
 
 ### Build
-Finally, `npm run build` builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance: the build is minified, and the filenames include hashes
+You may run `npm run build` command to build the app. 
+By default, the build output will be placed at `dist` folder. 
+
+### Testing the App Locally
+Once you've built the app, you may test it locally by running `npm run preview` command. 
+This will boot up a local static web server that serves the files form `dist` at [http://localhost:4173](http://localhost:4173). It's an easy way to check if the production build looks OK in you local environment.
 
 ## Deployment
 The main branch is automatically mirrored onto Google Cloud App Engine via GitHub workflow, each time you push onto the main branch.
@@ -100,19 +108,20 @@ about deployment using Vite.
   <br>
   <a href="https://github.com/sopra-fs23-group-11"><img src="src/ReadMePics/game.gif" alt="Battleship" width="500"></a>
   <br>
-  Game - The two players take turns shooting missiles, hit/miss/sunk show different icons.
+  GAME - The two players take turns shooting missiles, hit/miss/sunk show different icons.
   <br>
 </h3>
 <h3 align="center">
   <br>
   <a href="https://github.com/sopra-fs23-group-11"><img src="src/ReadMePics/endscreen.gif" alt="Battleship" width="500"></a>
   <br>
-  End-screen - Once the game finishes, a winner or loser page displays.
+  END-SCREEN - Once the game finishes, a winner or loser page displays.
   <br>
 </h3>
 
 
 ## Roadmap
+- Add secure connection (https instead of http)
 - Make ships drag and drop at setup
 - Different game modes
 - Different shot types (salvo, grenade, atomic bomb)
@@ -133,7 +142,8 @@ We would like to thank our TA [Isabella](https://github.com/bellachesney) and th
 #### Credits
 ##### Images
 [Sinking Ship](https://www.freepik.com/free-vector/broken-junk-ship-sinking-sea_24157524.htm#query=sinking%20ship&position=5&from_view=keyword&track=ais) Image by brgfx <br />
-[Winning Ship](https://pngtree.com/freepng/ship_3683653.html?sol=downref&id=bef) Image by Islam Elzayat
+[Winning Ship](https://pngtree.com/freepng/ship_3683653.html?sol=downref&id=bef) Image by islam elzayat <br />
+[Setup Ships](https://www.freepik.com/free-vector/military-boats-collection_9585890.htm#query=navy%20battleship&position=2&from_view=keyword&track=ais) Images by macrovector
 ##### Sounds
 [Cannonball Sound](https://www.fesliyanstudios.com/royalty-free-sound-effects-download/water-splashing-20) as "placing ship" sound. <br />
 [Bubbles](https://elements.envato.com/de/bubbles-9HUSJBM?_ga=2.76043477.175351568.1685008728-1436866847.1683553923&utm_campaign=elements_mixkit_cs_sfx_tag&utm_medium=referral&utm_source=mixkit) as "placing ship" sound.<br />

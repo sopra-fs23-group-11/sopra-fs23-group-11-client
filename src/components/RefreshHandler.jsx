@@ -5,7 +5,7 @@ export default function RefreshHandler({socket, lobbyCode}) {
         const handleRefresh = (e) => {
           e.preventDefault();
           e.returnValue = ''; // Chrome requires a returnValue to show a confirmation dialog
-          socket.send("/app/leave", {}, JSON.stringify({ lobbyCode }))
+          //socket.send("/app/leave", {}, JSON.stringify({ lobbyCode }))
           // Redirect the user to the desired page
         };
     
