@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react"
+import React, { useEffect, useContext, useState, useRef } from "react"
 import { morse } from "../helpers/soundEffects"
 import {
   Divider,
@@ -46,8 +46,8 @@ import { motion } from "framer-motion"
 
 let socket = null
 export default function Game() {
-  const { player, user, setPlayer, handleShoot, enemy, setEnemy, handleSunk } =
-    useContext(GameContext)
+  const {player, user, setPlayer, handleShoot, enemy, setEnemy, handleSunk} =
+      useContext(GameContext)
   const [enemyExit, setEnemyExit] = useState(false)
   const [isFinished, setIsFinished] = useState(false)
   const [inputValue, setInputValue] = useState("")
@@ -56,9 +56,10 @@ export default function Game() {
   const [isRematch, setIsRematch] = useState(false)
   const [requestReceived, setRequestReceived] = useState(false)
   const [showRules, setShowRules] = useState(false)
+  const inputRef = useRef(null);
   console.log(isRematch)
 
-  const { lobbyCode } = useParams()
+  const {lobbyCode} = useParams()
   const toast = useToast()
   const navigate = useNavigate()
 
@@ -70,10 +71,27 @@ export default function Game() {
       {
         const state = {message: "You may have accidentally refreshed the Page"}
         navigate("/lobby", {state})
-        socket.send("/app/leave", {}, JSON.stringify({ lobbyCode }))
+        socket.send("/app/leave", {}, JSON.stringify({lobbyCode}))
       }
     }
-  }, [])
+  },[])
+
+  useEffect(() => {
+    const handleKeyPressGlobal = (e) => {
+      if (e.key === "Escape") {
+        setIsChatOpen(!isChatOpen);
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPressGlobal);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyPressGlobal);
+    };
+  }, [isChatOpen]);
 
   const onConnected = () => {
     if (socket && socket.connected) socket.disconnect
@@ -92,33 +110,33 @@ export default function Game() {
     const isAHit = payloadData.hit
 
     setPlayer((player) =>
-      isAHit
-        ? { ...player, hitsReceived: [...player.hitsReceived, position] }
-        : { ...player, missesReceived: [...player.missesReceived, position] }
+        isAHit
+            ? {...player, hitsReceived: [...player.hitsReceived, position]}
+            : {...player, missesReceived: [...player.missesReceived, position]}
     )
 
     setPlayer((player) => {
       const newBoard = player.board.map((row) =>
-        row.map((cell) =>
-          player.hitsReceived.includes(cell.id)
-            ? { ...cell, isHit: true }
-            : player.missesReceived.includes(cell.id)
-            ? { ...cell, isShotAt: true }
-            : cell
-        )
+          row.map((cell) =>
+              player.hitsReceived.includes(cell.id)
+                  ? {...cell, isHit: true}
+                  : player.missesReceived.includes(cell.id)
+                      ? {...cell, isShotAt: true}
+                      : cell
+          )
       )
       if (isAHit) {
         explosionSound()
       } else {
         smallSplash()
       }
-      return { ...player, board: newBoard, isMyTurn: true }
+      return {...player, board: newBoard, isMyTurn: true}
     })
   }
   const onFinished = (payload) => {
     const payloadData = JSON.parse(payload.body)
     if (payloadData.winnerId === player.id) {
-      setPlayer((player) => ({ ...player, hasWon: true }))
+      setPlayer((player) => ({...player, hasWon: true}))
     }
     setIsFinished(true)
     //navigate(`/endscreen/${lobbyCode}`)
@@ -127,7 +145,7 @@ export default function Game() {
   const newGame = () => {
     setIsRematch(true)
     const enemyId = enemy.id
-    socket.send("/app/newgame", {}, JSON.stringify({ lobbyCode, enemyId }))
+    socket.send("/app/newgame", {}, JSON.stringify({lobbyCode, enemyId}))
     setPlayer({
       id: player.id,
       name: "",
@@ -176,18 +194,21 @@ export default function Game() {
 
   const sendMessage = (newMessage) => {
     newMessage = player.name + ": " + newMessage
+    if (inputValue.trim() !== "") {
+
     const message = {
       lobbyCode: lobbyCode,
       content: newMessage,
     }
     socket.send(`/chatroom/${lobbyCode}`, {}, JSON.stringify(message))
   }
+}
 
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleSendMessage()
+    const handleKeyPress = (e) => {
+      if (e.key === "Enter") {
+        handleSendMessage()
+      }
     }
-  }
 
   const handleSendMessage = () => {
     sendMessage(inputValue)
@@ -315,7 +336,7 @@ export default function Game() {
               fontWeight="medium"
               mt={2}
             >
-              Toggle Radio
+              Toggle Radio (Esc)
             </Button>
           </AnimationContainer>
         </Center>
@@ -359,13 +380,25 @@ export default function Game() {
           <Box
             position="fixed"
             bottom="0"
-            right="0"
-            bgColor="white"
+            left="0"
+            bgColor="rgba(255, 255, 255, 0.5)"
             boxShadow="0px -5px 10px rgba(0, 0, 0, 0.2)"
             borderRadius="lg"
             maxHeight="600px"
             overflowY="auto"
+            width="30%"
             p={4}
+            css={{
+              scrollbarWidth: 'thin',
+              scrollbarColor: 'rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.1)',
+              '&::-webkit-scrollbar': {
+                width: '8px',
+                backgroundColor: 'rgba(0, 0, 0, 0)',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                backgroundColor: 'rgba(0, 0, 0, 0.2)',
+              },
+            }}
           >
             <Box mb={4}>
               {messages.map((message, index) => (
@@ -377,10 +410,11 @@ export default function Game() {
             <InputGroup>
               <Input
                 type="text"
-                placeholder="Type your message here..."
+                placeholder="Type here..."
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyPress}
+                ref={inputRef}
               />
               <InputRightElement>
                 <Button
